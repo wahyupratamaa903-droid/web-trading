@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analisis XAU/DXY & Portofolio MT5 - Live</title>
+  <title>Analisis XAU/DXY & Live Chart - Premium</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
@@ -13,16 +13,12 @@
     <header class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-slate-800 pb-4 gap-4">
       <div>
         <h1 class="text-3xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY INSIGHTS</h1>
-        <p class="text-xs text-slate-400">Website Analisis Berita Fundamental & Portofolio MT5</p>
+        <p class="text-xs text-slate-400">Website Analisis Berita Fundamental & Live Chart TradingView</p>
       </div>
       <div class="flex gap-4 text-sm">
         <div class="bg-slate-900 px-4 py-2 rounded-xl border border-slate-800">
           <span class="text-slate-400 block text-xs">XAU/USD (Emas)</span>
-          <span class="font-bold text-amber-400" id="ticker-gold">🔒 Terkunci (Open MT5)</span>
-        </div>
-        <div class="bg-slate-900 px-4 py-2 rounded-xl border border-slate-800">
-          <span class="text-slate-400 block text-xs">DXY (Indeks Dolar)</span>
-          <span class="font-bold text-blue-400" id="ticker-dxy">📈 Live Monitor</span>
+          <span class="font-bold text-amber-400"><i class="fas fa-circle text-emerald-500 animate-pulse mr-1"></i> Live Chart</span>
         </div>
       </div>
     </header>
@@ -34,90 +30,70 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       
-      <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6">
+      <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-calendar-alt text-orange-500"></i> Kalender Ekonomi Terkini (USD)</h2>
+          <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-calendar-alt text-orange-500"></i> Kalender Ekonomi</h2>
           <span class="px-2 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold rounded animate-pulse">Live Feed</span>
         </div>
         
-        <div id="news-container" class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
-          <p class="text-sm text-slate-500 italic animate-pulse"><i class="fas fa-spinner fa-spin mr-2"></i>Mengambil jadwal rilis ekonomi global...</p>
-        </div>
-      </div>
-
-      <div class="lg:col-span-5 space-y-6">
-        
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-chart-line text-emerald-500"></i> Portofolio MT5 Kamu</h2>
-          
-          <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-slate-700 text-center py-12">
-            <i class="fas fa-plug text-4xl text-slate-600 mb-3"></i>
-            <p class="text-sm font-medium text-slate-300 mb-1">Siap Dihubungkan ke Myfxbook</p>
-            <p class="text-xs text-slate-500 max-w-xs mx-auto mb-4">Kamu bisa menempelkan kode embed HTML dari Myfxbook di sini untuk memunculkan grafik profit akun trading aslimu.</p>
-            <div class="text-left text-xs bg-slate-900 p-3 rounded-lg font-mono text-slate-400">
-              <span class="text-emerald-400 font-bold">Status Koneksi:</span> Menunggu investor password terverifikasi di Myfxbook.
-            </div>
+        <div id="news-container" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
           </div>
-
-        </div>
-
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs text-slate-400">
-          <p class="font-bold text-slate-300 mb-1">💡 Cara Kerja Analisis Otomatis:</p>
-          Sistem di sebelah kiri membaca berita ekonomi AS. Fokus utama trader emas adalah data <span class="text-red-400 font-bold">Initial Claims (Klaim Pengangguran)</span>, <span class="text-red-400 font-bold">CPI (Inflasi)</span>, dan <span class="text-red-400 font-bold">NFP</span>.
-        </div>
-
       </div>
+
+      <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-chart-area text-amber-400"></i> Live Technical Chart (XAU/USD)</h2>
+        
+        <div class="tradingview-widget-container rounded-xl overflow-hidden border border-slate-800" style="height:480px;width:100%">
+          <div id="tradingview_gold" style="height:480px;width:100%"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+          <script type="text/javascript">
+          new TradingView.widget(
+          {
+            "autosize": true,
+            "symbol": "FX_IDC:XAUUSD",
+            "interval": "H1",
+            "timezone": "Asia/Jakarta",
+            "theme": "dark",
+            "style": "1",
+            "locale": "id",
+            "toolbar_bg": "#0f172a",
+            "enable_publishing": false,
+            "hide_side_toolbar": false,
+            "allow_symbol_change": true,
+            "container_id": "tradingview_gold"
+          }
+          );
+          </script>
+        </div>
+        </div>
 
     </div>
   </div>
 
   <script>
-    async function fetchLiveNews() {
-      const container = document.getElementById('news-container');
-      try {
-        // Menggunakan fetch ke API Kalender Ekonomi makro global yang stabil
-        const res = await fetch('https://secure.fiaformulas.com/news-feed');
-        if (!res.ok) throw new Error("Network busy");
-        
-        // Memakai struktur analisis data berbasis event trading hari ini
-        generateCustomCalendar();
-      } catch (error) {
-        generateCustomCalendar();
-      }
-    }
-
     function generateCustomCalendar() {
       const container = document.getElementById('news-container');
-      
-      // Data terstruktur real-time berdasarkan rilis kalender ekonomi mingguan terbaru
       const events = [
-        { title: "Initial Jobless Claims (Klaim Pengangguran Mingguan AS)", impact: "HIGH", time: "Hari Ini - 19:30 WIB", desc: "Mengukur jumlah individu yang mengajukan tunjangan pengangguran untuk pertama kali.", logic: "Jika data AKTUAL Turun (Tenaga kerja menguat) -> DXY Naik 📈 -> XAU/USD Turun 📉." },
-        { title: "Philadelphia Fed Manufacturing Index", impact: "MEDIUM", time: "Hari Ini - 19:30 WIB", desc: "Indikator kondisi bisnis manufaktur di wilayah Philadelphia.", logic: "Hasil di atas konsensus/proyeksi menandakan ekonomi AS ekspansif, mendukung penguatan Dolar (DXY)." },
-        { title: "US Core CPI MoM (Data Inflasi Inti Amerika)", impact: "HIGH", time: "Berkala Bulanan", desc: "Mengukur tingkat kenaikan harga barang di tingkat konsumen, menjadi basis utama The Fed menentukan suku bunga.", logic: "Inflasi naik -> Spekulasi Suku Bunga tinggi bertahan lama -> DXY Meroket 📈 -> Emas Ambruk 📉." },
-        { title: "Non-Farm Employment Change (NFP AS)", impact: "HIGH", time: "Jumat Pertama Awal Bulan", desc: "Data ketersediaan lapangan kerja baru di AS selain sektor pertanian.", logic: "NFP naik melebihi forecast berarti ekonomi kokoh, memicu aksi jual pada Emas (Bearish XAU)." }
+        { title: "Initial Jobless Claims (Klaim Pengangguran AS)", impact: "HIGH", time: "Hari Ini - 19:30 WIB", logic: "Jika data AKTUAL Turun -> DXY Naik 📈 -> XAU/USD Turun 📉." },
+        { title: "Philadelphia Fed Manufacturing Index", impact: "MEDIUM", time: "Hari Ini - 19:30 WIB", logic: "Hasil di atas konsensus/proyeksi menandakan ekonomi AS ekspansif, mendukung penguatan Dolar (DXY)." },
+        { title: "US Core CPI MoM (Data Inflasi Inti)", impact: "HIGH", time: "Berkala Bulanan", logic: "Inflasi naik -> DXY Meroket 📈 -> Emas Ambruk 📉." },
+        { title: "Non-Farm Employment Change (NFP AS)", impact: "HIGH", time: "Awal Bulan", logic: "NFP naik melebihi forecast memicu aksi jual pada Emas (Bearish XAU)." }
       ];
 
-      container.innerHTML = events.map(ev => {
-        const badgeColor = ev.impact === "HIGH" ? "bg-red-500/20 text-red-400" : "bg-amber-500/20 text-amber-400";
-        return `
-          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 transition-all">
-            <div class="flex justify-between text-xs text-slate-400 mb-2">
-              <span class="font-mono text-amber-400"><i class="far fa-clock mr-1"></i> ${ev.time}</span>
-              <span class="px-2 py-0.5 ${badgeColor} font-bold rounded text-[10px]"><i class="fas fa-bolt mr-1"></i> ${ev.impact} IMPACT</span>
-            </div>
-            <h3 class="font-bold text-slate-200 text-sm mb-1">${ev.title}</h3>
-            <p class="text-xs text-slate-400 mb-3">${ev.desc}</p>
-            <div class="text-xs bg-amber-500/5 text-amber-300 p-3 rounded-lg border border-amber-500/10">
-              <strong>Logika Analisis Bot:</strong> ${ev.logic}
-            </div>
+      container.innerHTML = events.map(ev => `
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+          <div class="flex justify-between text-xs text-slate-400 mb-2">
+            <span class="font-mono text-amber-400"><i class="far fa-clock mr-1"></i> ${ev.time}</span>
+            <span class="px-2 py-0.5 ${ev.impact === 'HIGH' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'} font-bold rounded text-[10px]">${ev.impact} IMPACT</span>
           </div>
-        `;
-      }).join('');
+          <h3 class="font-bold text-slate-200 text-xs mb-2">${ev.title}</h3>
+          <div class="text-[11px] bg-amber-500/5 text-amber-300 p-2 rounded border border-amber-500/10">
+            <strong>Analisis Bot:</strong> ${ev.logic}
+          </div>
+        </div>
+      `).join('');
     }
-
-    window.onload = () => {
-      fetchLiveNews();
-    };
+    window.onload = generateCustomCalendar;
   </script>
 </body>
 </html>
