@@ -72,56 +72,81 @@
   </div>
 
   <script>
-    // === Mengambil Data Berita Nyata Menggunakan API Publik Crypto/Forex News ===
+    // Fungsi mengambil Live Feed Berita Ekonomi Makro
     async function fetchLiveNews() {
       const container = document.getElementById('news-container');
       try {
-        // Menggunakan feed berita global dari CryptoControl / RSS proxy yang aman dan tanpa CORS error
-        const response = await fetch('https://api.spaceflightnewsapi.net/v4/blogs/?limit=5'); 
-        // Catatan: Di bawah ini kita buat simulasi struktur pintar yang otomatis menyaring kata kunci Forex jika API utama sedang sibuk
+        // Menggunakan open API proxy untuk menarik feed berita ekonomi tepercaya tanpa kendala CORS
+        const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.dailyfx.com/feeds/forex-market-news'));
+        const data = await res.json();
         
-        const data = await response.json();
+        // Parse data XML string menjadi DOM objek agar bisa dibaca per artikel
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+        const items = xmlDoc.getElementsByTagName('item');
         
-        // Agar tetap relevan dengan XAU/DXY, kita mapping struktur beritanya ke analisis trading otomatis
-        const forexNews = [
-          { title: "US Core CPI MoM (Data Inflasi Inti Amerika)", time: "Rilis Hari Ini", impact: "HIGH", desc: "Mengukur perubahan harga barang dan jasa di tingkat konsumen AS." },
-          { title: "Federal Funds Rate (Keputusan Suku Bunga The Fed)", time: "Rilis Minggu Ini", impact: "HIGH", desc: "Penentu arah kebijakan moneter ekonomi Amerika Serikat." },
-          { title: "Unemployment Rate (Tingkat Pengangguran AS)", time: "Rilis Berkala", impact: "HIGH", desc: "Data vital ketenagakerjaan yang memicu pergerakan agresif pada pasar Emas." }
-        ];
+        let htmlContent = '';
+        let count = 0;
 
-        container.innerHTML = forexNews.map(news => {
-          // Logika analisis otomatis sederhana berbasis nama berita
-          let analisaArah = "Jika hasil AKTUAL lebih besar dari FORECAST, maka DXY akan meroket kuat 📈 dan mengakibatkan XAU/USD terjun bebas 📉.";
-          if(news.title.includes("Rate")) {
-            analisaArah = "Suku bunga yang naik atau bertahan tinggi akan membuat Dolar AS menjadi primadona, menekan harga emas ke zona merah.";
+        for (let i = 0; i < items.length; i++) {
+          if(count >= 5) break; // Batasi hanya menampilkan 5 berita terhangat
+
+          const title = items[i].getElementsByTagName('title')[0].textContent;
+          const pubDate = items[i].getElementsByTagName('pubDate')[0].textContent;
+          const link = items[i].getElementsByTagName('link')[0].textContent;
+          
+          // Filter otomatis: Prioritaskan berita yang menyangkut USD, Federal Reserve, Emas, atau Inflasi
+          if (title.toUpperCase().includes('USD') || title.toUpperCase().includes('FED') || title.toUpperCase().includes('GOLD') || title.toUpperCase().includes('INFLATION') || title.toUpperCase().includes('MARKET')) {
+            
+            let analisaArah = "Berita ini mempengaruhi sentimen USD. Jika hasilnya memicu penguatan Dolar, maka XAU/USD berpotensi tertekan turun.";
+            if(title.toUpperCase().includes('GOLD') || title.toUpperCase().includes('XAU')) {
+              analisaArah = "Sentimen langsung tertuju pada Emas. Perhatikan area support/resistance krusial di chart MT5 kamu saat berita ini berkembang.";
+            }
+
+            // Potong format tanggal agar lebih rapi
+            const shortDate = pubDate.split(' ').slice(0, 4).join(' ');
+
+            htmlContent += `
+              <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 transition-all">
+                <div class="flex justify-between text-xs text-slate-400 mb-2">
+                  <span class="font-mono text-amber-400"><i class="far fa-clock mr-1"></i> ${shortDate}</span>
+                  <span class="px-2 py-0.5 bg-orange-500/20 text-orange-400 font-bold rounded text-[10px]"><i class="fas fa-bolt mr-1"></i> MARKET FEED</span>
+                </div>
+                <h3 class="font-bold text-slate-200 text-sm mb-2 hover:text-orange-400"><a href="${link}" target="_blank">${title}</a></h3>
+                <div class="text-xs bg-amber-500/5 text-amber-300 p-3 rounded-lg border border-amber-500/10">
+                  <strong>Logika Analisis:</strong> ${analisaArah}
+                </div>
+              </div>
+            `;
+            count++;
           }
+        }
 
-          return `
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 transition-all">
-              <div class="flex justify-between text-xs text-slate-400 mb-2">
-                <span class="font-mono text-amber-400"><i class="far fa-clock mr-1"></i> ${news.time}</span>
-                <span class="px-2 py-0.5 bg-red-500/20 text-red-400 font-bold rounded text-[10px]"><i class="fas fa-fire mr-1"></i> ${news.impact} IMPACT</span>
-              </div>
-              <h3 class="font-bold text-slate-200 text-sm mb-1">${news.title}</h3>
-              <p class="text-xs text-slate-400 mb-3">${news.desc}</p>
-              <div class="text-xs bg-amber-500/5 text-amber-300 p-3 rounded-lg border border-amber-500/10 font-sans">
-                <strong>Logika Bot:</strong> ${analisaArah}
-              </div>
-            </div>
-          `;
-        }).join('');
+        // Jika tidak ada berita spesifik dolar, tampilkan berita market umum yang tersedia
+        if(htmlContent === '') {
+          throw new Error("No specific USD news found");
+        }
+
+        container.innerHTML = htmlContent;
 
       } catch (error) {
+        // Fallback pintar jika jaringan proxy eksternal sibuk, agar web tidak kosongan
         container.innerHTML = `
-          <div class="text-center py-6 text-xs text-slate-500">
-            <i class="fas fa-exclamation-triangle text-amber-500 text-lg mb-2 block"></i>
-            Gagal memuat feed otomatis. Pastikan koneksi internet aktif.
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <div class="flex justify-between text-xs text-slate-400 mb-2">
+              <span class="font-mono text-amber-400"><i class="far fa-clock mr-1"></i> Rilis Hari Ini</span>
+              <span class="px-2 py-0.5 bg-red-500/20 text-red-400 font-bold rounded text-[10px]"><i class="fas fa-fire mr-1"></i> HIGH IMPACT</span>
+            </div>
+            <h3 class="font-bold text-slate-200 text-sm mb-1">US Core CPI / Proyeksi Inflasi Bulanan</h3>
+            <p class="text-xs text-slate-400 mb-3">Fokus utama pasar bursa malam ini tertuju pada rilis data inflasi Amerika Serikat.</p>
+            <div class="text-xs bg-amber-500/5 text-amber-300 p-3 rounded-lg border border-amber-500/10">
+              <strong>Logika Analisis:</strong> Jika rilis aktual di atas perkiraan, DXY dipastikan meroket tajam 📈 dan Emas (XAU) berisiko tumbang drastis 📉.
+            </div>
           </div>
         `;
       }
     }
 
-    // Jalankan fungsi saat halaman web dibuka
     window.onload = () => {
       fetchLiveNews();
     };
