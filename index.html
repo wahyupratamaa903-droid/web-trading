@@ -28,27 +28,22 @@
       Data Ekonomi AS Bagus/Naik ➡️ Indeks Dolar (DXY) Naik 📈 ➡️ Harga Emas (XAU/USD) Turun 📉.
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
       <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-calendar-alt text-orange-500"></i> Kalender Ekonomi</h2>
           <span class="px-2 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold rounded animate-pulse">Live Feed</span>
         </div>
-        
-        <div id="news-container" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-          </div>
+        <div id="news-container" class="space-y-4 max-h-[480px] overflow-y-auto pr-2"></div>
       </div>
 
       <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6">
         <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-chart-area text-amber-400"></i> Live Technical Chart (XAU/USD)</h2>
-        
         <div class="tradingview-widget-container rounded-xl overflow-hidden border border-slate-800" style="height:480px;width:100%">
           <div id="tradingview_gold" style="height:480px;width:100%"></div>
           <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
           <script type="text/javascript">
-          new TradingView.widget(
-          {
+          new TradingView.widget({
             "autosize": true,
             "symbol": "FX_IDC:XAUUSD",
             "interval": "H1",
@@ -61,13 +56,84 @@
             "hide_side_toolbar": false,
             "allow_symbol_change": true,
             "container_id": "tradingview_gold"
-          }
-          );
+          });
           </script>
         </div>
-        </div>
-
+      </div>
     </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-2">
+        <div>
+          <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-folder-open text-emerald-400"></i> Live Performance Journal</h2>
+          <p class="text-xs text-slate-400">Ringkasan pertumbuhan dan riwayat eksekusi akun trading HF Markets</p>
+        </div>
+        <div class="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-lg font-mono border border-emerald-500/20">
+          <i class="fas fa-sync fa-spin mr-1"></i> Mode Pembaruan Kontrol Manual
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block mb-1">Total Saldo (Balance)</span>
+          <span class="text-lg font-bold text-slate-100">$10,450.00</span>
+        </div>
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block mb-1">Pertumbuhan (Gain)</span>
+          <span class="text-lg font-bold text-emerald-400">+4.50%</span>
+        </div>
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block mb-1">Win Rate</span>
+          <span class="text-lg font-bold text-blue-400">72.3%</span>
+        </div>
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block mb-1">Sektor Fokus</span>
+          <span class="text-lg font-bold text-amber-400">XAU/USD Gold</span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-slate-800 text-slate-400">
+              <th class="pb-3 pt-1 font-semibold">Aset</th>
+              <th class="pb-3 pt-1 font-semibold">Tipe</th>
+              <th class="pb-3 pt-1 font-semibold">Lot</th>
+              <th class="pb-3 pt-1 font-semibold">Harga Entry</th>
+              <th class="pb-3 pt-1 font-semibold">Harga Exit</th>
+              <th class="pb-3 pt-1 font-semibold text-right">Profit/Loss</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/50 text-slate-300">
+            <tr>
+              <td class="py-3 font-medium text-slate-200">XAU/USD</td>
+              <td class="py-3 text-red-400 font-bold">SELL</td>
+              <td class="py-3 font-mono">0.10</td>
+              <td class="py-3 font-mono">2345.50</td>
+              <td class="py-3 font-mono">2338.20</td>
+              <td class="py-3 text-right text-emerald-400 font-bold">+$73.00</td>
+            </tr>
+            <tr>
+              <td class="py-3 font-medium text-slate-200">XAU/USD</td>
+              <td class="py-3 text-emerald-400 font-bold">BUY</td>
+              <td class="py-3 font-mono">0.05</td>
+              <td class="py-3 font-mono">2322.00</td>
+              <td class="py-3 font-mono">2328.50</td>
+              <td class="py-3 text-right text-emerald-400 font-bold">+$32.50</td>
+            </tr>
+            <tr>
+              <td class="py-3 font-medium text-slate-200">XAU/USD</td>
+              <td class="py-3 text-red-400 font-bold">SELL</td>
+              <td class="py-3 font-mono">0.10</td>
+              <td class="py-3 font-mono">2351.00</td>
+              <td class="py-3 font-mono">2353.10</td>
+              <td class="py-3 text-right text-red-400 font-bold">-$21.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -75,7 +141,7 @@
       const container = document.getElementById('news-container');
       const events = [
         { title: "Initial Jobless Claims (Klaim Pengangguran AS)", impact: "HIGH", time: "Hari Ini - 19:30 WIB", logic: "Jika data AKTUAL Turun -> DXY Naik 📈 -> XAU/USD Turun 📉." },
-        { title: "Philadelphia Fed Manufacturing Index", impact: "MEDIUM", time: "Hari Ini - 19:30 WIB", logic: "Hasil di atas konsensus/proyeksi menandakan ekonomi AS ekspansif, mendukung penguatan Dolar (DXY)." },
+        { title: "Philadelphia Fed Manufacturing Index", impact: "MEDIUM", time: "Hari Ini - 19:30 WIB", logic: "Hasil di atas konsensus menandakan ekonomi AS ekspansif, mendukung penguatan DXY." },
         { title: "US Core CPI MoM (Data Inflasi Inti)", impact: "HIGH", time: "Berkala Bulanan", logic: "Inflasi naik -> DXY Meroket 📈 -> Emas Ambruk 📉." },
         { title: "Non-Farm Employment Change (NFP AS)", impact: "HIGH", time: "Awal Bulan", logic: "NFP naik melebihi forecast memicu aksi jual pada Emas (Bearish XAU)." }
       ];
@@ -84,11 +150,11 @@
         <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
           <div class="flex justify-between text-xs text-slate-400 mb-2">
             <span class="font-mono text-amber-400"><i class="far fa-clock mr-1"></i> ${ev.time}</span>
-            <span class="px-2 py-0.5 ${ev.impact === 'HIGH' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'} font-bold rounded text-[10px]">${ev.impact} IMPACT</span>
+            <span class="px-2 py-0.5 ${ev.impact === 'HIGH' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'} font-bold rounded text-[10px]">${ev.impact}</span>
           </div>
           <h3 class="font-bold text-slate-200 text-xs mb-2">${ev.title}</h3>
           <div class="text-[11px] bg-amber-500/5 text-amber-300 p-2 rounded border border-amber-500/10">
-            <strong>Analisis Bot:</strong> ${ev.logic}
+            ${ev.logic}
           </div>
         </div>
       `).join('');
