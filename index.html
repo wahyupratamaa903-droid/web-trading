@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analisis XAU/DXY & Portofolio MT5</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto p-4 md:p-6">
+    <header class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-slate-800 pb-4 gap-4">
+      <div>
+        <h1 class="text-3xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY INSIGHTS</h1>
+        <p class="text-xs text-slate-400">Website Analisis Berita Fundamental & Portofolio MT5</p>
+      </div>
+      <div class="flex gap-4 text-sm">
+        <div class="bg-slate-900 px-4 py-2 rounded-xl border border-slate-800">
+          <span class="text-slate-400 block text-xs">XAU/USD (Emas)</span>
+          <span class="font-bold text-amber-400" id="ticker-gold">Loading...</span>
+        </div>
+        <div class="bg-slate-900 px-4 py-2 rounded-xl border border-slate-800">
+          <span class="text-slate-400 block text-xs">DXY (Indeks Dolar)</span>
+          <span class="font-bold text-blue-400" id="ticker-dxy">Loading...</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="bg-gradient-to-r from-amber-500/10 to-blue-500/10 border border-slate-800 rounded-2xl p-4 mb-6 text-sm">
+      <span class="font-bold text-amber-400"><i class="fas fa-calculator mr-1"></i> Rumus Korelasi Sederhana:</span> 
+      Jika Berita AS **Bagus (Hijau)** ➡️ DXY Naik 📈 ➡️ XAU/USD Turun 📉. Begitupun sebaliknya.
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-newspaper text-orange-500"></i> Berita Dampak Besar Hari Ini</h2>
+          <span class="px-2 py-1 bg-red-500/20 text-red-400 text-xs font-bold rounded">High Impact Only</span>
+        </div>
+        
+        <div id="news-container" class="space-y-4">
+          <p class="text-sm text-slate-500 italic">Mencari rilis data ekonomi dari kalender global...</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 space-y-6">
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+          <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-wallet text-emerald-500"></i> Ringkasan Akun MT5</h2>
+          
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-400 block">Balance (Saldo)</span>
+              <span class="text-lg font-mono font-bold text-slate-200">$1,250.00</span>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-400 block">Equity</span>
+              <span class="text-lg font-mono font-bold text-emerald-400">$1,253.20</span>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-400 block">Win Rate</span>
+              <span class="text-lg font-mono font-bold text-blue-400">68.4%</span>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-400 block">Total Profit</span>
+              <span class="text-lg font-mono font-bold text-amber-400">+$250.00</span>
+            </div>
+          </div>
+
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Grafik Pertumbuhan Keuntungan</h3>
+          <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+            <canvas id="portfolioChart" class="w-full h-40"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs text-slate-400">
+          <p class="font-bold text-slate-300 mb-1">💡 Tips Pemantauan:</p>
+          Pantau berita bertanda <span class="text-red-400 font-bold">CPI (Inflasi)</span> atau <span class="text-red-400 font-bold">FOMC (Suku Bunga)</span>. Berita tersebut adalah penggerak utama volatilitas Emas terbesar saat ini.
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // === 1. Simulasi Live Ticker Harga XAU dan DXY ===
+    function updatePrices() {
+      // Menggunakan angka acak realistis untuk simulasi bursa sebelum integrasi API kunci komersial
+      const mockGold = (2300 + Math.random() * 15).toFixed(2);
+      const mockDxy = (105 + Math.random() * 0.4).toFixed(3);
+      
+      document.getElementById('ticker-gold').textContent = `$${mockGold}`;
+      document.getElementById('ticker-dxy').textContent = `${mockDxy}`;
+    }
+    setInterval(updatePrices, 3000);
+    updatePrices();
+
+    // === 2. Pembuat Berita Fundamental Otomatis (News Feed) ===
+    const mockNews = [
+      { time: "19:30 WIB", event: "Core CPI m/m (Data Inflasi Bulanan AS)", impact: "High", forecast: "0.3%", previous: "0.4%", analysis: "Jika data rilis di atas 0.3%, DXY akan menguat tajam, dan Emas (XAU) kemungkinan besar akan jatuh tumbang." },
+      { time: "20:45 WIB", event: "Flash Manufacturing PMI", impact: "High", forecast: "50.5", previous: "50.0", analysis: "Angka di atas 50 menunjukkan ekspansi ekonomi ekonomi AS yang mendukung penguatan mata uang Dolar." },
+      { time: "23:00 WIB", event: "Pidato Ketua Fed Jerome Powell", impact: "High", forecast: "-", previous: "-", analysis: "Pernyataan hawkish mengenai suku bunga tinggi yang bertahan lama akan menekan laju kenaikan harga emas." }
+    ];
+
+    function loadNews() {
+      const container = document.getElementById('news-container');
+      container.innerHTML = mockNews.map(n => `
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-orange-500/40 transition-all">
+          <div class="flex justify-between text-xs text-slate-400 mb-2">
+            <span class="font-mono text-amber-400"><i class="far fa-clock mr-1"></i> ${n.time}</span>
+            <span class="text-red-400 font-bold"><i class="fas fa-fire mr-1"></i> Dampak Tinggi</span>
+          </div>
+          <h3 class="font-bold text-slate-200 text-base mb-2">${n.event}</h3>
+          <div class="grid grid-cols-2 gap-2 text-xs bg-slate-900 p-2 rounded-lg mb-3 font-mono">
+            <div><span class="text-slate-500">Perkiraan:</span> ${n.forecast}</div>
+            <div><span class="text-slate-500">Sebelumnya:</span> ${n.previous}</div>
+          </div>
+          <div class="text-xs bg-orange-500/5 text-orange-300 p-3 rounded-lg border border-orange-500/10">
+            <strong>Analisis Arah:</strong> ${n.analysis}
+          </div>
+        </div>
+      `).join('');
+    }
+    loadNews();
+
+    // === 3. Grafik Pertumbuhan Portofolio (Chart.js) ===
+    const ctx = document.getElementById('portfolioChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', 'Minggu 5'],
+        datasets: [{
+          label: 'Profit ($)',
+          data: [0, 50, 45, 120, 250],
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } },
+          y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 10 } } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
