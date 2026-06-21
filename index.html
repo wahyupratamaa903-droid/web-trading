@@ -13,7 +13,7 @@
     <div>
       <div class="mb-8">
         <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY</h1>
-        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v8.2 FIX</p>
+        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v8.3 STABLE</p>
       </div>
       <nav class="space-y-2">
         <button onclick="switchTab('analisis')" id="btn-analisis" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -26,8 +26,8 @@
     </div>
     <div class="pt-4 border-t border-slate-800/60 hidden md:block">
       <div class="flex items-center gap-2 text-xs text-slate-400">
-        <i class="fas fa-circle text-emerald-500 animate-pulse"></i>
-        <span>Strict Model Router Aktif</span>
+        <i class="fas fa-shield-alt text-emerald-500"></i>
+        <span>Strict Lock Router Aktif</span>
       </div>
     </div>
   </aside>
@@ -52,15 +52,15 @@
         
         <div class="border-b border-slate-800 pb-4 mb-4 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
           <div>
-            <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-brain text-purple-400"></i> AI Smart Router (Anti-Error)</h2>
-            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-check-double"></i> Prioritas Pilihan Terkunci Ketat</p>
+            <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-brain text-purple-400"></i> AI Smart Router (Anti-Bypass)</h2>
+            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-lock"></i> Pilihan Manual Dikunci Penuh</p>
           </div>
           
           <div class="w-full xl:w-auto flex items-center gap-2 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
-            <label for="model-selector" class="text-xs font-bold text-slate-400 whitespace-nowrap"><i class="fas fa-microchip text-amber-400 mr-1"></i> Mode:</label>
+            <label for="model-selector" class="text-xs font-bold text-slate-400 whitespace-nowrap"><i class="fas fa-microchip text-amber-400 mr-1"></i> Model:</label>
             <select id="model-selector" class="bg-transparent text-xs font-bold text-slate-200 outline-none cursor-pointer pr-2 max-w-[200px] sm:max-w-xs truncate">
-              <optgroup label="Sistem Cerdas">
-                <option value="auto_pilot" class="bg-slate-900 text-amber-400 font-bold">⚡ AUTO-PILOT (Pilih Otomatis & Terbaik)</option>
+              <optgroup label="Sistem Otomatis">
+                <option value="auto_pilot" class="bg-slate-900 text-amber-400 font-bold">⚡ AUTO-PILOT (Pilih Otomatis)</option>
               </optgroup>
               <optgroup label="OpenAI & Google">
                 <option value="openai/gpt-oss-120b:free" class="bg-slate-900 text-slate-100">OpenAI: GPT OSS 120B</option>
@@ -115,7 +115,7 @@
         <div id="chat-box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2 text-sm scrollbar-thin">
           <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%]">
             <p class="text-purple-400 font-bold mb-1"><i class="fas fa-robot"></i> System Core:</p>
-            Sistem perutean diperketat. Model yang kamu pilih pada menu di atas kini akan **dipaksa berjalan terlebih dahulu**.
+            Sistem pergantian model diperketat. Model yang kamu pilih pada menu di atas sekarang dijamin akan diprioritaskan penuh tanpa lompat otomatis ke model lain.
           </div>
         </div>
 
@@ -208,7 +208,7 @@
       let modelsToTry = [];
       const lowerText = text.toLowerCase();
 
-      // LOGIKA URUTAN: Jika user memilih model spesifik, kunci mati model tersebut di urutan ke-0!
+      // LOGIKA KUNCI: Jika user memiih model manual, JANGAN campur adukkan array di awal. Kunci mati!
       if (selectedDropdown === 'auto_pilot') {
           if (lowerText.includes('code') || lowerText.includes('script') || lowerText.includes('html') || lowerText.includes('python')) {
               modelsToTry = ['qwen/qwen3-coder:free', 'cohere/north-mini-code:free', 'openai/gpt-oss-120b:free'];
@@ -217,12 +217,12 @@
           } else {
               modelsToTry = ['deepseek/deepseek-r1:free', 'openai/gpt-oss-120b:free', 'google/gemma-4-31b:free'];
           }
-          // Gabungkan sisa alternatif
+          // Tambahkan alternatif sisa di belakang sebagai cadangan auto_pilot
           modelsToTry = [...new Set([...modelsToTry, ...allModelOptions])];
       } else {
-          // JIKA USER MEMILIH MANUAL (Misal DeepSeek R1), model tersebut wajib berada paling depan tunggal!
-          const sisaModel = allModelOptions.filter(m => m !== selectedDropdown);
-          modelsToTry = [selectedDropdown, ...sisaModel];
+          // JIKA DROPDOWN DIPILIH MANUAL, model tersebut diletakkan di urutan PERTAMA tunggal, baru diikuti cadangan.
+          const fallbackModels = allModelOptions.filter(m => m !== selectedDropdown);
+          modelsToTry = [selectedDropdown, ...fallbackModels];
       }
 
       let success = false;
@@ -230,8 +230,9 @@
       let modelUsed = "";
 
       for (let model of modelsToTry) {
+          // Modifikasi text UI agar kamu bisa melihat dengan jelas model apa yang sedang ditembak sistem saat ini
           document.getElementById(loadingId).innerHTML = `
-            <p class="text-purple-400 font-bold mb-1"><i class="fas fa-satellite-dish animate-pulse"></i> Meminta respons dari ${model.split('/')[1]}...</p>
+            <p class="text-purple-400 font-bold mb-1"><i class="fas fa-satellite-dish animate-pulse"></i> Meminta respons dari: <span class="text-amber-400">${model.split('/')[1]}</span>...</p>
           `;
 
           try {
@@ -259,7 +260,7 @@
               break; 
             }
           } catch (error) {
-            console.warn("Model " + model + " sibuk, beralih...");
+            console.warn("Model " + model + " gagal merespons, mencoba jalur alternatif...");
           }
       }
 
@@ -278,7 +279,7 @@
       } else {
         chatBox.innerHTML += `
           <div class="bg-orange-500/10 p-4 rounded-xl border border-orange-500/20 max-w-[85%] text-orange-400">
-            <i class="fas fa-exclamation-circle"></i> Jalur server penuh. Silakan klik kirim ulang.
+            <i class="fas fa-exclamation-circle"></i> Seluruh jalur server penuh. Silakan klik kirim ulang pesan Anda beberapa saat lagi.
           </div>
         `;
       }
