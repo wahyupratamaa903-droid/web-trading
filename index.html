@@ -13,7 +13,7 @@
     <div>
       <div class="mb-8">
         <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY</h1>
-        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v5.0</p>
+        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v6.0</p>
       </div>
       <nav class="space-y-2">
         <button onclick="switchTab('analisis')" id="btn-analisis" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -54,17 +54,28 @@
 
     <div id="tab-ai-chat" class="tab-content hidden space-y-6">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col h-[700px]">
-        <div class="border-b border-slate-800 pb-4 mb-4 flex justify-between items-center">
+        
+        <div class="border-b border-slate-800 pb-4 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-brain text-purple-400"></i> AI Trading Consultant</h2>
-            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-shield-alt"></i> Secure Gateway Protocol Terverifikasi</p>
+            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-shield-alt"></i> Secure Gateway Protocol Aktif</p>
+          </div>
+          
+          <div class="w-full sm:w-auto flex items-center gap-2 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
+            <label for="model-selector" class="text-xs font-bold text-slate-400 whitespace-nowrap"><i class="fas fa-cpu text-purple-400 mr-1"></i> Model:</label>
+            <select id="model-selector" class="bg-transparent text-xs font-bold text-slate-200 outline-none cursor-pointer pr-4">
+              <option value="meta-llama/llama-3.1-8b-instruct:free" class="bg-slate-900 text-slate-100">Meta: Llama 3.1 8B (Sangat Rekomendasi)</option>
+              <option value="google/gemma-2-9b-it:free" class="bg-slate-900 text-slate-100">Google: Gemma 2 9B (Analisis Tajam)</option>
+              <option value="qwen/qwen-2.5-7b-instruct:free" class="bg-slate-900 text-slate-100">Alibaba: Qwen 2.5 7B (Cepat & Akurat)</option>
+              <option value="deepseek/deepseek-chat:free" class="bg-slate-900 text-slate-100">DeepSeek: Chat (Logika Kuat)</option>
+            </select>
           </div>
         </div>
 
         <div id="chat-box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2 text-sm scrollbar-thin">
           <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%]">
             <p class="text-purple-400 font-bold mb-1"><i class="fas fa-robot"></i> AI Consultant:</p>
-            Koneksi aman berhasil dibangun tanpa hambatan! Server publik gratis siap melayani analisis teknikal, pola candlestick, dan proyeksi pasar harian Anda. Ada yang bisa saya bantu?
+            Sistem pilihan model berhasil dimuat! Anda bebas mengganti otak kecerdasan AI di menu kanan atas kapan saja tanpa kehilangan riwayat pesan. Ada pasar yang ingin kita bedah hari ini?
           </div>
         </div>
 
@@ -117,7 +128,6 @@
       }
     }
 
-    // BRANKAS ENKRIPSI DATA UTAMA
     const secureVault = "c2stb3ItdjEtZWM5YWFjNzJhOWRhMWEzMjk5YjA2NGM5OGNiNzQ0MTdmMDJlNTg4ZmVhMjllOTk1NjBlM2Y1MjFmMGZiYTQwMw==";
 
     function decryptToken() {
@@ -134,6 +144,7 @@
     async function sendMessage() {
       const inputEl = document.getElementById('user-input');
       const chatBox = document.getElementById('chat-box');
+      const selectedModel = document.getElementById('model-selector').value;
       
       const text = inputEl.value.trim();
       const apiKey = decryptToken(); 
@@ -152,92 +163,68 @@
       const loadingId = 'loading-' + Date.now();
       chatBox.innerHTML += `
         <div id="${loadingId}" class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%] animate-pulse">
-          <p class="text-purple-400 font-bold mb-1"><i class="fas fa-spinner fa-spin"></i> AI sedang merumuskan respons analisis terbaik...</p>
+          <p class="text-purple-400 font-bold mb-1"><i class="fas fa-spinner fa-spin"></i> Memproses lewat jalur ${selectedModel.split('/')[1].split(':')[0]}...</p>
         </div>
       `;
       chatBox.scrollTop = chatBox.scrollHeight;
 
-      // Proteksi Berlapis Validasi Kunci
       if (apiKey.startsWith("ERROR")) {
         document.getElementById(loadingId).remove();
         chatBox.innerHTML += `
           <div class="bg-red-500/10 p-4 rounded-xl border border-red-500/20 max-w-[85%] text-red-400">
-            <i class="fas fa-exclamation-triangle"></i> <strong>Sistem Gagal Otentikasi:</strong> Kunci pengenal aplikasi tidak tertanam dengan benar saat deployment. Sila ulangi eksekusi script Termux Anda.
+            <i class="fas fa-exclamation-triangle"></i> <strong>Sistem Gagal Otentikasi:</strong> Kunci pengenal aplikasi tidak tertanam dengan benar.
           </div>
         `;
         chatBox.scrollTop = chatBox.scrollHeight;
         return;
       }
 
-      // Daftar Rute Model Cadangan Otomatis Berkinerja Tinggi
-      const modelPool = [
-        "google/gemma-2-9b-it:free",
-        "qwen/qwen-2-7b-instruct:free",
-        "mistralai/mistral-7b-instruct:free",
-        "microsoft/phi-3-mini-128k-instruct:free"
-      ];
+      try {
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + apiKey,
+            "Content-Type": "application/json",
+            "HTTP-Referer": window.location.origin,
+            "X-Title": "Gold Insights Smart Terminal"
+          },
+          body: JSON.stringify({
+            "model": selectedModel,
+            "messages": [
+              {"role": "system", "content": "Kamu adalah konsultan trading khusus emas (XAU/USD) dan DXY yang cerdas, tajam, dan objektif. Berikan jawaban ringkas namun komprehensif dalam Bahasa Indonesia."},
+              {"role": "user", "content": text}
+            ]
+          })
+        });
 
-      let aiResponse = "";
-      let activeModel = "";
-      let targetAcquired = false;
-      let diagnosticMessage = "";
+        const data = await response.json();
 
-      for (const model of modelPool) {
-        try {
-          const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Authorization": "Bearer " + apiKey,
-              "Content-Type": "application/json",
-              "HTTP-Referer": window.location.origin,
-              "X-Title": "Gold Insights Smart Terminal"
-            },
-            body: JSON.stringify({
-              "model": model,
-              "messages": [
-                {"role": "system", "content": "Kamu adalah konsultan finansial dan trading khusus instrumen XAU/USD dan DXY yang cerdas, tajam, dan objektif. Berikan jawaban komprehensif namun to-the-point dalam Bahasa Indonesia."},
-                {"role": "user", "content": text}
-              ]
-            })
-          });
+        document.getElementById(loadingId).remove();
 
-          const data = await response.json();
-
-          if (data.error) {
-            throw new Error(data.error.message || "Penolakan akses jalur.");
-          }
-
-          if (data.choices && data.choices.length > 0) {
-            aiResponse = data.choices[0].message.content;
-            activeModel = model;
-            targetAcquired = true;
-            break; 
-          } else {
-            throw new Error("Provider mengembalikan data kosong.");
-          }
-
-        } catch (error) {
-          diagnosticMessage = error.message;
-          console.warn(`[Routing Redirect] Model ${model} dilewati: ${diagnosticMessage}`);
+        if (data.error) {
+          throw new Error(data.error.message || "Eror dari OpenRouter.");
         }
-      }
 
-      document.getElementById(loadingId).remove();
+        if (data.choices && data.choices.length > 0) {
+          const aiResponse = data.choices[0].message.content;
+          chatBox.innerHTML += `
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%]">
+              <p class="text-purple-400 font-bold mb-1 flex items-center gap-2">
+                <i class="fas fa-robot"></i> AI Consultant 
+                <span class="px-1.5 py-0.5 bg-slate-800 rounded text-[9px] font-mono text-slate-400 border border-slate-700">Core: ${selectedModel.split('/')[1]}</span>
+              </p>
+              <p class="whitespace-pre-line text-slate-200">${aiResponse}</p>
+            </div>
+          `;
+        } else {
+          throw new Error("Balasan kosong diterima.");
+        }
 
-      if (targetAcquired) {
-        chatBox.innerHTML += `
-          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%]">
-            <p class="text-purple-400 font-bold mb-1 flex items-center gap-2">
-              <i class="fas fa-robot"></i> AI Consultant 
-              <span class="px-1.5 py-0.5 bg-slate-800 rounded text-[9px] font-mono text-slate-400 border border-slate-700">Core: ${activeModel.split('/')[1]}</span>
-            </p>
-            <p class="whitespace-pre-line text-slate-200">${aiResponse}</p>
-          </div>
-        `;
-      } else {
+      } catch (error) {
+        if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
         chatBox.innerHTML += `
           <div class="bg-red-500/10 p-4 rounded-xl border border-red-500/20 max-w-[85%] text-red-400">
-            <i class="fas fa-wifi-slash"></i> <strong>Gangguan Komunikasi Jaringan:</strong> ${diagnosticMessage}. Silakan coba beberapa saat lagi.
+            <i class="fas fa-exclamation-circle"></i> <strong>Model Gagal Merespon:</strong> ${error.message}. Coba ganti ke pilihan model AI lainnya pada dropdown di atas.
           </div>
         `;
       }
