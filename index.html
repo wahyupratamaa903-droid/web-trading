@@ -2,10 +2,10 @@
 <html lang="id" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>GOLD & DXY INSIGHTS PRO</title>
-  <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
-  <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css)">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
@@ -28,26 +28,28 @@
     .ai-response h4 { color: #a78bfa; font-weight: 600; margin: 6px 0 3px; }
     .ai-response hr { border-color: #334155; margin: 8px 0; }
 
-    .model-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 9px; font-weight: 700; font-family: monospace; background: #1e293b; border: 1px solid #334155; color: #94a3b8; white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+    .model-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 9px; font-weight: 700; font-family: monospace; background: #1e293b; border: 1px solid #334155; color: #94a3b8; white-space: nowrap; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
     .tab-content { animation: fadeIn 0.2s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
     input:disabled { opacity: 0.6; cursor: not-allowed; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col md:flex-row">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col md:flex-row h-screen overflow-hidden">
 
-  <aside class="w-full md:w-64 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 p-4 md:p-6 flex flex-col justify-between shrink-0">
+  <aside class="w-full md:w-64 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 p-4 md:p-6 flex flex-col justify-between shrink-0 z-10">
     <div>
-      <div class="mb-6 md:mb-8">
-        <h1 class="text-xl md:text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY</h1>
-        <p class="text-[9px] text-slate-400 tracking-widest uppercase">Trading Terminal v8.6 PATCHED</p>
+      <div class="mb-4 md:mb-8 flex justify-between items-center md:block">
+        <div>
+          <h1 class="text-xl md:text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY</h1>
+          <p class="text-[9px] text-slate-400 tracking-widest uppercase">Trading Terminal v8.6.1 PRO</p>
+        </div>
       </div>
-      <nav class="flex flex-row md:flex-col gap-2">
-        <button onclick="switchTab('analisis')" id="btn-analisis" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition bg-amber-500/10 text-amber-400 border border-amber-500/20">
+      <nav class="flex flex-row md:flex-col gap-2 w-full">
+        <button onclick="switchTab('analisis')" id="btn-analisis" class="flex-1 md:flex-none flex items-center justify-center md:justify-start gap-3 px-4 py-2.5 md:py-3 text-sm font-bold rounded-xl transition bg-amber-500/10 text-amber-400 border border-amber-500/20">
           <i class="fas fa-chart-line w-5 text-center"></i> <span>Live Terminal</span>
         </button>
-        <button onclick="switchTab('ai-chat')" id="btn-ai-chat" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition text-slate-400 hover:bg-slate-800/50">
+        <button onclick="switchTab('ai-chat')" id="btn-ai-chat" class="flex-1 md:flex-none flex items-center justify-center md:justify-start gap-3 px-4 py-2.5 md:py-3 text-sm font-bold rounded-xl transition text-slate-400 hover:bg-slate-800/50">
           <i class="fas fa-robot w-5 text-center"></i> <span>Pusat Analisis AI</span>
         </button>
       </nav>
@@ -66,13 +68,13 @@
     </div>
   </aside>
 
-  <main class="flex-grow p-3 md:p-6 overflow-y-auto">
-    <div id="tab-analisis" class="tab-content space-y-4">
+  <main class="flex-grow p-3 md:p-6 overflow-y-auto h-full box-border">
+    <div id="tab-analisis" class="tab-content space-y-4 h-full">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
         <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 flex flex-col" style="height: 520px;">
           <h2 class="text-base md:text-lg font-bold mb-3 flex items-center gap-2"><i class="fas fa-calendar-alt text-orange-500"></i> Kalender Ekonomi</h2>
           <div class="flex-grow overflow-hidden rounded-xl border border-slate-800">
-            <iframe src="[https://s.tradingview.com/embed-widget/events/?locale=id&colorTheme=dark&isTransparent=true&width=100%25&height=100%25](https://s.tradingview.com/embed-widget/events/?locale=id&colorTheme=dark&isTransparent=true&width=100%25&height=100%25)" style="width:100%;height:100%;border:none;" allowtransparency="true" loading="lazy"></iframe>
+            <iframe src="https://s.tradingview.com/embed-widget/events/?locale=id&colorTheme=dark&isTransparent=true&width=100%25&height=100%25" style="width:100%;height:100%;border:none;" allowtransparency="true" loading="lazy"></iframe>
           </div>
         </div>
         <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6" style="height: 520px;">
@@ -82,18 +84,18 @@
       </div>
     </div>
 
-    <div id="tab-ai-chat" class="tab-content hidden">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl flex flex-col" style="height: calc(100vh - 100px); min-height: 500px; max-height: 850px;">
+    <div id="tab-ai-chat" class="tab-content hidden h-full">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl flex flex-col h-[calc(100vh-130px)] md:h-[calc(100vh-50px)]">
         <div class="border-b border-slate-800 p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shrink-0">
           <div>
             <h2 class="text-lg font-bold flex items-center gap-2"><i class="fas fa-brain text-purple-400"></i> AI Terminal Router</h2>
-            <p class="text-[10px] text-emerald-400 font-mono mt-0.5"><i class="fas fa-shield-alt"></i> XSS-Protected &bull; History-Aware &bull; Hard-Isolated v8.6</p>
+            <p class="text-[10px] text-emerald-400 font-mono mt-0.5"><i class="fas fa-shield-alt"></i> Anti-Scraping &bull; Smart Failover v8.6.1</p>
           </div>
           <div class="flex items-center gap-2 bg-slate-950 px-3 py-2 rounded-xl border border-slate-700 w-full sm:w-auto">
             <i class="fas fa-microchip text-amber-400 text-xs shrink-0"></i>
-            <select id="model-selector" onchange="onModelChange()" class="bg-transparent text-xs font-bold text-slate-200 outline-none cursor-pointer w-full sm:w-auto sm:max-w-[220px]">
+            <select id="model-selector" onchange="onModelChange()" class="bg-transparent text-xs font-bold text-slate-200 outline-none cursor-pointer w-full sm:w-auto">
               <optgroup label="🤖 Sistem Otomatis">
-                <option value="auto_pilot">⚡ AUTO-PILOT (Konieks Cerdas)</option>
+                <option value="auto_pilot">⚡ AUTO-PILOT (Konteks Cerdas)</option>
               </optgroup>
               <optgroup label="🧠 Reasoning / Analisis">
                 <option value="deepseek/deepseek-r1:free">DeepSeek R1 — Reasoning</option>
@@ -114,34 +116,28 @@
           <i class="fas fa-bolt"></i> <span id="mode-indicator-text">AUTO-PILOT aktif — Deteksi konteks otomatis</span>
         </div>
 
-        <div id="chat-box" class="flex-grow overflow-y-auto p-4 space-y-4 text-sm">
+        <div id="chat-box" class="flex-grow overflow-y-auto p-4 space-y-4 text-sm bg-slate-950/20">
           <div class="flex gap-3">
             <div class="w-7 h-7 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-robot text-purple-400 text-xs"></i></div>
             <div class="bg-slate-950 p-4 rounded-2xl rounded-tl-none border border-slate-800 max-w-[88%]">
-              <p class="text-purple-400 font-bold text-xs mb-2">System Core <span class="text-slate-600 font-normal">v8.6-PATCHED</span></p>
+              <p class="text-purple-400 font-bold text-xs mb-2">System Core <span class="text-slate-600 font-normal">v8.6.1-FIXED</span></p>
               <div class="ai-response text-slate-300 space-y-1">
                 <p>👋 Selamat datang di <strong>GOLD & DXY Trading Terminal</strong>.</p>
-                <p>Fitur aktif versi ini:</p>
-                <ul>
-                  <li>✅ Hard-Isolated mode manual (no silent fallback)</li>
-                  <li>✅ XSS protection pada semua output</li>
-                  <li>✅ Conversation history (AI ingat konteks)</li>
-                  <li>✅ Intent detection pada AUTO-PILOT</li>
-                </ul>
+                <p>Mesin routing otomatis dan isolasi manual berjalan optimal.</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="border-t border-slate-800 p-3 md:p-4 shrink-0">
-          <div class="flex items-center justify-between mb-2 px-1">
-            <span class="text-[10px] text-slate-600 font-mono"><i class="fas fa-history"></i> Riwayat: <span id="history-count">0</span> pesan</span>
-            <button onclick="clearHistory()" class="text-[10px] text-slate-600 hover:text-red-400 transition font-mono"><i class="fas fa-trash-alt"></i> Reset sesi</button>
+        <div class="border-t border-slate-800 p-3 shrink-0 bg-slate-900 rounded-b-2xl">
+          <div class="flex items-center justify-between mb-1.5 px-1">
+            <span class="text-[10px] text-slate-500 font-mono"><i class="fas fa-history"></i> Riwayat: <span id="history-count">0</span> sesi</span>
+            <button onclick="clearHistory()" class="text-[10px] text-slate-500 hover:text-red-400 transition font-mono"><i class="fas fa-trash-alt"></i> Reset sesi</button>
           </div>
           <div class="flex gap-2">
-            <input type="text" id="user-input" placeholder="Tanya analisis XAUUSD, DXY..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500/70 transition text-slate-100 placeholder-slate-600">
+            <input type="text" id="user-input" placeholder="Tanya analisis XAUUSD atau DXY..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500/70 transition text-slate-100 placeholder-slate-600">
             <button onclick="sendMessage()" id="send-btn" class="bg-gradient-to-r from-amber-500 to-orange-600 px-5 py-3 rounded-xl font-bold text-sm hover:opacity-90 active:scale-95 transition flex items-center gap-2 shrink-0">
-              <span class="hidden sm:inline">Kirim</span> <i class="fas fa-paper-plane"></i>
+              <span>Kirim</span> <i class="fas fa-paper-plane"></i>
             </button>
           </div>
         </div>
@@ -149,12 +145,12 @@
     </div>
   </main>
 
-  <script type="text/javascript" src="[https://s3.tradingview.com/tv.js](https://s3.tradingview.com/tv.js)"></script>
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <script type="text/javascript">
     const APP_CONFIG = {
-      endpoint: "[https://openrouter.ai/api/v1/chat/completions](https://openrouter.ai/api/v1/chat/completions)",
-      maxHistoryPairs: 8,
-      systemPrompt: `Kamu adalah AI Trading Analyst profesional untuk platform GOLD & DXY Trading Terminal. Jawab padat dalam Bahasa Indonesia, gunakan format sinyal 📈 BUY / 📉 SELL jika diminta.`
+      endpoint: "https://openrouter.ai/api/v1/chat/completions",
+      maxHistoryPairs: 6,
+      systemPrompt: "Kamu adalah AI Trading Analyst profesional untuk platform GOLD & DXY Trading Terminal. Jawab padat, terstruktur, langsung ke analisis teknikal/fundamental dalam Bahasa Indonesia. Gunakan simbol penanda tren grafik jika relevan."
     };
 
     const APP_STATE = { chartLoaded: false, isLoading: false, conversationHistory: [], currentModel: "auto_pilot" };
@@ -166,8 +162,8 @@
         general: ["openai/gpt-oss-120b:free", "meta-llama/llama-3.3-70b-instruct:free"]
       },
       intent_keywords: {
-        coding: ["kode", "code", "script", "bug", "error", "javascript"],
-        reasoning: ["analisis", "analisa", "prediksi", "xauusd", "dxy", "gold", "sinyal"]
+        coding: ["kode", "code", "script", "bug", "error", "html", "css", "js", "json"],
+        reasoning: ["analisis", "analisa", "prediksi", "xauusd", "dxy", "gold", "sinyal", "fomc", "cpi", "nfp", "trend", "support", "resistance"]
       }
     };
 
@@ -214,14 +210,14 @@
       const chatBox = document.getElementById('chat-box');
       let html = '';
       if (role === 'user') {
-        html = `<div class="flex gap-3 justify-end"><div class="bg-slate-800/60 p-3 rounded-2xl max-w-[88%]"><p class="text-amber-400 font-bold text-xs text-right">Kamu</p><p class="text-slate-200">${escapeHtml(content)}</p></div></div>`;
+        html = `<div class="flex gap-3 justify-end"><div class="bg-slate-800/60 p-3 rounded-2xl max-w-[88%]"><p class="text-amber-400 font-bold text-xs text-right">Kamu <i class="fas fa-user ml-1"></i></p><p class="text-slate-200">${escapeHtml(content)}</p></div></div>`;
       } else if (role === 'ai') {
-        const badge = modelSlug ? `<span class="model-badge ml-2">${escapeHtml(modelSlug)}</span>` : '';
+        const badge = modelSlug ? `<span class="model-badge ml-2"><i class="fas fa-microchip mr-1"></i>${escapeHtml(modelSlug)}</span>` : '';
         html = `<div class="flex gap-3"><div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 max-w-[88%]"><div class="flex items-center text-purple-400 font-bold text-xs">AI Engine ${badge}</div><div class="ai-response text-slate-200 mt-1">${isHtml ? content : renderMarkdown(content)}</div></div></div>`;
       } else if (role === 'error') {
-        html = `<div class="flex gap-3"><div class="bg-red-500/5 p-3 rounded-2xl border border-red-500/20 text-red-400 max-w-[88%]"><p class="font-bold text-xs">Error — Model Terkunci Gagal</p><pre class="text-xs font-mono bg-slate-950 p-2 rounded mt-1">${escapeHtml(content)}</pre></div></div>`;
+        html = `<div class="flex gap-3"><div class="bg-red-500/5 p-3 rounded-2xl border border-red-500/20 text-red-400 max-w-[88%]"><p class="font-bold text-xs"><i class="fas fa-exclamation-circle mr-1"></i>Isolasi Gagal</p><pre class="text-xs font-mono bg-slate-950 p-2 rounded mt-1 overflow-x-auto whitespace-pre-wrap">${escapeHtml(content)}</pre></div></div>`;
       } else if (role === 'system') {
-        html = `<div class="text-center py-1"><span class="text-[10px] font-mono text-slate-600 bg-slate-900 px-3 py-0.5 rounded-full">${escapeHtml(content)}</span></div>`;
+        html = `<div class="text-center py-1"><span class="text-[10px] font-mono text-slate-500 bg-slate-900 px-3 py-0.5 rounded-full border border-slate-800">${escapeHtml(content)}</span></div>`;
       }
       chatBox.insertAdjacentHTML('beforeend', html);
       chatBox.scrollTop = chatBox.scrollHeight;
@@ -230,7 +226,7 @@
     function showLoading(modelName = "...") {
       const chatBox = document.getElementById('chat-box');
       const loadingId = 'ld-' + Date.now();
-      chatBox.insertAdjacentHTML('beforeend', `<div id="${loadingId}" class="flex gap-3"><div class="bg-slate-950 p-3 rounded-2xl border border-slate-800"><p class="text-[10px] text-slate-500 font-mono"><i class="fas fa-circle-notch fa-spin"></i> Menghubungi <span class="text-amber-400 font-bold model-name-label">${escapeHtml(modelName)}</span>...</p></div></div>`);
+      chatBox.insertAdjacentHTML('beforeend', `<div id="${loadingId}" class="flex gap-3"><div class="bg-slate-950 p-3 rounded-2xl border border-slate-800"><p class="text-[10px] text-slate-500 font-mono"><i class="fas fa-circle-notch fa-spin text-purple-400 mr-1"></i>Menghubungi <span class="text-amber-400 font-bold model-name-label">${escapeHtml(modelName)}</span>...</p><div class="flex items-center gap-1 mt-1.5"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div></div></div>`);
       chatBox.scrollTop = chatBox.scrollHeight;
       return loadingId;
     }
@@ -254,17 +250,21 @@
 
     async function sendMessage() {
       if (APP_STATE.isLoading) return;
+      
       const inputEl = document.getElementById('user-input');
       const selectedDropdown = document.getElementById('model-selector').value;
       const text = inputEl.value.trim();
       const apiKey = decryptToken();
 
       if (!text) return;
-      if (!apiKey) { appendMessage({ role: 'error', content: "API key tidak tersedia atau dekripsi Base64 gagal." }); return; }
+      if (!apiKey) { 
+        appendMessage({ role: 'error', content: "Injeksi API Key tidak terdeteksi. Silakan jalankan script sed di Termux kembali." }); 
+        return; 
+      }
 
+      setLoadingState(true);
       appendMessage({ role: 'user', content: text });
       inputEl.value = '';
-      setLoadingState(true);
 
       let modelsToTry = [];
       let isAutoMode = selectedDropdown === 'auto_pilot';
@@ -272,7 +272,7 @@
       if (isAutoMode) {
         const intent = detectIntent(text);
         modelsToTry = [...MODEL_REGISTRY.auto_pools[intent]];
-        appendMessage({ role: 'system', content: `AUTO-PILOT: Intent "${intent}"` });
+        appendMessage({ role: 'system', content: `AUTO-PILOT: Memproses rute intent "${intent}"` });
       } else {
         modelsToTry = [selectedDropdown];
       }
@@ -288,24 +288,41 @@
         try {
           const response = await fetch(APP_CONFIG.endpoint, {
             method: "POST",
-            headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
-            body: JSON.stringify({ model: model, messages: messagesPayload, temperature: 0.7, max_tokens: 2048 })
+            headers: { 
+              "Authorization": "Bearer " + apiKey, 
+              "Content-Type": "application/json",
+              "HTTP-Referer": window.location.origin,
+              "X-Title": "GOLD DXY Terminal"
+            },
+            body: JSON.stringify({ model: model, messages: messagesPayload, temperature: 0.6, max_tokens: 1500 })
           });
+          
           const data = await response.json();
           if (data.error) {
             lastError = data.error.message || JSON.stringify(data.error);
-            if (!isAutoMode) { removeLoading(loadingId); appendMessage({ role: 'error', content: lastError }); setLoadingState(false); return; }
+            if (!isAutoMode) { 
+              removeLoading(loadingId); 
+              appendMessage({ role: 'error', content: `[OpenRouter Error] ${lastError}` }); 
+              setLoadingState(false); 
+              return; 
+            }
             continue;
           }
-          if (data.choices && data.choices.length > 0) {
+          
+          if (data.choices && data.choices.length > 0 && data.choices[0].message?.content) {
             success = true;
             finalResponse = data.choices[0].message.content;
             modelUsed = data.model || model;
             break;
           }
         } catch (err) {
-          lastError = err.message;
-          if (!isAutoMode) { removeLoading(loadingId); appendMessage({ role: 'error', content: lastError }); setLoadingState(false); return; }
+          lastError = err.message || "Network Timeout / Interrupted Fallback.";
+          if (!isAutoMode) { 
+            removeLoading(loadingId); 
+            appendMessage({ role: 'error', content: `[Fetch Failure] ${lastError}` }); 
+            setLoadingState(false); 
+            return; 
+          }
         }
       }
 
@@ -315,37 +332,81 @@
         updateHistoryCounter();
         appendMessage({ role: 'ai', content: finalResponse, modelSlug: modelUsed });
       } else {
-        appendMessage({ role: 'error', content: `AUTO-PILOT gagal. Error terakhir: ${lastError}` });
+        appendMessage({ role: 'error', content: `Seluruh pool model gagal dihubungi. Detail masalah terakhir:\n${lastError}` });
       }
       setLoadingState(false);
+      
+      // Auto-focus kembali ke kolom input setelah pengiriman selesai (Optimasi HP Android)
+      setTimeout(() => { inputEl.focus(); }, 100);
     }
 
-    function clearHistory() { APP_STATE.conversationHistory = []; updateHistoryCounter(); appendMessage({ role: 'system', content: 'Sesi direset.' }); }
+    function clearHistory() { 
+      APP_STATE.conversationHistory = []; 
+      updateHistoryCounter(); 
+      appendMessage({ role: 'system', content: 'Riwayat percakapan dibersihkan.' }); 
+    }
 
     function onModelChange() {
       const val = document.getElementById('model-selector').value;
       const modeText = document.getElementById('mode-indicator-text');
       const sidebarModel = document.getElementById('sidebar-active-model');
-      if (val === 'auto_pilot') { modeText.textContent = 'AUTO-PILOT aktif'; sidebarModel.textContent = 'Mode: AUTO-PILOT'; }
-      else { modeText.textContent = `HARD-ISOLATED: ${val.split('/').pop()}`; sidebarModel.textContent = val.split('/').pop(); }
+      if (val === 'auto_pilot') { 
+        modeText.textContent = 'AUTO-PILOT aktif — Deteksi konteks otomatis'; 
+        sidebarModel.textContent = 'Mode: AUTO-PILOT'; 
+      } else { 
+        const shortName = val.split('/').pop();
+        modeText.textContent = `HARD-ISOLATED: ${shortName} — Gagal langsung error`; 
+        sidebarModel.textContent = shortName; 
+      }
     }
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.getElementById('tab-' + tabId).classList.remove('hidden');
-      if(tabId === 'analisis') initChart();
+      
+      document.querySelectorAll('aside nav button').forEach(btn => {
+        btn.className = "flex-1 md:flex-none flex items-center justify-center md:justify-start gap-3 px-4 py-2.5 md:py-3 text-sm font-bold rounded-xl transition text-slate-400 hover:bg-slate-800/50";
+      });
+      
+      const activeBtn = document.getElementById('btn-' + tabId);
+      if(tabId === 'analisis') {
+        activeBtn.className = "flex-1 md:flex-none flex items-center justify-center md:justify-start gap-3 px-4 py-2.5 md:py-3 text-sm font-bold rounded-xl transition bg-amber-500/10 text-amber-400 border border-amber-500/20";
+        initChart();
+      } else {
+        activeBtn.className = "flex-1 md:flex-none flex items-center justify-center md:justify-start gap-3 px-4 py-2.5 md:py-3 text-sm font-bold rounded-xl transition bg-purple-500/10 text-purple-400 border border-purple-500/20";
+      }
     }
 
     function initChart() {
       if (APP_STATE.chartLoaded) return;
       try {
-        new TradingView.widget({ autosize: true, symbol: "FX_IDC:XAUUSD", interval: "H1", timezone: "Asia/Jakarta", theme: "dark", style: "1", locale: "id", container_id: "tradingview_gold" });
+        new TradingView.widget({ 
+          autosize: true, 
+          symbol: "FX_IDC:XAUUSD", 
+          interval: "H1", 
+          timezone: "Asia/Jakarta", 
+          theme: "dark", 
+          style: "1", 
+          locale: "id", 
+          container_id: "tradingview_gold",
+          hide_side_toolbar: false,
+          allow_symbol_change: true
+        });
         APP_STATE.chartLoaded = true;
-      } catch(e) { console.error(e); }
+      } catch(e) { console.error("TradingView failed to map container:", e); }
     }
 
-    document.getElementById('user-input').addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
-    window.addEventListener('load', function() { initChart(); onModelChange(); });
+    document.getElementById('user-input').addEventListener('keydown', function(e) { 
+      if (e.key === 'Enter' && !e.shiftKey) { 
+        e.preventDefault(); 
+        sendMessage(); 
+      } 
+    });
+    
+    window.addEventListener('load', function() { 
+      initChart(); 
+      onModelChange(); 
+    });
   </script>
 </body>
 </html>
