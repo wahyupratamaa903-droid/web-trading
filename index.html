@@ -13,7 +13,7 @@
     <div>
       <div class="mb-8">
         <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY</h1>
-        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v8.0 MAX</p>
+        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v8.2 FIX</p>
       </div>
       <nav class="space-y-2">
         <button onclick="switchTab('analisis')" id="btn-analisis" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -27,7 +27,7 @@
     <div class="pt-4 border-t border-slate-800/60 hidden md:block">
       <div class="flex items-center gap-2 text-xs text-slate-400">
         <i class="fas fa-circle text-emerald-500 animate-pulse"></i>
-        <span>Arena Auto-Routing Aktif</span>
+        <span>Strict Model Router Aktif</span>
       </div>
     </div>
   </aside>
@@ -53,7 +53,7 @@
         <div class="border-b border-slate-800 pb-4 mb-4 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
           <div>
             <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-brain text-purple-400"></i> AI Smart Router (Anti-Error)</h2>
-            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-network-wired"></i> Otomatis mencari model yang aktif</p>
+            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-check-double"></i> Prioritas Pilihan Terkunci Ketat</p>
           </div>
           
           <div class="w-full xl:w-auto flex items-center gap-2 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
@@ -115,7 +115,7 @@
         <div id="chat-box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2 text-sm scrollbar-thin">
           <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%]">
             <p class="text-purple-400 font-bold mb-1"><i class="fas fa-robot"></i> System Core:</p>
-            Puluhan model berhasil dimuat! Mode <strong>Auto-Pilot</strong> aktif. Tuliskan kode, analisa gambar, maupun analisa trading, dan sistem akan mengoperkannya ke server terbaik secara otomatis tanpa error.
+            Sistem perutean diperketat. Model yang kamu pilih pada menu di atas kini akan **dipaksa berjalan terlebih dahulu**.
           </div>
         </div>
 
@@ -196,12 +196,11 @@
       const loadingId = 'loading-' + Date.now();
       chatBox.innerHTML += `
         <div id="${loadingId}" class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%] animate-pulse">
-          <p class="text-purple-400 font-bold mb-1"><i class="fas fa-spinner fa-spin"></i> Memproses rute terbaik...</p>
+          <p class="text-purple-400 font-bold mb-1"><i class="fas fa-spinner fa-spin"></i> Menghubungi server...</p>
         </div>
       `;
       chatBox.scrollTop = chatBox.scrollHeight;
 
-      // Ambil seluruh model yang ada di option (kecuali auto)
       const allModelOptions = Array.from(document.getElementById('model-selector').options)
                                    .map(opt => opt.value)
                                    .filter(val => val !== 'auto_pilot');
@@ -209,30 +208,30 @@
       let modelsToTry = [];
       const lowerText = text.toLowerCase();
 
-      // Logika Arena AI Auto-Routing
+      // LOGIKA URUTAN: Jika user memilih model spesifik, kunci mati model tersebut di urutan ke-0!
       if (selectedDropdown === 'auto_pilot') {
           if (lowerText.includes('code') || lowerText.includes('script') || lowerText.includes('html') || lowerText.includes('python')) {
               modelsToTry = ['qwen/qwen3-coder:free', 'cohere/north-mini-code:free', 'openai/gpt-oss-120b:free'];
           } else if (lowerText.includes('gambar') || lowerText.includes('lihat')) {
-              modelsToTry = ['qwen/qwen2.5-vl-3b-instruct:free', 'nvidia/llama-nemotron-rerank-vl-1b-v2:free', 'openai/gpt-oss-120b:free'];
+              modelsToTry = ['qwen/qwen2.5-vl-3b-instruct:free', 'nvidia/llama-nemotron-rerank-vl-1b-v2:free'];
           } else {
-              modelsToTry = ['openai/gpt-oss-120b:free', 'deepseek/deepseek-r1:free', 'google/gemma-4-31b:free', 'nvidia/nemotron-3-ultra:free'];
+              modelsToTry = ['deepseek/deepseek-r1:free', 'openai/gpt-oss-120b:free', 'google/gemma-4-31b:free'];
           }
-          // Tambahkan sisa model sebagai jaring pengaman utama
+          // Gabungkan sisa alternatif
           modelsToTry = [...new Set([...modelsToTry, ...allModelOptions])];
       } else {
-          // Jika user memilih 1 model spesifik, coba model itu dulu, jika mati langsung oper ke yang lain
-          modelsToTry = [...new Set([selectedDropdown, ...allModelOptions])];
+          // JIKA USER MEMILIH MANUAL (Misal DeepSeek R1), model tersebut wajib berada paling depan tunggal!
+          const sisaModel = allModelOptions.filter(m => m !== selectedDropdown);
+          modelsToTry = [selectedDropdown, ...sisaModel];
       }
 
       let success = false;
       let finalResponse = "";
       let modelUsed = "";
 
-      // Loop Anti-Error Merah (Silent Fallback)
       for (let model of modelsToTry) {
           document.getElementById(loadingId).innerHTML = `
-            <p class="text-purple-400 font-bold mb-1"><i class="fas fa-satellite-dish animate-pulse"></i> Routing ke ${model.split('/')[1]}...</p>
+            <p class="text-purple-400 font-bold mb-1"><i class="fas fa-satellite-dish animate-pulse"></i> Meminta respons dari ${model.split('/')[1]}...</p>
           `;
 
           try {
@@ -245,7 +244,7 @@
               body: JSON.stringify({
                 "model": model,
                 "messages": [
-                  {"role": "system", "content": "Kamu adalah asisten trading dan koding profesional. Jawab dengan cerdas, padat, dan bahasa Indonesia yang baik."},
+                  {"role": "system", "content": "Kamu adalah asisten trading profesional. Jawab dengan cerdas, padat, menggunakan Bahasa Indonesia."},
                   {"role": "user", "content": text}
                 ]
               })
@@ -253,16 +252,14 @@
 
             const data = await response.json();
             
-            // Jika berhasil dan bukan error dari openrouter
             if (!data.error && data.choices && data.choices.length > 0) {
               success = true;
               finalResponse = data.choices[0].message.content;
               modelUsed = model;
-              break; // Keluar dari loop pencarian
+              break; 
             }
           } catch (error) {
-            // Lanjut mencoba rute model berikutnya secara diam-diam tanpa memunculkan error merah
-            console.warn("Rute " + model + " penuh/error, mengalihkan...");
+            console.warn("Model " + model + " sibuk, beralih...");
           }
       }
 
@@ -279,10 +276,9 @@
           </div>
         `;
       } else {
-        // Ini hanya akan muncul jika ke-30 model mati semua (sangat mustahil)
         chatBox.innerHTML += `
           <div class="bg-orange-500/10 p-4 rounded-xl border border-orange-500/20 max-w-[85%] text-orange-400">
-            <i class="fas fa-exclamation-circle"></i> Seluruh jaringan server publik saat ini sedang maintenance. Silakan coba kirim ulang dalam beberapa detik.
+            <i class="fas fa-exclamation-circle"></i> Jalur server penuh. Silakan klik kirim ulang.
           </div>
         `;
       }
