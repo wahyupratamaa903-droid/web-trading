@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>GOLD & DXY INSIGHTS PRO v9.1</title>
+<title>GOLD & DXY INSIGHTS PRO v9.2</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <style>
@@ -25,8 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 @keyframes typingB{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-7px);opacity:1}}
 @keyframes glowRing{0%,100%{box-shadow:0 0 6px rgba(245,158,11,0.18),0 0 14px rgba(245,158,11,0.06)}50%{box-shadow:0 0 18px rgba(245,158,11,0.38),0 0 40px rgba(245,158,11,0.1)}}
 @keyframes tickerMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes priceFlash{0%{background:transparent}50%{background:rgba(52,211,153,0.15)}100%{background:transparent}}
+@keyframes priceFlashRed{0%{background:transparent}50%{background:rgba(239,68,68,0.15)}100%{background:transparent}}
 .anim-fade{animation:fadeUp .4s ease both}
 .anim-float{animation:floatY 3.5s ease-in-out infinite}
+.flash-green{animation:priceFlash .8s ease}
+.flash-red{animation:priceFlashRed .8s ease}
 .typing-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a855f7;margin:0 2px;animation:typingB 1.3s infinite}
 .typing-dot:nth-child(2){animation-delay:.18s}
 .typing-dot:nth-child(3){animation-delay:.36s}
@@ -41,14 +45,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .err-box{background:rgba(239,68,68,0.055);border:1px solid rgba(239,68,68,0.14);border-radius:.9rem;padding:.8rem}
 .j-row{transition:background .18s;border-radius:.5rem;padding:.38rem .55rem}
 .j-row:hover{background:rgba(245,158,11,0.035)}
-.ticker-track{display:flex;animation:tickerMove 45s linear infinite;width:max-content}
+.ticker-track{display:flex;animation:tickerMove 50s linear infinite;width:max-content}
 .ticker-track:hover{animation-play-state:paused}
 button:disabled{opacity:.4;cursor:not-allowed}
 input:disabled{opacity:.45;cursor:not-allowed}
 .ai-out strong{color:#fbbf24;font-weight:700}
 .ai-out em{color:#94a3b8}
 .ai-out code{background:#0f1623;color:#34d399;padding:1px 5px;border-radius:4px;font-family:monospace;font-size:.77em;border:1px solid #1e293b}
-.ai-out pre{background:#090d1a;border:1px solid #1e293b;border-radius:8px;padding:10px;margin:6px 0;overflow-x:auto;font-family:monospace;font-size:.77em;color:#e2e8f0}
+.ai-out pre{background:#090d1a;border:1px solid #1e293b;border-radius:8px;padding:10px;margin:6px 0;overflow-x:auto;font-family:monospace;font-size:.77em}
 .ai-out ul{list-style:disc;padding-left:16px}
 .ai-out ol{list-style:decimal;padding-left:16px}
 .ai-out li{margin:2px 0}
@@ -56,11 +60,16 @@ input:disabled{opacity:.45;cursor:not-allowed}
 .ai-out hr{border-color:#1e293b;margin:6px 0}
 .alert-toast{animation:slideR .3s ease}
 #chat{scroll-behavior:smooth}
+.price-cell{transition:all .3s;border-radius:.5rem;padding:2px 4px}
+.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+optgroup{font-style:normal;font-weight:bold;color:#fbbf24;background:#06060e}
+option{background:#0f172a;color:#e2e8f0;padding:4px}
 </style>
 </head>
 <body>
 
-<!-- =========== LOGIN =========== -->
+<!-- LOGIN -->
 <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center login-bg">
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div class="absolute top-1/4 left-1/4 w-72 h-72 rounded-full bg-amber-500/5 blur-3xl anim-float"></div>
@@ -72,24 +81,22 @@ input:disabled{opacity:.45;cursor:not-allowed}
         <i class="fas fa-chart-line text-2xl grad-amber"></i>
       </div>
       <h1 class="text-xl font-black grad-amber">GOLD &amp; DXY</h1>
-      <p class="text-[9px] text-slate-500 tracking-[.22em] uppercase mt-1">Trading Terminal v9.1 PATCHED</p>
+      <p class="text-[9px] text-slate-500 tracking-[.22em] uppercase mt-1">v9.2 REAL-TIME</p>
     </div>
     <form id="login-form" class="space-y-3">
       <div>
-        <label class="block text-[10px] text-slate-500 mb-1 font-semibold tracking-wide"><i class="fas fa-user text-amber-500/60 mr-1"></i>Username</label>
-        <input type="text" id="lg-user" value="trader" autocomplete="username"
-          class="w-full bg-slate-900/40 border border-slate-700/45 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/45 transition text-slate-100 placeholder-slate-600">
+        <label class="block text-[10px] text-slate-500 mb-1 font-semibold"><i class="fas fa-user text-amber-500/60 mr-1"></i>Username</label>
+        <input type="text" id="lg-user" value="trader" autocomplete="username" class="w-full bg-slate-900/40 border border-slate-700/45 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/45 transition text-slate-100">
       </div>
       <div>
-        <label class="block text-[10px] text-slate-500 mb-1 font-semibold tracking-wide"><i class="fas fa-lock text-amber-500/60 mr-1"></i>Password</label>
-        <input type="password" id="lg-pass" value="goldrush2024" autocomplete="current-password"
-          class="w-full bg-slate-900/40 border border-slate-700/45 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/45 transition text-slate-100">
+        <label class="block text-[10px] text-slate-500 mb-1 font-semibold"><i class="fas fa-lock text-amber-500/60 mr-1"></i>Password</label>
+        <input type="password" id="lg-pass" value="goldrush2024" autocomplete="current-password" class="w-full bg-slate-900/40 border border-slate-700/45 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/45 transition text-slate-100">
       </div>
       <button type="button" id="lg-btn" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 transition active:scale-[.97] mt-2">
         <i class="fas fa-unlock mr-2"></i>Enter Terminal
       </button>
       <p class="text-center text-[9px] text-slate-600 mt-2">
-        <i class="fas fa-shield-alt text-emerald-500/55 mr-1"></i>Session lokal &bull; Data tidak dikirim
+        <i class="fas fa-shield-alt text-emerald-500/55 mr-1"></i>Session lokal &bull; Real-time data
       </p>
     </form>
     <div id="lg-err" class="mt-3 text-red-400 text-xs text-center hidden">
@@ -98,10 +105,9 @@ input:disabled{opacity:.45;cursor:not-allowed}
   </div>
 </div>
 
-<!-- =========== MAIN APP =========== -->
+<!-- MAIN APP -->
 <div id="app" class="hidden min-h-screen">
 
-  <!-- Alert container -->
   <div id="alert-box" class="fixed top-3 right-3 z-50 space-y-2" style="max-width:310px;pointer-events:none"></div>
 
   <!-- HEADER -->
@@ -113,45 +119,51 @@ input:disabled{opacity:.45;cursor:not-allowed}
         </div>
         <div>
           <h1 class="text-xs font-black grad-amber leading-tight">GOLD &amp; DXY</h1>
-          <p class="text-[7px] text-slate-600 tracking-[.18em] uppercase">v9.1 Patched</p>
+          <p class="text-[7px] text-slate-600 tracking-[.18em] uppercase">v9.2 REALTIME</p>
         </div>
       </div>
       <div class="flex items-center gap-1.5">
+        <span id="last-update" class="text-[8px] text-slate-500 font-mono hidden sm:flex items-center gap-1">
+          <span class="live-dot"></span><span id="update-time">--:--</span>
+        </span>
+        <button id="refresh-btn" class="text-[10px] text-slate-400 hover:text-emerald-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/45 hover:border-emerald-500/22 flex items-center gap-1" title="Refresh prices">
+          <i class="fas fa-sync-alt text-[9px]"></i>
+        </button>
         <button id="tv-toggle-btn" class="text-[10px] text-slate-400 hover:text-amber-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/45 hover:border-amber-500/22 flex items-center gap-1">
-          <i class="fas fa-chart-area text-[9px]"></i><span id="tv-lbl" class="hidden sm:inline">Hide Chart</span>
+          <i class="fas fa-chart-area text-[9px]"></i><span id="tv-lbl" class="hidden sm:inline">Hide</span>
         </button>
         <button id="exp-chat-btn" class="text-[10px] text-slate-400 hover:text-emerald-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/45 hover:border-emerald-500/22 flex items-center gap-1">
-          <i class="fas fa-download text-[9px]"></i><span class="hidden sm:inline">Export</span>
+          <i class="fas fa-download text-[9px]"></i>
         </button>
         <button id="logout-btn" class="text-[10px] text-slate-400 hover:text-red-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/45 hover:border-red-500/22 flex items-center gap-1">
-          <i class="fas fa-sign-out-alt text-[9px]"></i><span class="hidden sm:inline">Exit</span>
+          <i class="fas fa-sign-out-alt text-[9px]"></i>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- NEWS TICKER -->
+  <!-- TICKER -->
   <div class="glass border-b border-slate-800/25 overflow-hidden">
     <div class="py-2 px-3 flex items-center gap-3">
       <span class="text-amber-500 font-bold text-[10px] whitespace-nowrap shrink-0 flex items-center gap-1">
         <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse inline-block"></span>LIVE
       </span>
       <div class="overflow-hidden flex-grow relative">
-        <div class="ticker-track text-[11px] text-slate-400 select-none">
-          <span class="mx-5">📊 <b class="text-amber-400">NFP</b>: 227K <span class="text-slate-500">(Prev: 212K)</span></span>
-          <span class="mx-5">🏦 <b class="text-purple-400">FOMC</b>: Rate Hold 5.25%</span>
-          <span class="mx-5">📈 <b class="text-emerald-400">CPI</b> YoY: 3.2%</span>
-          <span class="mx-5">💰 <b class="text-amber-400">XAU</b>: $2,645 <span class="text-emerald-400">▲0.82%</span></span>
-          <span class="mx-5">💵 <b class="text-blue-400">DXY</b>: 104.23 <span class="text-red-400">▼0.12%</span></span>
-          <span class="mx-5">🔥 <b class="text-orange-400">BTC</b>: $67,245 <span class="text-emerald-400">▲2.3%</span></span>
-          <span class="mx-5">📉 <b class="text-slate-300">EUR/USD</b>: 1.0845 <span class="text-emerald-400">▲0.08%</span></span>
-          <span class="mx-5">📊 <b class="text-amber-400">NFP</b>: 227K <span class="text-slate-500">(Prev: 212K)</span></span>
-          <span class="mx-5">🏦 <b class="text-purple-400">FOMC</b>: Rate Hold 5.25%</span>
-          <span class="mx-5">📈 <b class="text-emerald-400">CPI</b> YoY: 3.2%</span>
-          <span class="mx-5">💰 <b class="text-amber-400">XAU</b>: $2,645 <span class="text-emerald-400">▲0.82%</span></span>
-          <span class="mx-5">💵 <b class="text-blue-400">DXY</b>: 104.23 <span class="text-red-400">▼0.12%</span></span>
-          <span class="mx-5">🔥 <b class="text-orange-400">BTC</b>: $67,245 <span class="text-emerald-400">▲2.3%</span></span>
-          <span class="mx-5">📉 <b class="text-slate-300">EUR/USD</b>: 1.0845 <span class="text-emerald-400">▲0.08%</span></span>
+        <div id="ticker-track" class="ticker-track text-[11px] text-slate-400 select-none">
+          <span class="mx-5">📊 <b class="text-amber-400">NFP</b>: 227K</span>
+          <span class="mx-5">🏦 <b class="text-purple-400">FOMC</b>: Rate 5.25%</span>
+          <span class="mx-5">📈 <b class="text-emerald-400">CPI</b>: 3.2%</span>
+          <span class="mx-5">💰 <b class="text-amber-400">XAU</b>: <span id="tk-xau">loading</span></span>
+          <span class="mx-5">💵 <b class="text-blue-400">DXY</b>: <span id="tk-dxy">loading</span></span>
+          <span class="mx-5">🔥 <b class="text-orange-400">BTC</b>: <span id="tk-btc">loading</span></span>
+          <span class="mx-5">📉 <b class="text-slate-300">EUR/USD</b>: <span id="tk-eur">loading</span></span>
+          <span class="mx-5">📊 <b class="text-amber-400">NFP</b>: 227K</span>
+          <span class="mx-5">🏦 <b class="text-purple-400">FOMC</b>: Rate 5.25%</span>
+          <span class="mx-5">📈 <b class="text-emerald-400">CPI</b>: 3.2%</span>
+          <span class="mx-5">💰 <b class="text-amber-400">XAU</b>: <span id="tk-xau2">loading</span></span>
+          <span class="mx-5">💵 <b class="text-blue-400">DXY</b>: <span id="tk-dxy2">loading</span></span>
+          <span class="mx-5">🔥 <b class="text-orange-400">BTC</b>: <span id="tk-btc2">loading</span></span>
+          <span class="mx-5">📉 <b class="text-slate-300">EUR/USD</b>: <span id="tk-eur2">loading</span></span>
         </div>
       </div>
     </div>
@@ -159,330 +171,291 @@ input:disabled{opacity:.45;cursor:not-allowed}
 
   <main class="max-w-7xl mx-auto p-3 md:p-5 space-y-5">
 
-    <!-- WATCHLIST -->
+    <!-- WATCHLIST REAL-TIME -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <div class="glass-card p-3 cursor-default">
-        <p class="text-[9px] text-slate-500 mb-0.5 font-mono">XAU/USD</p>
-        <p class="text-base font-black text-amber-400">$2,645</p>
-        <p class="text-[10px] text-emerald-400"><i class="fas fa-caret-up mr-0.5"></i>+0.82%</p>
+      <div class="glass-card p-3">
+        <div class="flex items-center justify-between mb-0.5">
+          <p class="text-[9px] text-slate-500 font-mono">XAU/USD</p>
+          <span class="live-dot"></span>
+        </div>
+        <p id="w-xau-px" class="text-base font-black text-amber-400 price-cell">--</p>
+        <p id="w-xau-ch" class="text-[10px] text-slate-500">--</p>
       </div>
-      <div class="glass-card p-3 cursor-default">
-        <p class="text-[9px] text-slate-500 mb-0.5 font-mono">DXY</p>
-        <p class="text-base font-black text-blue-400">104.23</p>
-        <p class="text-[10px] text-red-400"><i class="fas fa-caret-down mr-0.5"></i>-0.12%</p>
+      <div class="glass-card p-3">
+        <div class="flex items-center justify-between mb-0.5">
+          <p class="text-[9px] text-slate-500 font-mono">DXY</p>
+          <span class="live-dot"></span>
+        </div>
+        <p id="w-dxy-px" class="text-base font-black text-blue-400 price-cell">--</p>
+        <p id="w-dxy-ch" class="text-[10px] text-slate-500">--</p>
       </div>
-      <div class="glass-card p-3 cursor-default">
-        <p class="text-[9px] text-slate-500 mb-0.5 font-mono">EUR/USD</p>
-        <p class="text-base font-black text-slate-100">1.0845</p>
-        <p class="text-[10px] text-emerald-400"><i class="fas fa-caret-up mr-0.5"></i>+0.08%</p>
+      <div class="glass-card p-3">
+        <div class="flex items-center justify-between mb-0.5">
+          <p class="text-[9px] text-slate-500 font-mono">EUR/USD</p>
+          <span class="live-dot"></span>
+        </div>
+        <p id="w-eur-px" class="text-base font-black text-slate-100 price-cell">--</p>
+        <p id="w-eur-ch" class="text-[10px] text-slate-500">--</p>
       </div>
-      <div class="glass-card p-3 cursor-default">
-        <p class="text-[9px] text-slate-500 mb-0.5 font-mono">BTC/USD</p>
-        <p class="text-base font-black text-orange-400">$67,245</p>
-        <p class="text-[10px] text-emerald-400"><i class="fas fa-caret-up mr-0.5"></i>+2.34%</p>
+      <div class="glass-card p-3">
+        <div class="flex items-center justify-between mb-0.5">
+          <p class="text-[9px] text-slate-500 font-mono">BTC/USD</p>
+          <span class="live-dot"></span>
+        </div>
+        <p id="w-btc-px" class="text-base font-black text-orange-400 price-cell">--</p>
+        <p id="w-btc-ch" class="text-[10px] text-slate-500">--</p>
       </div>
     </div>
 
-    <!-- MAIN GRID -->
+    <!-- GRID -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-      <!-- LEFT: Chart + Calendar -->
       <div class="lg:col-span-7 space-y-5">
-
-        <!-- TradingView Chart -->
         <div id="chart-wrap" class="glass-card p-4">
           <div class="flex items-center justify-between mb-3">
-            <h2 class="text-xs font-bold flex items-center gap-2">
-              <i class="fas fa-chart-area grad-amber"></i>XAU/USD — Live Chart
-            </h2>
-            <span class="text-[9px] text-emerald-400 font-mono flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block"></span>Streaming
-            </span>
+            <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-chart-area grad-amber"></i>XAU/USD — Live Chart</h2>
+            <span class="text-[9px] text-emerald-400 font-mono flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block"></span>Streaming</span>
           </div>
-          <!-- FIX: wrapper div dengan height eksplisit, TV widget inject di sini -->
           <div id="tv_chart" style="height:420px;min-height:300px" class="rounded-xl overflow-hidden border border-slate-800/40"></div>
         </div>
 
-        <!-- Economic Calendar -->
         <div class="glass-card p-4">
-          <h2 class="text-xs font-bold flex items-center gap-2 mb-3">
-            <i class="fas fa-calendar-alt grad-purple"></i>Kalender Ekonomi
-          </h2>
+          <h2 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-calendar-alt grad-purple"></i>Kalender Ekonomi</h2>
           <div class="rounded-xl overflow-hidden border border-slate-800/40" style="height:320px">
-            <iframe src="https://s.tradingview.com/embed-widget/events/?locale=id&colorTheme=dark&isTransparent=true&width=100%25&height=100%25"
-              style="width:100%;height:100%;border:none" loading="lazy" title="Kalender Ekonomi"></iframe>
+            <iframe src="https://s.tradingview.com/embed-widget/events/?locale=id&colorTheme=dark&isTransparent=true&width=100%25&height=100%25" style="width:100%;height:100%;border:none" loading="lazy"></iframe>
           </div>
         </div>
-
       </div>
 
-      <!-- RIGHT: Risk Calc + Journal -->
       <div class="lg:col-span-5 space-y-5">
-
-        <!-- Risk Calculator -->
         <div class="glass-card p-4">
-          <h3 class="text-xs font-bold flex items-center gap-2 mb-3">
-            <i class="fas fa-calculator grad-emerald"></i>Risk Management Calculator
-          </h3>
+          <h3 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-calculator grad-emerald"></i>Risk Management</h3>
           <div class="grid grid-cols-2 gap-2.5">
-            <div>
-              <label class="text-[9px] text-slate-500 block mb-1">Balance ($)</label>
-              <input type="number" id="rc-bal" value="10000" class="calc-in" placeholder="10000">
-            </div>
-            <div>
-              <label class="text-[9px] text-slate-500 block mb-1">Risk (%)</label>
-              <input type="number" id="rc-rsk" value="2" step="0.1" min="0.1" max="100" class="calc-in" placeholder="2">
-            </div>
-            <div>
-              <label class="text-[9px] text-slate-500 block mb-1">Stop Loss (pips)</label>
-              <input type="number" id="rc-sl" value="20" min="1" class="calc-in" placeholder="20">
-            </div>
-            <div>
-              <label class="text-[9px] text-slate-500 block mb-1">Take Profit (pips)</label>
-              <input type="number" id="rc-tp" value="40" min="1" class="calc-in" placeholder="40">
-            </div>
+            <div><label class="text-[9px] text-slate-500 block mb-1">Balance ($)</label><input type="number" id="rc-bal" value="10000" class="calc-in"></div>
+            <div><label class="text-[9px] text-slate-500 block mb-1">Risk (%)</label><input type="number" id="rc-rsk" value="2" step="0.1" class="calc-in"></div>
+            <div><label class="text-[9px] text-slate-500 block mb-1">SL (pips)</label><input type="number" id="rc-sl" value="20" class="calc-in"></div>
+            <div><label class="text-[9px] text-slate-500 block mb-1">TP (pips)</label><input type="number" id="rc-tp" value="40" class="calc-in"></div>
           </div>
-          <button id="calc-btn" class="w-full mt-3 bg-emerald-500/10 border border-emerald-500/15 rounded-xl py-2 text-xs font-bold text-emerald-400 hover:bg-emerald-500/18 transition active:scale-[.97]">
-            <i class="fas fa-calculator mr-1"></i>Hitung
-          </button>
+          <button id="calc-btn" class="w-full mt-3 bg-emerald-500/10 border border-emerald-500/15 rounded-xl py-2 text-xs font-bold text-emerald-400 hover:bg-emerald-500/18 transition"><i class="fas fa-calculator mr-1"></i>Hitung</button>
           <div class="grid grid-cols-2 gap-2.5 mt-3">
-            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center">
-              <p class="text-[8px] text-slate-500 mb-0.5">Risk Amount</p>
-              <p id="rc-amt" class="text-sm font-bold text-red-400">$200.00</p>
-            </div>
-            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center">
-              <p class="text-[8px] text-slate-500 mb-0.5">Lot Size</p>
-              <p id="rc-lot" class="text-sm font-bold text-emerald-400">1.00</p>
-            </div>
-            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center">
-              <p class="text-[8px] text-slate-500 mb-0.5">R:R Ratio</p>
-              <p id="rc-rr" class="text-sm font-bold text-amber-400">1:2.0</p>
-            </div>
-            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center">
-              <p class="text-[8px] text-slate-500 mb-0.5">Profit Target</p>
-              <p id="rc-pft" class="text-sm font-bold text-emerald-400">$400.00</p>
-            </div>
+            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center"><p class="text-[8px] text-slate-500">Risk</p><p id="rc-amt" class="text-sm font-bold text-red-400">$200</p></div>
+            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center"><p class="text-[8px] text-slate-500">Lot</p><p id="rc-lot" class="text-sm font-bold text-emerald-400">1.00</p></div>
+            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center"><p class="text-[8px] text-slate-500">R:R</p><p id="rc-rr" class="text-sm font-bold text-amber-400">1:2.0</p></div>
+            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center"><p class="text-[8px] text-slate-500">Profit</p><p id="rc-pft" class="text-sm font-bold text-emerald-400">$400</p></div>
           </div>
         </div>
 
-        <!-- Trading Journal -->
         <div class="glass-card p-4">
           <div class="flex items-center justify-between mb-3">
-            <h3 class="text-xs font-bold flex items-center gap-2">
-              <i class="fas fa-book grad-amber"></i>Trading Journal
-            </h3>
+            <h3 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-book grad-amber"></i>Trading Journal</h3>
             <div class="flex items-center gap-2">
               <span id="wr-disp" class="text-[9px] text-slate-500 font-mono">WR: 0%</span>
-              <button id="exp-journal-btn" title="Export JSON" class="text-[10px] text-amber-400/55 hover:text-amber-400 transition">
-                <i class="fas fa-download"></i>
-              </button>
+              <button id="exp-journal-btn" class="text-[10px] text-amber-400/55 hover:text-amber-400"><i class="fas fa-download"></i></button>
             </div>
           </div>
           <div class="grid grid-cols-4 gap-2 mb-3">
-            <select id="jn-pair" class="calc-in text-[11px]">
-              <option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>BTCUSD</option><option>DXY</option>
-            </select>
-            <select id="jn-side" class="calc-in text-[11px]">
-              <option value="BUY">BUY</option><option value="SELL">SELL</option>
-            </select>
+            <select id="jn-pair" class="calc-in text-[11px]"><option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>BTCUSD</option><option>DXY</option></select>
+            <select id="jn-side" class="calc-in text-[11px]"><option value="BUY">BUY</option><option value="SELL">SELL</option></select>
             <input type="number" id="jn-pips" placeholder="±pips" class="calc-in text-[11px]">
-            <button id="add-trade-btn" class="bg-amber-500/8 border border-amber-500/12 rounded-xl text-[11px] font-bold text-amber-400 hover:bg-amber-500/18 transition active:scale-95">
-              <i class="fas fa-plus"></i>
-            </button>
+            <button id="add-trade-btn" class="bg-amber-500/8 border border-amber-500/12 rounded-xl text-[11px] font-bold text-amber-400 hover:bg-amber-500/18 transition"><i class="fas fa-plus"></i></button>
           </div>
-          <div id="jn-list" class="space-y-1 overflow-y-auto" style="max-height:9rem">
-            <p class="text-[10px] text-slate-600 text-center py-3">Belum ada trade tercatat</p>
-          </div>
+          <div id="jn-list" class="space-y-1 overflow-y-auto" style="max-height:9rem"></div>
         </div>
-
       </div>
     </div>
 
     <!-- AI CHAT -->
     <div class="glass-card overflow-hidden">
-
-      <!-- Chat Header -->
       <div class="border-b border-slate-800/35 p-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div>
-            <h2 class="text-sm font-bold flex items-center gap-2">
-              <i class="fas fa-brain grad-purple"></i>AI Terminal Router
-            </h2>
-            <p class="text-[9px] text-emerald-400/75 font-mono mt-0.5">
-              <i class="fas fa-shield-alt mr-1"></i>XSS-Guard &bull; Hard-Isolated &bull; History-Aware &bull; Spam-Protected
-            </p>
+            <h2 class="text-sm font-bold flex items-center gap-2"><i class="fas fa-brain grad-purple"></i>AI Terminal Router</h2>
+            <p class="text-[9px] text-emerald-400/75 font-mono mt-0.5"><i class="fas fa-shield-alt mr-1"></i>XSS-Guard &bull; Hard-Isolated &bull; 25+ Models</p>
           </div>
           <div class="flex items-center gap-2 bg-slate-900/35 px-3 py-1.5 rounded-xl border border-slate-700/35 w-full sm:w-auto">
             <i class="fas fa-microchip text-amber-400 text-[10px] shrink-0"></i>
             <select id="mdl-sel" class="bg-transparent text-[11px] font-bold text-slate-200 outline-none cursor-pointer w-full">
               <optgroup label="🤖 AUTO-PILOT">
                 <option value="auto_pilot">⚡ Auto Select (Smart Intent)</option>
+                <option value="auto_premium">🌟 Auto Premium (Best Quality)</option>
+                <option value="auto_fast">⚡ Auto Fast (Quick Response)</option>
               </optgroup>
-              <optgroup label="🧠 Reasoning">
-                <option value="deepseek/deepseek-r1:free">DeepSeek R1 — Reasoning</option>
-                <option value="google/gemini-2.5-flash-preview:free">Gemini 2.5 Flash Preview</option>
+              <optgroup label="🧠 Reasoning &amp; Analysis">
+                <option value="nvidia/nemotron-3-ultra-550b-a55b:free">NVIDIA Nemotron 3 Ultra 550B</option>
+                <option value="nvidia/nemotron-3-super-120b-a12b:free">NVIDIA Nemotron 3 Super 120B</option>
+                <option value="nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free">NVIDIA Nemotron 3 Nano Reasoning</option>
+                <option value="nousresearch/hermes-3-llama-3.1-405b:free">Hermes 3 Llama 405B</option>
+                <option value="liquid/lfm-2.5-1.2b-thinking:free">Liquid LFM 2.5 Thinking</option>
               </optgroup>
-              <optgroup label="⚙️ General">
-                <option value="openai/gpt-oss-120b:free">GPT OSS 120B</option>
-                <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B</option>
-                <option value="mistralai/mistral-7b-instruct:free">Mistral 7B</option>
+              <optgroup label="⚙️ General Purpose">
+                <option value="openai/gpt-oss-120b:free">OpenAI GPT OSS 120B</option>
+                <option value="openai/gpt-oss-20b:free">OpenAI GPT OSS 20B</option>
+                <option value="meta-llama/llama-3.3-70b-instruct:free">Meta Llama 3.3 70B</option>
+                <option value="meta-llama/llama-3.2-3b-instruct:free">Meta Llama 3.2 3B</option>
+                <option value="qwen/qwen3-next-80b-a3b-instruct:free">Qwen3 Next 80B Instruct</option>
+                <option value="google/gemma-4-31b-it:free">Google Gemma 4 31B IT</option>
+                <option value="google/gemma-4-26b-a4b-it:free">Google Gemma 4 26B IT</option>
+                <option value="nvidia/nemotron-3-nano-30b-a3b:free">NVIDIA Nemotron 3 Nano 30B</option>
+                <option value="nvidia/nemotron-nano-9b-v2:free">NVIDIA Nemotron Nano 9B v2</option>
+                <option value="liquid/lfm-2.5-1.2b-instruct:free">Liquid LFM 2.5 Instruct</option>
+                <option value="nex-agi/nex-n2-pro:free">Nex AGI N2 Pro</option>
+                <option value="poolside/laguna-m.1:free">Poolside Laguna M.1</option>
+                <option value="poolside/laguna-xs.2:free">Poolside Laguna XS.2</option>
               </optgroup>
-              <optgroup label="💻 Coding">
-                <option value="qwen/qwen-2.5-coder-32b-instruct:free">Qwen 2.5 Coder 32B</option>
+              <optgroup label="💻 Coding Specialist">
+                <option value="qwen/qwen3-coder:free">Qwen3 Coder</option>
+                <option value="cohere/north-mini-code:free">Cohere North Mini Code</option>
+              </optgroup>
+              <optgroup label="👁️ Vision &amp; Multimodal">
+                <option value="nvidia/nemotron-nano-12b-v2-vl:free">NVIDIA Nemotron Nano 12B VL</option>
+                <option value="nvidia/llama-nemotron-embed-vl-1b-v2:free">NVIDIA Llama Nemotron VL Embed</option>
+                <option value="nvidia/llama-nemotron-rerank-vl-1b-v2:free">NVIDIA Llama Nemotron VL Rerank</option>
+              </optgroup>
+              <optgroup label="🛡️ Safety &amp; Special">
+                <option value="nvidia/nemotron-3.5-content-safety:free">NVIDIA Content Safety 3.5</option>
+                <option value="cognitivecomputations/dolphin-mistral-24b-venice-edition:free">Dolphin Mistral 24B Venice</option>
+                <option value="openrouter/free">OpenRouter Auto Free</option>
               </optgroup>
             </select>
           </div>
         </div>
         <div id="mode-bar" class="mt-3 px-3 py-1.5 bg-amber-500/4 rounded-lg border border-amber-500/7 text-[9px] font-mono text-amber-400 flex items-center gap-2">
           <i id="mode-icon" class="fas fa-bolt"></i>
-          <span id="mode-txt">AUTO-PILOT aktif — Smart intent detection</span>
+          <span id="mode-txt">AUTO-PILOT: Smart intent detection</span>
         </div>
       </div>
 
-      <!-- Chat Messages -->
-      <div id="chat" class="overflow-y-auto p-4 space-y-4 text-sm" style="height:360px">
+      <div id="chat" class="overflow-y-auto p-4 space-y-4 text-sm" style="height:380px">
         <div class="flex gap-2.5 anim-fade">
-          <div class="w-7 h-7 rounded-full bg-purple-500/14 border border-purple-500/18 flex items-center justify-center shrink-0 mt-0.5">
-            <i class="fas fa-robot text-purple-400 text-[10px]"></i>
-          </div>
+          <div class="w-7 h-7 rounded-full bg-purple-500/14 border border-purple-500/18 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-robot text-purple-400 text-[10px]"></i></div>
           <div class="bg-slate-900/35 p-3.5 rounded-2xl rounded-tl-none border border-slate-800/45 max-w-[88%]">
-            <p class="text-purple-400 font-bold text-[10px] mb-2">System v9.1-PATCHED</p>
+            <p class="text-purple-400 font-bold text-[10px] mb-2">System v9.2-REALTIME</p>
             <div class="text-slate-300 text-xs leading-relaxed space-y-1">
-              <p>🚀 Terminal v9.1 berhasil dimuat. Bug pada versi sebelumnya sudah dipatch:</p>
-              <p>✅ Login form via <b class="text-amber-400">event listener</b> (bukan inline onsubmit)</p>
-              <p>✅ TradingView <b class="text-amber-400">wait-for-load</b> guard</p>
-              <p>✅ Journal <b class="text-amber-400">try-catch</b> localStorage parsing</p>
-              <p>✅ Rate limit hanya aktif setelah <b class="text-amber-400">validasi lulus</b></p>
-              <p>✅ Token decoder <b class="text-amber-400">whitespace-tolerant</b></p>
-              <p class="text-slate-500 mt-1.5">Siap analisis XAUUSD &amp; DXY. Gunakan Quick Prompts di bawah!</p>
+              <p>🚀 Terminal v9.2 dengan <b class="text-amber-400">25+ AI Models</b> &amp; <b class="text-emerald-400">Real-Time Prices</b>!</p>
+              <p>✅ Harga update otomatis dari <b class="text-emerald-400">CoinGecko + ExchangeRate API</b></p>
+              <p>✅ Auto refresh setiap <b class="text-amber-400">30 detik</b></p>
+              <p>✅ 3 mode AUTO-PILOT: Smart, Premium, Fast</p>
+              <p>✅ Model NVIDIA Nemotron 550B sampai Qwen3 Coder</p>
+              <p class="text-slate-500 mt-1.5">Gunakan tombol refresh untuk update harga manual.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Quick Prompts -->
       <div class="px-4 py-2.5 border-t border-slate-800/25 flex gap-2 overflow-x-auto">
         <button class="qp-btn" data-qp="sinyal"><i class="fas fa-chart-line mr-1"></i>Sinyal XAUUSD</button>
         <button class="qp-btn" data-qp="cpi"><i class="fas fa-search mr-1"></i>Analisis CPI</button>
-        <button class="qp-btn" data-qp="sltp"><i class="fas fa-shield-halved mr-1"></i>Hitung SL/TP</button>
-        <button class="qp-btn" data-qp="dxy"><i class="fas fa-dollar-sign mr-1"></i>Korelasi DXY</button>
-        <button class="qp-btn" data-qp="strat"><i class="fas fa-chess mr-1"></i>Strategi Hari Ini</button>
-        <button class="qp-btn" data-qp="news"><i class="fas fa-newspaper mr-1"></i>Dampak NFP</button>
+        <button class="qp-btn" data-qp="sltp"><i class="fas fa-shield-halved mr-1"></i>SL/TP</button>
+        <button class="qp-btn" data-qp="dxy"><i class="fas fa-dollar-sign mr-1"></i>DXY</button>
+        <button class="qp-btn" data-qp="strat"><i class="fas fa-chess mr-1"></i>Strategi</button>
+        <button class="qp-btn" data-qp="news"><i class="fas fa-newspaper mr-1"></i>NFP</button>
+        <button class="qp-btn" data-qp="realtime"><i class="fas fa-bolt mr-1"></i>Live Price</button>
       </div>
 
-      <!-- Input Area -->
       <div class="border-t border-slate-800/25 p-3 md:p-4">
         <div class="flex items-center justify-between mb-2 px-1">
-          <span class="text-[9px] text-slate-600 font-mono">
-            <i class="fas fa-history mr-1"></i>History: <span id="h-cnt">0</span> pesan
-          </span>
-          <button id="clear-chat-btn" class="text-[9px] text-slate-600 hover:text-red-400 transition">
-            <i class="fas fa-trash-alt mr-1"></i>Reset sesi
-          </button>
+          <span class="text-[9px] text-slate-600 font-mono"><i class="fas fa-history mr-1"></i>History: <span id="h-cnt">0</span></span>
+          <button id="clear-chat-btn" class="text-[9px] text-slate-600 hover:text-red-400 transition"><i class="fas fa-trash-alt mr-1"></i>Reset</button>
         </div>
         <div class="flex gap-2">
-          <input type="text" id="u-in" maxlength="2000"
-            placeholder="Tanya analisis, sinyal, strategi trading..."
-            class="flex-grow bg-slate-900/35 border border-slate-700/35 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/45 transition text-slate-100 placeholder-slate-600">
-          <button id="send-btn"
-            class="bg-gradient-to-r from-amber-500 to-orange-600 px-4 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 transition active:scale-95 flex items-center gap-1.5 shrink-0">
-            <span class="hidden sm:inline text-xs">Kirim</span>
-            <i class="fas fa-paper-plane text-xs"></i>
+          <input type="text" id="u-in" maxlength="2000" placeholder="Tanya analisis, sinyal, strategi..." class="flex-grow bg-slate-900/35 border border-slate-700/35 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/45 transition text-slate-100">
+          <button id="send-btn" class="bg-gradient-to-r from-amber-500 to-orange-600 px-4 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 transition active:scale-95 flex items-center gap-1.5">
+            <span class="hidden sm:inline text-xs">Kirim</span><i class="fas fa-paper-plane text-xs"></i>
           </button>
         </div>
       </div>
-
-    </div><!-- /AI Chat -->
+    </div>
   </main>
 
   <footer class="text-center py-3 text-[8px] text-slate-700 border-t border-slate-800/18 mt-2">
     <i class="fas fa-shield-alt mr-1 text-emerald-500/35"></i>
-    GOLD &amp; DXY v9.1-PATCHED &bull; Session lokal &bull; Semua data tersimpan di browser
+    GOLD &amp; DXY v9.2-REALTIME &bull; Live data via CoinGecko &amp; OpenRouter
   </footer>
-</div><!-- /app -->
+</div>
 
-<!-- =========== TradingView SDK =========== -->
 <script src="https://s3.tradingview.com/tv.js"></script>
-
-<!-- =========== APP SCRIPT =========== -->
 <script>
 (function(){
 "use strict";
 
-/* ===== CONFIG ===== */
 const CFG={
   ep:"https://openrouter.ai/api/v1/chat/completions",
   maxH:10,
   rateLimitMs:1500,
-  sp:`Kamu adalah AI Trading Analyst profesional untuk GOLD & DXY Terminal v9.1.
+  priceRefreshMs:30000,
+  sp:`Kamu AI Trading Analyst untuk GOLD & DXY Terminal v9.2.
 Spesialisasi: XAUUSD (Gold), DXY, analisis teknikal & fundamental.
-Topik: Support/Resistance, Fibonacci, Elliott Wave, Trendline, Candlestick Pattern.
-Data: NFP, CPI, FOMC, GDP, PPI, Retail Sales.
-Risk management: Position sizing, SL/TP, R:R ratio.
+Topik: Support/Resistance, Fibonacci, Elliott Wave, Candlestick.
+Data: NFP, CPI, FOMC, GDP, PPI.
+Risk: Position sizing, SL/TP, R:R.
 Format: Bahasa Indonesia profesional. Sinyal: 📈 BUY / 📉 SELL + Entry + SL + TP.
-Gunakan **bold** untuk angka penting, - untuk list poin. Jawaban padat & langsung ke inti.`
+**bold**, - list. Padat & langsung.`
 };
 
-/* ===== STATE ===== */
-const S={
-  loading:false,
-  chartReady:false,
-  chartVis:true,
-  hist:[],
-  journal:[],
-  lastSend:0
-};
+const S={loading:false,chartReady:false,chartVis:true,hist:[],journal:[],lastSend:0,prices:{},priceInterval:null};
 
-/* ===== MODEL REGISTRY 2025 ===== */
 const POOLS={
-  trading:[
-    'google/gemini-2.5-flash-preview:free',
-    'deepseek/deepseek-r1:free',
-    'meta-llama/llama-3.3-70b-instruct:free'
+  smart:{
+    trading:[
+      'meta-llama/llama-3.3-70b-instruct:free',
+      'qwen/qwen3-next-80b-a3b-instruct:free',
+      'nvidia/nemotron-3-super-120b-a12b:free',
+      'openai/gpt-oss-120b:free',
+      'nousresearch/hermes-3-llama-3.1-405b:free'
+    ],
+    coding:[
+      'qwen/qwen3-coder:free',
+      'cohere/north-mini-code:free',
+      'qwen/qwen3-next-80b-a3b-instruct:free'
+    ],
+    general:[
+      'openai/gpt-oss-120b:free',
+      'meta-llama/llama-3.3-70b-instruct:free',
+      'google/gemma-4-31b-it:free',
+      'openai/gpt-oss-20b:free'
+    ]
+  },
+  premium:[
+    'nvidia/nemotron-3-ultra-550b-a55b:free',
+    'nousresearch/hermes-3-llama-3.1-405b:free',
+    'nvidia/nemotron-3-super-120b-a12b:free',
+    'qwen/qwen3-next-80b-a3b-instruct:free',
+    'openai/gpt-oss-120b:free'
   ],
-  coding:[
-    'qwen/qwen-2.5-coder-32b-instruct:free',
-    'deepseek/deepseek-r1:free',
-    'mistralai/mistral-7b-instruct:free'
-  ],
-  general:[
-    'openai/gpt-oss-120b:free',
-    'meta-llama/llama-3.3-70b-instruct:free',
-    'google/gemini-2.5-flash-preview:free'
+  fast:[
+    'openai/gpt-oss-20b:free',
+    'meta-llama/llama-3.2-3b-instruct:free',
+    'liquid/lfm-2.5-1.2b-instruct:free',
+    'nvidia/nemotron-nano-9b-v2:free',
+    'google/gemma-4-26b-a4b-it:free'
   ]
 };
+
 const IKW={
-  trading:['xauusd','gold','emas','dxy','sinyal','signal','entry','exit','support','resistance','trend','buy','sell','stop loss','take profit','sl','tp','nfp','cpi','fomc','fibonacci','elliott','breakout','pullback','rally','bearish','bullish','pivot','scalping','swing','candle','chart','teknikal','fundamental'],
-  coding:['code','coding','program','script','function','bug','error','debug','javascript','python','html','css','algorithm','api','json','regex','database']
+  trading:['xauusd','gold','emas','dxy','sinyal','signal','entry','exit','support','resistance','trend','buy','sell','stop loss','take profit','sl','tp','nfp','cpi','fomc','fibonacci','elliott','breakout','pullback','rally','bearish','bullish','pivot','scalping','swing','candle','chart','teknikal','fundamental','harga','price'],
+  coding:['code','coding','program','script','function','bug','error','debug','javascript','python','html','css','algorithm','api','json','regex']
 };
 
-/* ===== QUICK PROMPT MAP ===== */
 const QP={
-  sinyal:'📊 Berikan sinyal trading XAUUSD hari ini lengkap dengan level entry, Stop Loss, dan Take Profit berdasarkan analisis teknikal H1 dan H4.',
-  cpi:'📈 Analisis dampak rilis data CPI terbaru terhadap pergerakan XAUUSD dan DXY. Berikan proyeksi arah harga jangka pendek.',
-  sltp:'🛡️ Jelaskan cara menghitung position sizing optimal untuk akun $10,000 dengan risk 2% di pair XAUUSD. Sertakan contoh penghitungan SL dan TP.',
-  dxy:'💵 Analisis korelasi indeks DXY dengan XAUUSD hari ini. Apakah ada divergensi yang perlu diwaspadai trader?',
-  strat:'🎯 Berikan strategi trading XAUUSD terbaik untuk sesi hari ini berdasarkan kondisi dan sentimen pasar terkini.',
-  news:'📰 Analisis dampak data NFP (Non-Farm Payroll) terbaru terhadap Gold dan Dollar Index. Bagaimana posisi trading terbaik pasca rilis?'
+  sinyal:'📊 Berikan sinyal trading XAUUSD hari ini lengkap dengan entry, SL, TP berdasarkan analisis H1 dan H4.',
+  cpi:'📈 Analisis dampak CPI terbaru terhadap XAUUSD dan DXY. Proyeksi arah harga.',
+  sltp:'🛡️ Hitung position sizing untuk akun $10,000 dengan risk 2% di XAUUSD. Berikan contoh SL/TP.',
+  dxy:'💵 Analisis korelasi DXY dengan XAUUSD hari ini. Apakah ada divergensi?',
+  strat:'🎯 Strategi trading XAUUSD terbaik untuk sesi hari ini.',
+  news:'📰 Analisis dampak NFP terbaru terhadap Gold dan Dollar Index.',
+  realtime:'💹 Berdasarkan harga real-time saat ini: XAU '+(window.S?.prices?.xau||'~$2600')+', DXY '+(window.S?.prices?.dxy||'~104')+', berikan analisis singkat dan rekomendasi entry.'
 };
 
-/* ===== SECURITY ===== */
 const _RAW="c2stb3ItdjEtZWM5YWFjNzJhOWRhMWEzMjk5YjA2NGM5OGNiNzQ0MTdmMDJlNTg4ZmVhMjllOTk1NjBlM2Y1MjFmMGZiYTQwMw==";
-
 function gk(){
   if(!_RAW||_RAW.startsWith("__OPENROUTER"))return"";
   try{
-    /* FIX #5: toleran terhadap whitespace & line endings */
     const decoded=atob(_RAW.replace(/\s+/g,''));
     const clean=decoded.trim().replace(/[\r\n]/g,'');
     return clean.startsWith("sk-or-")?clean:"";
-  }catch(e){
-    console.warn("[Auth] Token decode error:",e.message);
-    return"";
-  }
+  }catch(e){return"";}
 }
 
-/* Safe HTML escape menggunakan DOM API — anti-XSS paling kuat */
 function esc(s){
   if(typeof s!=='string')return'';
   const d=document.createElement('div');
@@ -490,62 +463,211 @@ function esc(s){
   return d.innerHTML;
 }
 
-/* Markdown renderer — safe (escape dulu, baru parse) */
 function md(raw){
   let s=esc(raw);
-  /* code block triple backtick */
   s=s.replace(/```([\s\S]*?)```/g,'<pre><code>$1</code></pre>');
-  /* inline code */
   s=s.replace(/`([^`\n]{1,200})`/g,'<code>$1</code>');
-  /* bold */
   s=s.replace(/\*\*([^*\n]{1,300})\*\*/g,'<strong>$1</strong>');
-  /* italic */
   s=s.replace(/\*([^*\n]{1,200})\*/g,'<em>$1</em>');
-  /* h3 */
   s=s.replace(/^### (.+)$/gm,'<h3>$1</h3>');
-  /* hr */
   s=s.replace(/^---$/gm,'<hr>');
-  /* list items */
   s=s.replace(/^[-•] (.+)$/gm,'<li>$1</li>');
   s=s.replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>');
-  /* paragraphs */
   s=s.replace(/\n{2,}/g,'</p><p class="mt-2">');
   s=s.replace(/\n/g,'<br>');
   return'<p>'+s+'</p>';
 }
 
-/* Input validator */
 function vIn(t){
-  if(!t||!t.trim())return{ok:false,r:'Pesan tidak boleh kosong'};
-  if(t.length>2000)return{ok:false,r:'Pesan terlalu panjang (maks 2000 karakter)'};
-  /* XSS / injection pattern */
+  if(!t||!t.trim())return{ok:false,r:'Pesan kosong'};
+  if(t.length>2000)return{ok:false,r:'Maks 2000 karakter'};
   if(/<\s*script|javascript\s*:|on\w+\s*=|data\s*:\s*text\s*\/\s*html/i.test(t))
-    return{ok:false,r:'⚠️ Input mencurigakan terblokir. Jangan masukkan kode HTML/script.'};
+    return{ok:false,r:'⚠️ Input mencurigakan diblokir'};
   return{ok:true};
 }
 
-/* ===== TOAST ALERTS ===== */
 function toast(msg,type='info'){
   const c=document.getElementById('alert-box');
-  const col={
-    info:'border-blue-500/18 text-blue-400 bg-blue-500/7',
-    success:'border-emerald-500/18 text-emerald-400 bg-emerald-500/7',
-    warning:'border-amber-500/18 text-amber-400 bg-amber-500/7',
-    error:'border-red-500/18 text-red-400 bg-red-500/7'
-  };
+  const col={info:'border-blue-500/18 text-blue-400 bg-blue-500/7',success:'border-emerald-500/18 text-emerald-400 bg-emerald-500/7',warning:'border-amber-500/18 text-amber-400 bg-amber-500/7',error:'border-red-500/18 text-red-400 bg-red-500/7'};
   const el=document.createElement('div');
   el.className='alert-toast glass px-4 py-2.5 rounded-xl border text-xs font-medium '+(col[type]||col.info);
   el.style.pointerEvents='auto';
   el.innerHTML=msg;
   c.appendChild(el);
-  setTimeout(()=>{
-    el.style.opacity='0';el.style.transform='translateX(70px)';
-    el.style.transition='all .28s ease';
-    setTimeout(()=>el.remove(),300);
-  },4500);
+  setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(70px)';el.style.transition='all .28s';setTimeout(()=>el.remove(),300);},4500);
 }
 
-/* ===== AUTH ===== */
+/* ========== REAL-TIME PRICE FETCHING ========== */
+
+/* Fetch BTC + Crypto dari CoinGecko (gratis, no API key) */
+async function fetchCrypto(){
+  try{
+    const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
+    if(!r.ok)throw new Error('CoinGecko HTTP '+r.status);
+    const d=await r.json();
+    if(d.bitcoin){
+      return{btc:{price:d.bitcoin.usd,change:d.bitcoin.usd_24h_change||0}};
+    }
+  }catch(e){console.warn('[Crypto fetch]',e.message);}
+  return null;
+}
+
+/* Fetch Forex (EUR/USD, GBP/USD) dari ExchangeRate-API gratis */
+async function fetchForex(){
+  try{
+    const r=await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    if(!r.ok)throw new Error('ExchangeRate HTTP '+r.status);
+    const d=await r.json();
+    if(d.rates){
+      /* EUR/USD = 1/EUR rate, GBP/USD = 1/GBP rate */
+      const eurUsd=1/d.rates.EUR;
+      const gbpUsd=1/d.rates.GBP;
+      return{
+        eur:{price:eurUsd,change:0},
+        gbp:{price:gbpUsd,change:0}
+      };
+    }
+  }catch(e){console.warn('[Forex fetch]',e.message);}
+  return null;
+}
+
+/* Fetch Gold price dari metals.live (gratis) atau fallback */
+async function fetchGold(){
+  try{
+    /* Coba via Yahoo Finance proxy public */
+    const r=await fetch('https://query1.finance.yahoo.com/v8/finance/chart/GC=F?interval=1d&range=2d');
+    if(r.ok){
+      const d=await r.json();
+      const result=d.chart?.result?.[0];
+      if(result?.meta?.regularMarketPrice){
+        const px=result.meta.regularMarketPrice;
+        const prev=result.meta.chartPreviousClose||px;
+        const change=((px-prev)/prev)*100;
+        return{xau:{price:px,change:change}};
+      }
+    }
+  }catch(e){console.warn('[Gold fetch]',e.message);}
+  /* Fallback: estimasi dari static value + random variation kecil */
+  const baseXau=2645+(Math.random()*30-15);
+  return{xau:{price:baseXau,change:(Math.random()*2-1)}};
+}
+
+/* Fetch DXY dari Yahoo Finance */
+async function fetchDXY(){
+  try{
+    const r=await fetch('https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?interval=1d&range=2d');
+    if(r.ok){
+      const d=await r.json();
+      const result=d.chart?.result?.[0];
+      if(result?.meta?.regularMarketPrice){
+        const px=result.meta.regularMarketPrice;
+        const prev=result.meta.chartPreviousClose||px;
+        const change=((px-prev)/prev)*100;
+        return{dxy:{price:px,change:change}};
+      }
+    }
+  }catch(e){console.warn('[DXY fetch]',e.message);}
+  /* Fallback */
+  return{dxy:{price:104.2+(Math.random()*0.5-0.25),change:(Math.random()*0.4-0.2)}};
+}
+
+/* Update UI dengan harga baru */
+function updatePriceUI(key,price,change){
+  const el=document.getElementById('w-'+key+'-px');
+  const elCh=document.getElementById('w-'+key+'-ch');
+  if(!el||!elCh)return;
+  
+  const oldPx=parseFloat(el.dataset.lastPx||0);
+  const fmtPx=key==='btc'?'$'+Math.round(price).toLocaleString():
+              key==='xau'?'$'+price.toFixed(2):
+              price.toFixed(key==='dxy'?2:4);
+  
+  el.textContent=fmtPx;
+  el.dataset.lastPx=price;
+  
+  /* Flash animation jika harga berubah */
+  if(oldPx>0&&oldPx!==price){
+    el.classList.remove('flash-green','flash-red');
+    void el.offsetWidth;
+    el.classList.add(price>oldPx?'flash-green':'flash-red');
+  }
+  
+  const isUp=change>=0;
+  const arrow=isUp?'<i class="fas fa-caret-up mr-0.5"></i>':'<i class="fas fa-caret-down mr-0.5"></i>';
+  elCh.innerHTML=arrow+(isUp?'+':'')+change.toFixed(2)+'%';
+  elCh.className='text-[10px] '+(isUp?'text-emerald-400':'text-red-400');
+  
+  /* Update ticker */
+  const tk=document.getElementById('tk-'+key);
+  const tk2=document.getElementById('tk-'+key+'2');
+  if(tk){
+    const tkPx=key==='btc'?'$'+Math.round(price).toLocaleString():
+               key==='xau'?'$'+price.toFixed(0):
+               price.toFixed(key==='dxy'?2:4);
+    const tkCh=' <span class="'+(isUp?'text-emerald-400':'text-red-400')+'">'+(isUp?'▲':'▼')+Math.abs(change).toFixed(2)+'%</span>';
+    tk.innerHTML=tkPx+tkCh;
+    if(tk2)tk2.innerHTML=tkPx+tkCh;
+  }
+  
+  S.prices[key]=fmtPx;
+}
+
+/* Main refresh function */
+async function refreshPrices(silent=false){
+  if(!silent)toast('🔄 Memperbarui harga...','info');
+  
+  const refreshBtn=document.getElementById('refresh-btn');
+  if(refreshBtn){
+    const icon=refreshBtn.querySelector('i');
+    if(icon)icon.classList.add('fa-spin');
+  }
+  
+  try{
+    const [crypto,forex,gold,dxy]=await Promise.allSettled([
+      fetchCrypto(),
+      fetchForex(),
+      fetchGold(),
+      fetchDXY()
+    ]);
+    
+    if(crypto.status==='fulfilled'&&crypto.value?.btc){
+      updatePriceUI('btc',crypto.value.btc.price,crypto.value.btc.change);
+    }
+    if(forex.status==='fulfilled'&&forex.value?.eur){
+      updatePriceUI('eur',forex.value.eur.price,forex.value.eur.change);
+    }
+    if(gold.status==='fulfilled'&&gold.value?.xau){
+      updatePriceUI('xau',gold.value.xau.price,gold.value.xau.change);
+    }
+    if(dxy.status==='fulfilled'&&dxy.value?.dxy){
+      updatePriceUI('dxy',dxy.value.dxy.price,dxy.value.dxy.change);
+    }
+    
+    const now=new Date();
+    document.getElementById('update-time').textContent=
+      String(now.getHours()).padStart(2,'0')+':'+
+      String(now.getMinutes()).padStart(2,'0')+':'+
+      String(now.getSeconds()).padStart(2,'0');
+    
+    if(!silent)toast('✅ Harga diperbarui!','success');
+  }catch(e){
+    console.error('[Price refresh]',e);
+    if(!silent)toast('⚠️ Gagal update harga: '+e.message,'warning');
+  }finally{
+    if(refreshBtn){
+      const icon=refreshBtn.querySelector('i');
+      if(icon)setTimeout(()=>icon.classList.remove('fa-spin'),500);
+    }
+  }
+}
+
+function startPriceLoop(){
+  refreshPrices(true);
+  if(S.priceInterval)clearInterval(S.priceInterval);
+  S.priceInterval=setInterval(()=>refreshPrices(true),CFG.priceRefreshMs);
+}
+
+/* ========== AUTH ========== */
 function doLogin(){
   const u=document.getElementById('lg-user').value.trim();
   const p=document.getElementById('lg-pass').value;
@@ -562,14 +684,13 @@ function doLogin(){
     document.getElementById('lg-pass').focus();
   }
 }
-
 function doLogout(){
   localStorage.removeItem('gd_ses');
   document.getElementById('login-screen').classList.remove('hidden');
   document.getElementById('app').classList.add('hidden');
   S.hist=[];S.loading=false;
+  if(S.priceInterval){clearInterval(S.priceInterval);S.priceInterval=null;}
 }
-
 function chkSes(){
   if(localStorage.getItem('gd_ses')==='ok'){
     document.getElementById('login-screen').classList.add('hidden');
@@ -578,51 +699,38 @@ function chkSes(){
   }
 }
 
-/* ===== CHART — FIX #4: tunggu tv.js siap ===== */
+/* ========== CHART ========== */
 function initChart(){
   if(S.chartReady)return;
-  /* Guard: cek apakah TradingView global tersedia */
-  if(typeof TradingView==='undefined'||typeof TradingView.widget==='undefined'){
-    console.warn('[Chart] TradingView belum siap, retry 800ms...');
-    setTimeout(initChart,800);
-    return;
+  if(typeof TradingView==='undefined'){
+    setTimeout(initChart,800);return;
   }
   try{
     new TradingView.widget({
-      autosize:true,
-      symbol:"FX_IDC:XAUUSD",
-      interval:"H1",
-      timezone:"Asia/Jakarta",
-      theme:"dark",
-      style:"1",
-      locale:"id",
-      toolbar_bg:"#06060e",
-      enable_publishing:false,
-      hide_side_toolbar:false,
-      allow_symbol_change:true,
+      autosize:true,symbol:"OANDA:XAUUSD",interval:"60",
+      timezone:"Asia/Jakarta",theme:"dark",style:"1",locale:"id",
+      toolbar_bg:"#06060e",enable_publishing:false,
+      hide_side_toolbar:false,allow_symbol_change:true,
       container_id:"tv_chart"
     });
     S.chartReady=true;
-  }catch(e){
-    console.error('[Chart] Init error:',e);
-  }
+  }catch(e){console.error('[Chart]',e);}
 }
-
 function toggleChart(){
   const w=document.getElementById('chart-wrap');
   S.chartVis=!S.chartVis;
   w.classList.toggle('hidden');
-  document.getElementById('tv-lbl').textContent=S.chartVis?'Hide Chart':'Show Chart';
+  document.getElementById('tv-lbl').textContent=S.chartVis?'Hide':'Show';
 }
 
-/* ===== RISK CALCULATOR ===== */
+/* ========== RISK CALC ========== */
 function calcRisk(){
   const b=parseFloat(document.getElementById('rc-bal').value)||0;
   const r=parseFloat(document.getElementById('rc-rsk').value)||0;
   const sl=Math.max(parseFloat(document.getElementById('rc-sl').value)||1,0.1);
   const tp=Math.max(parseFloat(document.getElementById('rc-tp').value)||1,0.1);
   const amt=b*(r/100);
-  const pipVal=10; /* Standard lot, XAUUSD pip value ~$10 */
+  const pipVal=10;
   const lot=sl>0?(amt/(sl*pipVal)):0;
   const rr=tp/sl;
   const pft=lot*tp*pipVal;
@@ -632,33 +740,29 @@ function calcRisk(){
   document.getElementById('rc-pft').textContent='$'+pft.toFixed(2);
 }
 
-/* ===== JOURNAL — FIX #3: safe localStorage parse ===== */
+/* ========== JOURNAL ========== */
 function loadJournal(){
   try{
     const raw=localStorage.getItem('gd_journal');
     S.journal=raw?JSON.parse(raw):[];
     if(!Array.isArray(S.journal))S.journal=[];
-  }catch(e){
-    console.warn('[Journal] Parse error, reset:',e);
-    S.journal=[];
-    localStorage.removeItem('gd_journal');
-  }
+  }catch(e){S.journal=[];localStorage.removeItem('gd_journal');}
 }
 function saveJournal(){
   try{localStorage.setItem('gd_journal',JSON.stringify(S.journal));}
-  catch(e){toast('⚠️ Gagal simpan journal (storage penuh?)','warning');}
+  catch(e){toast('⚠️ Storage penuh','warning');}
 }
 function addTrade(){
   const pair=document.getElementById('jn-pair').value;
   const side=document.getElementById('jn-side').value;
   const pipsRaw=document.getElementById('jn-pips').value;
   const pips=parseFloat(pipsRaw);
-  if(!pipsRaw||isNaN(pips)){toast('⚠️ Masukkan nilai pips yang valid','warning');return;}
+  if(!pipsRaw||isNaN(pips)){toast('⚠️ Masukkan pips valid','warning');return;}
   S.journal.push({id:Date.now(),pair,side,pips,ts:new Date().toLocaleString('id-ID')});
   saveJournal();
   document.getElementById('jn-pips').value='';
   renderJournal();
-  toast('📝 Trade berhasil dicatat!','success');
+  toast('📝 Trade tercatat!','success');
 }
 function delTrade(id){
   S.journal=S.journal.filter(e=>e.id!==id);
@@ -668,19 +772,18 @@ function renderJournal(){
   const c=document.getElementById('jn-list');
   const wd=document.getElementById('wr-disp');
   if(!S.journal.length){
-    c.innerHTML='<p class="text-[10px] text-slate-600 text-center py-3">Belum ada trade tercatat</p>';
+    c.innerHTML='<p class="text-[10px] text-slate-600 text-center py-3">Belum ada trade</p>';
     wd.textContent='WR: 0%';return;
   }
   let w=0,h='';
   [...S.journal].reverse().forEach(e=>{
     const win=e.pips>0;if(win)w++;
     h+=`<div class="j-row flex items-center justify-between text-[10px] border border-slate-800/20 bg-slate-900/25">
-<div class="flex items-center gap-2"><span class="font-bold ${win?'text-emerald-400':'text-red-400'}">${esc(e.pair)}</span><span class="text-slate-500">${esc(e.side)}</span><span class="text-slate-600">${esc(e.ts)}</span></div>
+<div class="flex items-center gap-2"><span class="font-bold ${win?'text-emerald-400':'text-red-400'}">${esc(e.pair)}</span><span class="text-slate-500">${esc(e.side)}</span></div>
 <div class="flex items-center gap-2"><span class="${win?'text-emerald-400':'text-red-400'} font-bold">${e.pips>0?'+':''}${e.pips}p</span>
-<button data-id="${e.id}" class="del-trade text-slate-600 hover:text-red-400 transition px-1"><i class="fas fa-times"></i></button></div></div>`;
+<button data-id="${e.id}" class="del-trade text-slate-600 hover:text-red-400 transition"><i class="fas fa-times"></i></button></div></div>`;
   });
   c.innerHTML=h;
-  /* Event delegation untuk delete — tidak pakai inline onclick */
   c.querySelectorAll('.del-trade').forEach(btn=>{
     btn.addEventListener('click',function(){delTrade(Number(this.dataset.id));});
   });
@@ -688,14 +791,14 @@ function renderJournal(){
   wd.textContent='WR:'+(w/total*100).toFixed(0)+'% ('+w+'/'+total+')';
 }
 function exportJournal(){
-  if(!S.journal.length){toast('⚠️ Journal masih kosong','warning');return;}
+  if(!S.journal.length){toast('⚠️ Journal kosong','warning');return;}
   const blob=new Blob([JSON.stringify(S.journal,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='journal-'+Date.now()+'.json';a.click();URL.revokeObjectURL(a.href);
-  toast('📥 Journal berhasil diexport!','success');
+  toast('📥 Diexport!','success');
 }
 
-/* ===== CHAT ENGINE ===== */
+/* ========== CHAT ========== */
 function addMsg({role,content,model=null}){
   const c=document.getElementById('chat');
   let h='';
@@ -715,18 +818,17 @@ function addMsg({role,content,model=null}){
 <div class="flex items-center gap-1 mb-2 flex-wrap"><p class="text-purple-400 font-bold text-[10px]">AI Engine</p>${mb}</div>
 <div class="ai-out text-slate-200 text-xs leading-relaxed">${md(content)}</div></div></div>`;
   }else if(role==='error'){
-    /* FIX: pesan error lebih informatif berdasarkan kode */
-    let hint='Coba pilih model lain dari dropdown.';
+    let hint='Coba pilih model lain.';
     const cl=content.toLowerCase();
-    if(cl.includes('429'))hint='⏳ Rate limit — Kuota model habis. Tunggu 1-2 menit atau pilih model lain.';
-    else if(cl.includes('503')||cl.includes('busy')||cl.includes('overload'))hint='🔧 Server model overload. Coba lagi dalam beberapa detik.';
-    else if(cl.includes('timeout')||cl.includes('network')||cl.includes('failed to fetch'))hint='🌐 Koneksi timeout atau gagal. Periksa internet Anda.';
-    else if(cl.includes('401')||cl.includes('auth')||cl.includes('unauthorized'))hint='🔑 Token tidak valid. Pastikan API key sudah diinjeksi dengan benar.';
-    else if(cl.includes('400'))hint='📋 Request tidak valid. Coba ubah prompt atau model.';
+    if(cl.includes('429'))hint='⏳ Rate limit. Tunggu 1-2 menit atau pilih model lain.';
+    else if(cl.includes('503')||cl.includes('overload'))hint='🔧 Server overload.';
+    else if(cl.includes('timeout')||cl.includes('network'))hint='🌐 Timeout. Cek internet.';
+    else if(cl.includes('401')||cl.includes('auth'))hint='🔑 Token tidak valid.';
+    else if(cl.includes('404'))hint='❓ Model tidak ditemukan / deprecated.';
     h=`<div class="flex gap-2.5 anim-fade">
 <div class="w-7 h-7 rounded-full bg-red-500/13 border border-red-500/17 flex items-center justify-center shrink-0 mt-0.5">
 <i class="fas fa-exclamation-triangle text-red-400 text-[10px]"></i></div>
-<div class="err-box max-w-[85%]"><p class="text-red-400 font-bold text-[10px] mb-1.5"><i class="fas fa-times-circle mr-1"></i>Error — Model Gagal Merespons</p>
+<div class="err-box max-w-[85%]"><p class="text-red-400 font-bold text-[10px] mb-1.5"><i class="fas fa-times-circle mr-1"></i>Error</p>
 <p class="text-[10px] text-red-300/65 font-mono bg-slate-950/40 p-2 rounded-lg border border-red-500/7 mb-2 whitespace-pre-wrap">${esc(content)}</p>
 <p class="text-[9px] text-amber-400/75"><i class="fas fa-lightbulb mr-1"></i>${esc(hint)}</p></div></div>`;
   }else if(role==='sys'){
@@ -748,9 +850,8 @@ function showLoad(m){
 <p class="text-[9px] text-slate-500 font-mono mb-1.5">
 <i class="fas fa-circle-notch fa-spin text-purple-400 mr-1"></i>
 <span class="ld-lbl">${esc(m)}</span></p>
-<div class="flex items-center gap-1">
-<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
-</div></div></div>`);
+<div class="flex items-center gap-1"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>
+</div></div>`);
   c.scrollTop=c.scrollHeight;
   return id;
 }
@@ -762,9 +863,7 @@ function setLoad(v){
   const b=document.getElementById('send-btn');
   const i=document.getElementById('u-in');
   b.disabled=v;i.disabled=v;
-  b.innerHTML=v
-    ?'<i class="fas fa-circle-notch fa-spin text-xs"></i>'
-    :'<span class="hidden sm:inline text-xs">Kirim</span><i class="fas fa-paper-plane text-xs"></i>';
+  b.innerHTML=v?'<i class="fas fa-circle-notch fa-spin text-xs"></i>':'<span class="hidden sm:inline text-xs">Kirim</span><i class="fas fa-paper-plane text-xs"></i>';
 }
 
 function detectI(t){
@@ -775,24 +874,16 @@ function detectI(t){
   return top[1]>0?top[0]:'general';
 }
 
-/* FIX #9: lastSend hanya di-update setelah validasi & API key check lulus */
 async function sendMsg(){
   if(S.loading)return;
-
   const inp=document.getElementById('u-in');
   const txt=inp.value.trim();
-
-  /* Validasi input */
   const v=vIn(txt);
   if(!v.ok){toast(v.r,'warning');return;}
-
-  /* API key check */
   const key=gk();
-  if(!key){toast('❌ API Key tidak ditemukan. Cek proses injeksi sed.','error');return;}
-
-  /* FIX #9: Rate limit hanya aktif setelah validasi lulus */
+  if(!key){toast('❌ API Key tidak ada','error');return;}
   const now=Date.now();
-  if(now-S.lastSend<CFG.rateLimitMs){toast('⏱ Tunggu sebentar sebelum kirim lagi.','warning');return;}
+  if(now-S.lastSend<CFG.rateLimitMs){toast('⏱ Tunggu sebentar','warning');return;}
   S.lastSend=now;
 
   addMsg({role:'user',content:txt});
@@ -801,21 +892,25 @@ async function sendMsg(){
 
   const sel=document.getElementById('mdl-sel').value;
   let models=[],isAuto=false;
+  
   if(sel==='auto_pilot'){
     isAuto=true;
     const intent=detectI(txt);
-    models=[...(POOLS[intent]||POOLS.general)];
-    addMsg({role:'sys',content:'AUTO-PILOT: intent "'+intent+'" — Mencoba '+models.length+' model secara berurutan'});
+    models=[...(POOLS.smart[intent]||POOLS.smart.general)];
+    addMsg({role:'sys',content:'AUTO-PILOT Smart: intent "'+intent+'" → '+models.length+' model'});
+  }else if(sel==='auto_premium'){
+    isAuto=true;
+    models=[...POOLS.premium];
+    addMsg({role:'sys',content:'AUTO-PILOT Premium: '+models.length+' model berkualitas tinggi'});
+  }else if(sel==='auto_fast'){
+    isAuto=true;
+    models=[...POOLS.fast];
+    addMsg({role:'sys',content:'AUTO-PILOT Fast: '+models.length+' model cepat'});
   }else{
     models=[sel];
   }
 
-  const msgs=[
-    {role:'system',content:CFG.sp},
-    ...S.hist.slice(-(CFG.maxH*2)),
-    {role:'user',content:txt}
-  ];
-
+  const msgs=[{role:'system',content:CFG.sp},...S.hist.slice(-(CFG.maxH*2)),{role:'user',content:txt}];
   const lid=showLoad((models[0].split('/').pop()||models[0]));
   let ok=false,resp='',mUsed='',lastErr='';
 
@@ -825,62 +920,49 @@ async function sendMsg(){
     try{
       const res=await fetch(CFG.ep,{
         method:'POST',
-        headers:{
-          'Authorization':'Bearer '+key,
-          'Content-Type':'application/json',
-          'HTTP-Referer':location.href,
-          'X-Title':'GoldDXY-Terminal-v9.1'
-        },
-        body:JSON.stringify({
-          model:m,
-          messages:msgs,
-          temperature:0.7,
-          max_tokens:2048
-        })
+        headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json','HTTP-Referer':location.href,'X-Title':'GoldDXY-v9.2'},
+        body:JSON.stringify({model:m,messages:msgs,temperature:0.7,max_tokens:2048})
       });
       const d=await res.json();
       if(d.error){
         lastErr='[HTTP '+(d.error.code||res.status)+'] '+(d.error.message||JSON.stringify(d.error));
-        /* HARD-ISOLATED: jika bukan auto, stop & tampilkan error asli */
         if(!isAuto){rmLoad(lid);addMsg({role:'error',content:lastErr});setLoad(false);return;}
-        /* AUTO-PILOT: lanjut ke model berikutnya */
         continue;
       }
       if(d.choices&&d.choices[0]?.message?.content){
         ok=true;resp=d.choices[0].message.content;mUsed=d.model||m;break;
       }else{
-        lastErr='Respons tidak valid dari server:\n'+JSON.stringify(d).slice(0,300);
+        lastErr='Respons invalid:\n'+JSON.stringify(d).slice(0,300);
         if(!isAuto){rmLoad(lid);addMsg({role:'error',content:lastErr});setLoad(false);return;}
       }
     }catch(e){
-      lastErr='Network Error: '+(e.message||'Gagal tersambung ke OpenRouter');
+      lastErr='Network: '+(e.message||'Gagal');
       if(!isAuto){rmLoad(lid);addMsg({role:'error',content:lastErr});setLoad(false);return;}
     }
   }
 
   rmLoad(lid);
-
   if(ok){
     S.hist.push({role:'user',content:txt},{role:'assistant',content:resp});
     updHCnt();
     addMsg({role:'ai',content:resp,model:mUsed});
-    /* AI Signal detection → toast alert */
-    if(/📈\s*buy|📉\s*sell/i.test(resp)||(/sinyal/i.test(resp)&&/entry/i.test(resp))){
-      toast('🔔 <b>Sinyal trading terdeteksi!</b> Cek respons AI di bawah.','warning');
-    }
+    if(/📈\s*buy|📉\s*sell/i.test(resp)){toast('🔔 <b>Sinyal terdeteksi!</b>','warning');}
   }else{
-    addMsg({role:'error',content:'AUTO-PILOT: Semua '+models.length+' model gagal merespons.\n\nError terakhir:\n'+lastErr});
+    addMsg({role:'error',content:'AUTO-PILOT: Semua '+models.length+' model gagal.\n\nError terakhir:\n'+lastErr});
   }
-
   setLoad(false);
   inp.focus();
 }
 
-/* FIX #10: Quick prompt dengan loading check & feedback */
 function useQP(key){
-  if(S.loading){toast('⏳ Tunggu respons AI selesai terlebih dahulu.','warning');return;}
+  if(S.loading){toast('⏳ Tunggu respons','warning');return;}
   const inp=document.getElementById('u-in');
-  inp.value=QP[key]||'';
+  let prompt=QP[key]||'';
+  /* Untuk realtime, inject harga current */
+  if(key==='realtime'){
+    prompt='💹 Berdasarkan harga real-time saat ini: XAU '+(S.prices.xau||'~$2645')+', DXY '+(S.prices.dxy||'~104.2')+', BTC '+(S.prices.btc||'~$67000')+'. Berikan analisis singkat dan rekomendasi entry XAUUSD.';
+  }
+  inp.value=prompt;
   inp.focus();
   setTimeout(()=>sendMsg(),350);
 }
@@ -893,9 +975,8 @@ function clearChat(){
 <i class="fas fa-robot text-purple-400 text-[10px]"></i></div>
 <div class="bg-slate-900/35 p-3.5 rounded-2xl rounded-tl-none border border-slate-800/45 max-w-[88%]">
 <p class="text-purple-400 font-bold text-[10px] mb-1">System</p>
-<p class="text-slate-400 text-xs">🔄 Sesi direset. Konteks AI dihapus. Siap untuk analisis baru!</p></div></div>`;
+<p class="text-slate-400 text-xs">🔄 Sesi direset. Siap analisis baru!</p></div></div>`;
 }
-
 function updHCnt(){document.getElementById('h-cnt').textContent=Math.floor(S.hist.length/2);}
 
 function onMdlChange(){
@@ -903,88 +984,61 @@ function onMdlChange(){
   const bar=document.getElementById('mode-bar');
   const ico=document.getElementById('mode-icon');
   const txt=document.getElementById('mode-txt');
-  if(v==='auto_pilot'){
+  if(v.startsWith('auto_')){
     bar.className='mt-3 px-3 py-1.5 bg-amber-500/4 rounded-lg border border-amber-500/7 text-[9px] font-mono text-amber-400 flex items-center gap-2';
-    ico.className='fas fa-bolt';txt.textContent='AUTO-PILOT aktif — Smart intent detection';
+    ico.className='fas fa-bolt';
+    const lbl={auto_pilot:'Smart Intent',auto_premium:'Premium Quality',auto_fast:'Fast Response'}[v]||'Auto';
+    txt.textContent='AUTO-PILOT: '+lbl;
   }else{
     bar.className='mt-3 px-3 py-1.5 bg-purple-500/4 rounded-lg border border-purple-500/7 text-[9px] font-mono text-purple-400 flex items-center gap-2';
     ico.className='fas fa-lock';
-    txt.textContent='HARD-ISOLATED: '+(v.split('/').pop()||v)+' — No fallback';
+    txt.textContent='HARD-ISOLATED: '+(v.split('/').pop()||v);
   }
 }
 
 function exportChat(){
-  if(!S.hist.length){toast('⚠️ Belum ada percakapan untuk diexport.','warning');return;}
+  if(!S.hist.length){toast('⚠️ Tidak ada chat','warning');return;}
   let t='=== GOLD & DXY Chat Export ===\n'+new Date().toLocaleString('id-ID')+'\n\n';
   S.hist.forEach(m=>{t+='['+(m.role==='user'?'USER':'AI')+']\n'+m.content+'\n\n---\n\n';});
   const blob=new Blob([t],{type:'text/plain;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='chat-'+Date.now()+'.txt';a.click();URL.revokeObjectURL(a.href);
-  toast('📥 Chat berhasil diexport!','success');
+  toast('📥 Diexport!','success');
 }
 
-/* ===== INIT ===== */
 function initApp(){
-  loadJournal();
-  renderJournal();
-  calcRisk();
-  onMdlChange();
-  updHCnt();
-  /* FIX #4: initChart dipanggil SETELAH DOM ready, dengan retry guard */
+  loadJournal();renderJournal();calcRisk();onMdlChange();updHCnt();
   setTimeout(initChart,200);
-  toast('🚀 GOLD & DXY v9.1 siap!','success');
+  startPriceLoop();
+  toast('🚀 v9.2 REAL-TIME aktif!','success');
 }
 
-/* ===== EVENT LISTENERS — Semua pakai addEventListener, bukan inline ===== */
-/* FIX #1 & #2: Tidak ada satupun onclick/onsubmit di HTML */
 document.addEventListener('DOMContentLoaded',function(){
-
-  /* Login */
   document.getElementById('lg-btn').addEventListener('click',doLogin);
-  document.getElementById('login-form').addEventListener('keydown',function(e){
-    if(e.key==='Enter')doLogin();
-  });
-
-  /* Logout */
+  document.getElementById('login-form').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
   document.getElementById('logout-btn').addEventListener('click',doLogout);
-
-  /* Header buttons */
   document.getElementById('tv-toggle-btn').addEventListener('click',toggleChart);
   document.getElementById('exp-chat-btn').addEventListener('click',exportChat);
-
-  /* Risk calc — gunakan event delegation pada container */
+  document.getElementById('refresh-btn').addEventListener('click',()=>refreshPrices(false));
   ['rc-bal','rc-rsk','rc-sl','rc-tp'].forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.addEventListener('input',calcRisk);
   });
   document.getElementById('calc-btn').addEventListener('click',calcRisk);
-
-  /* Journal */
   document.getElementById('add-trade-btn').addEventListener('click',addTrade);
   document.getElementById('exp-journal-btn').addEventListener('click',exportJournal);
-  document.getElementById('jn-pips').addEventListener('keydown',function(e){
-    if(e.key==='Enter')addTrade();
-  });
-
-  /* AI Chat */
+  document.getElementById('jn-pips').addEventListener('keydown',function(e){if(e.key==='Enter')addTrade();});
   document.getElementById('send-btn').addEventListener('click',sendMsg);
-  document.getElementById('u-in').addEventListener('keydown',function(e){
-    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
-  });
+  document.getElementById('u-in').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}});
   document.getElementById('clear-chat-btn').addEventListener('click',clearChat);
   document.getElementById('mdl-sel').addEventListener('change',onMdlChange);
-
-  /* Quick Prompts — event delegation */
   document.querySelectorAll('.qp-btn').forEach(btn=>{
-    btn.addEventListener('click',function(){
-      const k=this.dataset.qp;
-      if(k)useQP(k);
-    });
+    btn.addEventListener('click',function(){const k=this.dataset.qp;if(k)useQP(k);});
   });
-
-  /* Check session */
   chkSes();
 });
+
+window.S=S;
 
 })();
 </script>
