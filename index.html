@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>GOLD & DXY INSIGHTS PRO v9.0</title>
+<title>GOLD & DXY INSIGHTS PRO v9.1</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-<script src="https://s3.tradingview.com/tv.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#06060e;color:#e2e8f0;min-height:100vh;overflow-x:hidden}
@@ -14,371 +13,476 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 ::-webkit-scrollbar-track{background:#0a0a14}
 ::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:#f59e0b}
-
 .glass{background:rgba(12,18,35,0.65);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(245,158,11,0.07)}
-.glass-card{background:rgba(12,18,35,0.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(245,158,11,0.06);border-radius:1.25rem;transition:all .3s ease}
-.glass-card:hover{border-color:rgba(245,158,11,0.15);box-shadow:0 0 40px rgba(245,158,11,0.04)}
-
+.glass-card{background:rgba(12,18,35,0.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(245,158,11,0.06);border-radius:1.25rem;transition:border-color .3s,box-shadow .3s}
+.glass-card:hover{border-color:rgba(245,158,11,0.14);box-shadow:0 0 35px rgba(245,158,11,0.04)}
 .grad-amber{background:linear-gradient(135deg,#f59e0b,#ea580c);-webkit-background-clip:text;background-clip:text;color:transparent}
 .grad-purple{background:linear-gradient(135deg,#a855f7,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent}
 .grad-emerald{background:linear-gradient(135deg,#34d399,#059669);-webkit-background-clip:text;background-clip:text;color:transparent}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideR{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
-@keyframes pulse-neon{0%,100%{box-shadow:0 0 8px rgba(245,158,11,0.15)}50%{box-shadow:0 0 25px rgba(245,158,11,0.35)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@keyframes typing-bounce{0%,80%,100%{transform:translateY(0);opacity:.35}40%{transform:translateY(-7px);opacity:1}}
-@keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes glow-ring{0%,100%{box-shadow:0 0 5px rgba(245,158,11,0.2),0 0 15px rgba(245,158,11,0.05)}50%{box-shadow:0 0 15px rgba(245,158,11,0.4),0 0 40px rgba(245,158,11,0.1)}}
-.anim-fade{animation:fadeUp .45s ease both}
-.anim-slide{animation:slideR .35s ease both}
-.anim-float{animation:float 3s ease-in-out infinite}
-
-.typing-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a855f7;margin:0 2px;animation:typing-bounce 1.3s infinite}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideR{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes typingB{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-7px);opacity:1}}
+@keyframes glowRing{0%,100%{box-shadow:0 0 6px rgba(245,158,11,0.18),0 0 14px rgba(245,158,11,0.06)}50%{box-shadow:0 0 18px rgba(245,158,11,0.38),0 0 40px rgba(245,158,11,0.1)}}
+@keyframes tickerMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.anim-fade{animation:fadeUp .4s ease both}
+.anim-float{animation:floatY 3.5s ease-in-out infinite}
+.typing-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a855f7;margin:0 2px;animation:typingB 1.3s infinite}
 .typing-dot:nth-child(2){animation-delay:.18s}
 .typing-dot:nth-child(3){animation-delay:.36s}
-
-.login-bg{background:radial-gradient(ellipse at 30% 20%,rgba(245,158,11,0.06) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(168,85,247,0.04) 0%,transparent 50%),#06060e}
-.login-card{background:rgba(12,18,35,0.35);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);border:1px solid rgba(245,158,11,0.1);box-shadow:0 0 80px rgba(245,158,11,0.03),0 25px 60px rgba(0,0,0,0.4)}
-
-.calc-in{background:rgba(10,14,28,0.8);border:1px solid rgba(245,158,11,0.12);border-radius:.75rem;padding:.65rem .75rem;color:#e2e8f0;width:100%;transition:all .25s;font-size:.8rem}
-.calc-in:focus{outline:none;border-color:#f59e0b;box-shadow:0 0 18px rgba(245,158,11,0.08)}
-
-.qp-btn{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.1);border-radius:1rem;padding:.45rem .85rem;font-size:.68rem;font-weight:600;color:#fbbf24;cursor:pointer;transition:all .2s;white-space:nowrap}
-.qp-btn:hover{background:rgba(245,158,11,0.14);border-color:rgba(245,158,11,0.28);transform:translateY(-1px)}
+.login-bg{background:radial-gradient(ellipse at 30% 20%,rgba(245,158,11,0.055) 0%,transparent 55%),radial-gradient(ellipse at 72% 80%,rgba(168,85,247,0.04) 0%,transparent 55%),#06060e}
+.login-card{background:rgba(12,18,35,0.32);backdrop-filter:blur(52px);-webkit-backdrop-filter:blur(52px);border:1px solid rgba(245,158,11,0.09);box-shadow:0 0 90px rgba(245,158,11,0.025),0 28px 64px rgba(0,0,0,0.45)}
+.calc-in{background:rgba(10,14,28,0.8);border:1px solid rgba(245,158,11,0.1);border-radius:.75rem;padding:.6rem .75rem;color:#e2e8f0;width:100%;transition:border-color .2s,box-shadow .2s;font-size:.78rem}
+.calc-in:focus{outline:none;border-color:rgba(245,158,11,0.5);box-shadow:0 0 16px rgba(245,158,11,0.07)}
+.qp-btn{background:rgba(245,158,11,0.055);border:1px solid rgba(245,158,11,0.09);border-radius:1rem;padding:.42rem .8rem;font-size:.67rem;font-weight:600;color:#fbbf24;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:inherit}
+.qp-btn:hover{background:rgba(245,158,11,0.13);border-color:rgba(245,158,11,0.25);transform:translateY(-1px)}
 .qp-btn:active{transform:scale(.96)}
-
-.model-pill{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:9999px;font-size:.6rem;font-weight:700;font-family:monospace;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.15);color:#fbbf24}
-
-.err-box{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:1rem;padding:.85rem}
-
-.j-row{transition:all .2s;border-radius:.5rem;padding:.4rem .6rem}
-.j-row:hover{background:rgba(245,158,11,0.04)}
-
-.ticker-track{display:flex;animation:ticker-scroll 40s linear infinite;width:max-content}
+.model-pill{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:9999px;font-size:.58rem;font-weight:700;font-family:monospace;background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.13);color:#fbbf24}
+.err-box{background:rgba(239,68,68,0.055);border:1px solid rgba(239,68,68,0.14);border-radius:.9rem;padding:.8rem}
+.j-row{transition:background .18s;border-radius:.5rem;padding:.38rem .55rem}
+.j-row:hover{background:rgba(245,158,11,0.035)}
+.ticker-track{display:flex;animation:tickerMove 45s linear infinite;width:max-content}
 .ticker-track:hover{animation-play-state:paused}
-
-.tv-box{height:380px}
-@media(min-width:768px){.tv-box{height:480px}}
-
-.alert-toast{position:fixed;top:1rem;right:1rem;z-index:9999;animation:slideR .3s ease}
-
-button:disabled,input:disabled{opacity:.45;cursor:not-allowed}
-
+button:disabled{opacity:.4;cursor:not-allowed}
+input:disabled{opacity:.45;cursor:not-allowed}
 .ai-out strong{color:#fbbf24;font-weight:700}
 .ai-out em{color:#94a3b8}
-.ai-out code{background:#131825;color:#34d399;padding:1px 5px;border-radius:4px;font-family:monospace;font-size:.78em;border:1px solid #1e293b}
-.ai-out pre{background:#0a0e1a;border:1px solid #1e293b;border-radius:8px;padding:10px;margin:6px 0;overflow-x:auto;font-family:monospace;font-size:.78em;color:#e2e8f0}
+.ai-out code{background:#0f1623;color:#34d399;padding:1px 5px;border-radius:4px;font-family:monospace;font-size:.77em;border:1px solid #1e293b}
+.ai-out pre{background:#090d1a;border:1px solid #1e293b;border-radius:8px;padding:10px;margin:6px 0;overflow-x:auto;font-family:monospace;font-size:.77em;color:#e2e8f0}
 .ai-out ul{list-style:disc;padding-left:16px}
 .ai-out ol{list-style:decimal;padding-left:16px}
 .ai-out li{margin:2px 0}
-.ai-out h3{color:#f59e0b;font-weight:700;font-size:.95em;margin:6px 0 3px}
+.ai-out h3{color:#f59e0b;font-weight:700;font-size:.92em;margin:6px 0 3px}
 .ai-out hr{border-color:#1e293b;margin:6px 0}
+.alert-toast{animation:slideR .3s ease}
+#chat{scroll-behavior:smooth}
 </style>
 </head>
 <body>
 
-<!-- ===================== LOGIN SCREEN ===================== -->
+<!-- =========== LOGIN =========== -->
 <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center login-bg">
-<div class="absolute inset-0 overflow-hidden pointer-events-none">
-<div class="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-amber-500/5 blur-3xl anim-float"></div>
-<div class="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full bg-purple-500/5 blur-3xl anim-float" style="animation-delay:1.5s"></div>
-</div>
-<div class="login-card rounded-2xl p-7 w-full max-w-sm mx-4 anim-fade relative z-10">
-<div class="text-center mb-7">
-<div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-600/20 border border-amber-500/20 flex items-center justify-center" style="animation:glow-ring 3s ease infinite">
-<i class="fas fa-chart-line text-2xl grad-amber"></i>
-</div>
-<h1 class="text-xl font-black grad-amber">GOLD &amp; DXY</h1>
-<p class="text-[9px] text-slate-500 tracking-[.25em] uppercase mt-1">Trading Terminal v9.0 Ultra</p>
-</div>
-<form id="login-form" onsubmit="return doLogin(event)" class="space-y-3">
-<div>
-<label class="block text-[10px] text-slate-500 mb-1 font-semibold tracking-wide"><i class="fas fa-user text-amber-500/70 mr-1"></i>Username</label>
-<input type="text" id="lg-user" value="trader" class="w-full bg-slate-900/40 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/50 transition text-slate-100 placeholder-slate-600" autocomplete="username">
-</div>
-<div>
-<label class="block text-[10px] text-slate-500 mb-1 font-semibold tracking-wide"><i class="fas fa-lock text-amber-500/70 mr-1"></i>Password</label>
-<input type="password" id="lg-pass" value="goldrush2024" class="w-full bg-slate-900/40 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/50 transition text-slate-100" autocomplete="current-password">
-</div>
-<button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 transition active:scale-[.97] mt-2"><i class="fas fa-unlock mr-2"></i>Enter Terminal</button>
-<p class="text-center text-[9px] text-slate-600 mt-3"><i class="fas fa-shield-alt text-emerald-500/60 mr-1"></i>Session lokal &bull; Data tidak dikirim ke server</p>
-</form>
-<div id="lg-err" class="mt-3 text-red-400 text-xs text-center hidden"><i class="fas fa-exclamation-circle mr-1"></i>Kredensial salah</div>
-</div>
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-1/4 left-1/4 w-72 h-72 rounded-full bg-amber-500/5 blur-3xl anim-float"></div>
+    <div class="absolute bottom-1/3 right-1/4 w-56 h-56 rounded-full bg-purple-500/4 blur-3xl anim-float" style="animation-delay:1.8s"></div>
+  </div>
+  <div class="login-card rounded-2xl p-7 w-full max-w-sm mx-4 anim-fade relative z-10">
+    <div class="text-center mb-7">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-amber-500/18 to-orange-600/14 border border-amber-500/18 flex items-center justify-center" style="animation:glowRing 3.5s ease infinite">
+        <i class="fas fa-chart-line text-2xl grad-amber"></i>
+      </div>
+      <h1 class="text-xl font-black grad-amber">GOLD &amp; DXY</h1>
+      <p class="text-[9px] text-slate-500 tracking-[.22em] uppercase mt-1">Trading Terminal v9.1 PATCHED</p>
+    </div>
+    <form id="login-form" class="space-y-3">
+      <div>
+        <label class="block text-[10px] text-slate-500 mb-1 font-semibold tracking-wide"><i class="fas fa-user text-amber-500/60 mr-1"></i>Username</label>
+        <input type="text" id="lg-user" value="trader" autocomplete="username"
+          class="w-full bg-slate-900/40 border border-slate-700/45 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/45 transition text-slate-100 placeholder-slate-600">
+      </div>
+      <div>
+        <label class="block text-[10px] text-slate-500 mb-1 font-semibold tracking-wide"><i class="fas fa-lock text-amber-500/60 mr-1"></i>Password</label>
+        <input type="password" id="lg-pass" value="goldrush2024" autocomplete="current-password"
+          class="w-full bg-slate-900/40 border border-slate-700/45 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/45 transition text-slate-100">
+      </div>
+      <button type="button" id="lg-btn" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 transition active:scale-[.97] mt-2">
+        <i class="fas fa-unlock mr-2"></i>Enter Terminal
+      </button>
+      <p class="text-center text-[9px] text-slate-600 mt-2">
+        <i class="fas fa-shield-alt text-emerald-500/55 mr-1"></i>Session lokal &bull; Data tidak dikirim
+      </p>
+    </form>
+    <div id="lg-err" class="mt-3 text-red-400 text-xs text-center hidden">
+      <i class="fas fa-exclamation-circle mr-1"></i>Username atau password salah
+    </div>
+  </div>
 </div>
 
-<!-- ===================== MAIN APP ===================== -->
+<!-- =========== MAIN APP =========== -->
 <div id="app" class="hidden min-h-screen">
 
-<!-- Alert Container -->
-<div id="alert-box" class="fixed top-3 right-3 z-50 space-y-2" style="max-width:320px"></div>
+  <!-- Alert container -->
+  <div id="alert-box" class="fixed top-3 right-3 z-50 space-y-2" style="max-width:310px;pointer-events:none"></div>
 
-<!-- Header -->
-<header class="sticky top-0 z-40 glass border-b border-slate-800/40">
-<div class="max-w-7xl mx-auto px-3 py-2.5 flex items-center justify-between">
-<div class="flex items-center gap-2.5">
-<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-600/10 border border-amber-500/15 flex items-center justify-center">
-<i class="fas fa-chart-line text-sm grad-amber"></i>
-</div>
-<div>
-<h1 class="text-xs font-black grad-amber leading-tight">GOLD &amp; DXY</h1>
-<p class="text-[7px] text-slate-600 tracking-[.2em] uppercase">v9.0 Ultra</p>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<button onclick="toggleChart()" id="tv-toggle" class="text-[10px] text-slate-400 hover:text-amber-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/50 hover:border-amber-500/25 flex items-center gap-1">
-<i class="fas fa-chart-area"></i><span id="tv-toggle-lbl" class="hidden sm:inline">Hide Chart</span>
-</button>
-<button onclick="exportChat()" class="text-[10px] text-slate-400 hover:text-emerald-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/50 hover:border-emerald-500/25 flex items-center gap-1">
-<i class="fas fa-download"></i><span class="hidden sm:inline">Export</span>
-</button>
-<button onclick="doLogout()" class="text-[10px] text-slate-400 hover:text-red-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/50 hover:border-red-500/25 flex items-center gap-1">
-<i class="fas fa-sign-out-alt"></i><span class="hidden sm:inline">Exit</span>
-</button>
-</div>
-</div>
-</header>
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 glass border-b border-slate-800/35">
+    <div class="max-w-7xl mx-auto px-3 py-2.5 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500/18 to-orange-600/10 border border-amber-500/14 flex items-center justify-center">
+          <i class="fas fa-chart-line text-sm grad-amber"></i>
+        </div>
+        <div>
+          <h1 class="text-xs font-black grad-amber leading-tight">GOLD &amp; DXY</h1>
+          <p class="text-[7px] text-slate-600 tracking-[.18em] uppercase">v9.1 Patched</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button id="tv-toggle-btn" class="text-[10px] text-slate-400 hover:text-amber-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/45 hover:border-amber-500/22 flex items-center gap-1">
+          <i class="fas fa-chart-area text-[9px]"></i><span id="tv-lbl" class="hidden sm:inline">Hide Chart</span>
+        </button>
+        <button id="exp-chat-btn" class="text-[10px] text-slate-400 hover:text-emerald-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/45 hover:border-emerald-500/22 flex items-center gap-1">
+          <i class="fas fa-download text-[9px]"></i><span class="hidden sm:inline">Export</span>
+        </button>
+        <button id="logout-btn" class="text-[10px] text-slate-400 hover:text-red-400 transition px-2.5 py-1.5 rounded-lg border border-slate-700/45 hover:border-red-500/22 flex items-center gap-1">
+          <i class="fas fa-sign-out-alt text-[9px]"></i><span class="hidden sm:inline">Exit</span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-<!-- News Ticker -->
-<div class="glass border-b border-slate-800/30 overflow-hidden">
-<div class="py-2 px-3 flex items-center gap-3">
-<span class="text-amber-500 font-bold text-[10px] whitespace-nowrap shrink-0"><i class="fas fa-rss mr-1"></i>LIVE</span>
-<div class="overflow-hidden flex-grow">
-<div class="ticker-track text-[11px] text-slate-400">
-<span class="mx-4">📊 <b class="text-amber-400">NFP</b>: 227K (Prev: 212K)</span>
-<span class="mx-4">🏦 <b class="text-purple-400">FOMC</b>: Rate 5.25%</span>
-<span class="mx-4">📈 <b class="text-emerald-400">CPI</b> YoY: 3.2%</span>
-<span class="mx-4">💰 <b class="text-amber-400">XAU</b>: $2,645.30 <span class="text-emerald-400">+0.8%</span></span>
-<span class="mx-4">💵 <b class="text-blue-400">DXY</b>: 104.23 <span class="text-red-400">-0.12%</span></span>
-<span class="mx-4">🔥 <b class="text-orange-400">BTC</b>: $67,245 <span class="text-emerald-400">+2.3%</span></span>
-<span class="mx-4">📊 <b class="text-amber-400">NFP</b>: 227K (Prev: 212K)</span>
-<span class="mx-4">🏦 <b class="text-purple-400">FOMC</b>: Rate 5.25%</span>
-<span class="mx-4">📈 <b class="text-emerald-400">CPI</b> YoY: 3.2%</span>
-<span class="mx-4">💰 <b class="text-amber-400">XAU</b>: $2,645.30 <span class="text-emerald-400">+0.8%</span></span>
-<span class="mx-4">💵 <b class="text-blue-400">DXY</b>: 104.23 <span class="text-red-400">-0.12%</span></span>
-<span class="mx-4">🔥 <b class="text-orange-400">BTC</b>: $67,245 <span class="text-emerald-400">+2.3%</span></span>
-</div>
-</div>
-</div>
-</div>
+  <!-- NEWS TICKER -->
+  <div class="glass border-b border-slate-800/25 overflow-hidden">
+    <div class="py-2 px-3 flex items-center gap-3">
+      <span class="text-amber-500 font-bold text-[10px] whitespace-nowrap shrink-0 flex items-center gap-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse inline-block"></span>LIVE
+      </span>
+      <div class="overflow-hidden flex-grow relative">
+        <div class="ticker-track text-[11px] text-slate-400 select-none">
+          <span class="mx-5">📊 <b class="text-amber-400">NFP</b>: 227K <span class="text-slate-500">(Prev: 212K)</span></span>
+          <span class="mx-5">🏦 <b class="text-purple-400">FOMC</b>: Rate Hold 5.25%</span>
+          <span class="mx-5">📈 <b class="text-emerald-400">CPI</b> YoY: 3.2%</span>
+          <span class="mx-5">💰 <b class="text-amber-400">XAU</b>: $2,645 <span class="text-emerald-400">▲0.82%</span></span>
+          <span class="mx-5">💵 <b class="text-blue-400">DXY</b>: 104.23 <span class="text-red-400">▼0.12%</span></span>
+          <span class="mx-5">🔥 <b class="text-orange-400">BTC</b>: $67,245 <span class="text-emerald-400">▲2.3%</span></span>
+          <span class="mx-5">📉 <b class="text-slate-300">EUR/USD</b>: 1.0845 <span class="text-emerald-400">▲0.08%</span></span>
+          <span class="mx-5">📊 <b class="text-amber-400">NFP</b>: 227K <span class="text-slate-500">(Prev: 212K)</span></span>
+          <span class="mx-5">🏦 <b class="text-purple-400">FOMC</b>: Rate Hold 5.25%</span>
+          <span class="mx-5">📈 <b class="text-emerald-400">CPI</b> YoY: 3.2%</span>
+          <span class="mx-5">💰 <b class="text-amber-400">XAU</b>: $2,645 <span class="text-emerald-400">▲0.82%</span></span>
+          <span class="mx-5">💵 <b class="text-blue-400">DXY</b>: 104.23 <span class="text-red-400">▼0.12%</span></span>
+          <span class="mx-5">🔥 <b class="text-orange-400">BTC</b>: $67,245 <span class="text-emerald-400">▲2.3%</span></span>
+          <span class="mx-5">📉 <b class="text-slate-300">EUR/USD</b>: 1.0845 <span class="text-emerald-400">▲0.08%</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<main class="max-w-7xl mx-auto p-3 md:p-5 space-y-5">
+  <main class="max-w-7xl mx-auto p-3 md:p-5 space-y-5">
 
-<!-- Watchlist -->
-<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-<div class="glass-card p-3">
-<p class="text-[9px] text-slate-500 mb-0.5">XAU/USD</p>
-<p class="text-base font-black text-amber-400">$2,645</p>
-<p class="text-[10px] text-emerald-400"><i class="fas fa-arrow-up text-[8px]"></i> +0.82%</p>
-</div>
-<div class="glass-card p-3">
-<p class="text-[9px] text-slate-500 mb-0.5">DXY</p>
-<p class="text-base font-black text-blue-400">104.23</p>
-<p class="text-[10px] text-red-400"><i class="fas fa-arrow-down text-[8px]"></i> -0.12%</p>
-</div>
-<div class="glass-card p-3">
-<p class="text-[9px] text-slate-500 mb-0.5">EUR/USD</p>
-<p class="text-base font-black text-slate-100">1.0845</p>
-<p class="text-[10px] text-emerald-400"><i class="fas fa-arrow-up text-[8px]"></i> +0.08%</p>
-</div>
-<div class="glass-card p-3">
-<p class="text-[9px] text-slate-500 mb-0.5">BTC/USD</p>
-<p class="text-base font-black text-orange-400">$67,245</p>
-<p class="text-[10px] text-emerald-400"><i class="fas fa-arrow-up text-[8px]"></i> +2.34%</p>
-</div>
-</div>
+    <!-- WATCHLIST -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="glass-card p-3 cursor-default">
+        <p class="text-[9px] text-slate-500 mb-0.5 font-mono">XAU/USD</p>
+        <p class="text-base font-black text-amber-400">$2,645</p>
+        <p class="text-[10px] text-emerald-400"><i class="fas fa-caret-up mr-0.5"></i>+0.82%</p>
+      </div>
+      <div class="glass-card p-3 cursor-default">
+        <p class="text-[9px] text-slate-500 mb-0.5 font-mono">DXY</p>
+        <p class="text-base font-black text-blue-400">104.23</p>
+        <p class="text-[10px] text-red-400"><i class="fas fa-caret-down mr-0.5"></i>-0.12%</p>
+      </div>
+      <div class="glass-card p-3 cursor-default">
+        <p class="text-[9px] text-slate-500 mb-0.5 font-mono">EUR/USD</p>
+        <p class="text-base font-black text-slate-100">1.0845</p>
+        <p class="text-[10px] text-emerald-400"><i class="fas fa-caret-up mr-0.5"></i>+0.08%</p>
+      </div>
+      <div class="glass-card p-3 cursor-default">
+        <p class="text-[9px] text-slate-500 mb-0.5 font-mono">BTC/USD</p>
+        <p class="text-base font-black text-orange-400">$67,245</p>
+        <p class="text-[10px] text-emerald-400"><i class="fas fa-caret-up mr-0.5"></i>+2.34%</p>
+      </div>
+    </div>
 
-<!-- Grid: Chart + Sidebar -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+    <!-- MAIN GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-<!-- Chart Column -->
-<div class="lg:col-span-7 space-y-5">
+      <!-- LEFT: Chart + Calendar -->
+      <div class="lg:col-span-7 space-y-5">
 
-<div id="chart-wrap" class="glass-card p-4">
-<div class="flex items-center justify-between mb-3">
-<h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-chart-area grad-amber"></i>XAU/USD — Live Chart</h2>
-<span class="text-[9px] text-emerald-400 font-mono flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block"></span>Streaming</span>
-</div>
-<div id="tv_chart" class="tv-box rounded-xl overflow-hidden border border-slate-800/50"></div>
-</div>
+        <!-- TradingView Chart -->
+        <div id="chart-wrap" class="glass-card p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-xs font-bold flex items-center gap-2">
+              <i class="fas fa-chart-area grad-amber"></i>XAU/USD — Live Chart
+            </h2>
+            <span class="text-[9px] text-emerald-400 font-mono flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block"></span>Streaming
+            </span>
+          </div>
+          <!-- FIX: wrapper div dengan height eksplisit, TV widget inject di sini -->
+          <div id="tv_chart" style="height:420px;min-height:300px" class="rounded-xl overflow-hidden border border-slate-800/40"></div>
+        </div>
 
-<!-- Economic Calendar -->
-<div class="glass-card p-4">
-<h2 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-calendar-alt grad-purple"></i>Kalender Ekonomi</h2>
-<div class="rounded-xl overflow-hidden border border-slate-800/50" style="height:320px">
-<iframe src="https://s.tradingview.com/embed-widget/events/?locale=id&colorTheme=dark&isTransparent=true&width=100%25&height=100%25" style="width:100%;height:100%;border:none" loading="lazy"></iframe>
-</div>
-</div>
-</div>
+        <!-- Economic Calendar -->
+        <div class="glass-card p-4">
+          <h2 class="text-xs font-bold flex items-center gap-2 mb-3">
+            <i class="fas fa-calendar-alt grad-purple"></i>Kalender Ekonomi
+          </h2>
+          <div class="rounded-xl overflow-hidden border border-slate-800/40" style="height:320px">
+            <iframe src="https://s.tradingview.com/embed-widget/events/?locale=id&colorTheme=dark&isTransparent=true&width=100%25&height=100%25"
+              style="width:100%;height:100%;border:none" loading="lazy" title="Kalender Ekonomi"></iframe>
+          </div>
+        </div>
 
-<!-- Right Sidebar -->
-<div class="lg:col-span-5 space-y-5">
+      </div>
 
-<!-- Risk Calculator -->
-<div class="glass-card p-4">
-<h3 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-calculator grad-emerald"></i>Risk Management</h3>
-<div class="grid grid-cols-2 gap-2.5">
-<div><label class="text-[9px] text-slate-500 block mb-1">Balance ($)</label><input type="number" id="rc-bal" value="10000" class="calc-in" oninput="calcRisk()"></div>
-<div><label class="text-[9px] text-slate-500 block mb-1">Risk (%)</label><input type="number" id="rc-rsk" value="2" step="0.1" class="calc-in" oninput="calcRisk()"></div>
-<div><label class="text-[9px] text-slate-500 block mb-1">Stop Loss (pips)</label><input type="number" id="rc-sl" value="20" class="calc-in" oninput="calcRisk()"></div>
-<div><label class="text-[9px] text-slate-500 block mb-1">Take Profit (pips)</label><input type="number" id="rc-tp" value="40" class="calc-in" oninput="calcRisk()"></div>
-</div>
-<div class="grid grid-cols-2 gap-2.5 mt-3">
-<div class="bg-slate-900/40 rounded-xl p-2.5 border border-slate-800/40 text-center"><p class="text-[9px] text-slate-500">Risk Amount</p><p id="rc-amt" class="text-sm font-bold text-red-400">$200</p></div>
-<div class="bg-slate-900/40 rounded-xl p-2.5 border border-slate-800/40 text-center"><p class="text-[9px] text-slate-500">Lot Size</p><p id="rc-lot" class="text-sm font-bold text-emerald-400">1.00</p></div>
-<div class="bg-slate-900/40 rounded-xl p-2.5 border border-slate-800/40 text-center"><p class="text-[9px] text-slate-500">R:R Ratio</p><p id="rc-rr" class="text-sm font-bold text-amber-400">1:2.0</p></div>
-<div class="bg-slate-900/40 rounded-xl p-2.5 border border-slate-800/40 text-center"><p class="text-[9px] text-slate-500">Profit Target</p><p id="rc-pft" class="text-sm font-bold text-emerald-400">$400</p></div>
-</div>
-</div>
+      <!-- RIGHT: Risk Calc + Journal -->
+      <div class="lg:col-span-5 space-y-5">
 
-<!-- Trading Journal -->
-<div class="glass-card p-4">
-<div class="flex items-center justify-between mb-3">
-<h3 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-book grad-amber"></i>Trading Journal</h3>
-<div class="flex items-center gap-2">
-<span id="wr-disp" class="text-[9px] text-slate-500 font-mono">WR: 0%</span>
-<button onclick="exportJournal()" title="Export JSON" class="text-[10px] text-amber-400/60 hover:text-amber-400 transition"><i class="fas fa-download"></i></button>
-</div>
-</div>
-<div class="grid grid-cols-4 gap-2 mb-3">
-<select id="jn-pair" class="calc-in text-[11px] col-span-1"><option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>BTCUSD</option><option>DXY</option></select>
-<select id="jn-side" class="calc-in text-[11px]"><option value="BUY">BUY</option><option value="SELL">SELL</option></select>
-<input type="number" id="jn-pips" placeholder="±pips" class="calc-in text-[11px]">
-<button onclick="addTrade()" class="bg-amber-500/10 border border-amber-500/15 rounded-xl text-[11px] font-bold text-amber-400 hover:bg-amber-500/20 transition active:scale-95"><i class="fas fa-plus"></i></button>
-</div>
-<div id="jn-list" class="space-y-1 max-h-36 overflow-y-auto"></div>
-</div>
-</div>
+        <!-- Risk Calculator -->
+        <div class="glass-card p-4">
+          <h3 class="text-xs font-bold flex items-center gap-2 mb-3">
+            <i class="fas fa-calculator grad-emerald"></i>Risk Management Calculator
+          </h3>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="text-[9px] text-slate-500 block mb-1">Balance ($)</label>
+              <input type="number" id="rc-bal" value="10000" class="calc-in" placeholder="10000">
+            </div>
+            <div>
+              <label class="text-[9px] text-slate-500 block mb-1">Risk (%)</label>
+              <input type="number" id="rc-rsk" value="2" step="0.1" min="0.1" max="100" class="calc-in" placeholder="2">
+            </div>
+            <div>
+              <label class="text-[9px] text-slate-500 block mb-1">Stop Loss (pips)</label>
+              <input type="number" id="rc-sl" value="20" min="1" class="calc-in" placeholder="20">
+            </div>
+            <div>
+              <label class="text-[9px] text-slate-500 block mb-1">Take Profit (pips)</label>
+              <input type="number" id="rc-tp" value="40" min="1" class="calc-in" placeholder="40">
+            </div>
+          </div>
+          <button id="calc-btn" class="w-full mt-3 bg-emerald-500/10 border border-emerald-500/15 rounded-xl py-2 text-xs font-bold text-emerald-400 hover:bg-emerald-500/18 transition active:scale-[.97]">
+            <i class="fas fa-calculator mr-1"></i>Hitung
+          </button>
+          <div class="grid grid-cols-2 gap-2.5 mt-3">
+            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center">
+              <p class="text-[8px] text-slate-500 mb-0.5">Risk Amount</p>
+              <p id="rc-amt" class="text-sm font-bold text-red-400">$200.00</p>
+            </div>
+            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center">
+              <p class="text-[8px] text-slate-500 mb-0.5">Lot Size</p>
+              <p id="rc-lot" class="text-sm font-bold text-emerald-400">1.00</p>
+            </div>
+            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center">
+              <p class="text-[8px] text-slate-500 mb-0.5">R:R Ratio</p>
+              <p id="rc-rr" class="text-sm font-bold text-amber-400">1:2.0</p>
+            </div>
+            <div class="bg-slate-900/35 rounded-xl p-2.5 border border-slate-800/35 text-center">
+              <p class="text-[8px] text-slate-500 mb-0.5">Profit Target</p>
+              <p id="rc-pft" class="text-sm font-bold text-emerald-400">$400.00</p>
+            </div>
+          </div>
+        </div>
 
-</div>
+        <!-- Trading Journal -->
+        <div class="glass-card p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xs font-bold flex items-center gap-2">
+              <i class="fas fa-book grad-amber"></i>Trading Journal
+            </h3>
+            <div class="flex items-center gap-2">
+              <span id="wr-disp" class="text-[9px] text-slate-500 font-mono">WR: 0%</span>
+              <button id="exp-journal-btn" title="Export JSON" class="text-[10px] text-amber-400/55 hover:text-amber-400 transition">
+                <i class="fas fa-download"></i>
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-2 mb-3">
+            <select id="jn-pair" class="calc-in text-[11px]">
+              <option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>BTCUSD</option><option>DXY</option>
+            </select>
+            <select id="jn-side" class="calc-in text-[11px]">
+              <option value="BUY">BUY</option><option value="SELL">SELL</option>
+            </select>
+            <input type="number" id="jn-pips" placeholder="±pips" class="calc-in text-[11px]">
+            <button id="add-trade-btn" class="bg-amber-500/8 border border-amber-500/12 rounded-xl text-[11px] font-bold text-amber-400 hover:bg-amber-500/18 transition active:scale-95">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div id="jn-list" class="space-y-1 overflow-y-auto" style="max-height:9rem">
+            <p class="text-[10px] text-slate-600 text-center py-3">Belum ada trade tercatat</p>
+          </div>
+        </div>
 
-<!-- ===================== AI CHAT ===================== -->
-<div class="glass-card overflow-hidden">
-<!-- Chat Header -->
-<div class="border-b border-slate-800/40 p-4">
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-<div>
-<h2 class="text-sm font-bold flex items-center gap-2"><i class="fas fa-brain grad-purple"></i>AI Terminal Router</h2>
-<p class="text-[9px] text-emerald-400/80 font-mono mt-0.5"><i class="fas fa-shield-alt mr-1"></i>XSS-Guard &bull; Hard-Isolated &bull; History-Aware</p>
-</div>
-<div class="flex items-center gap-2 bg-slate-900/40 px-3 py-1.5 rounded-xl border border-slate-700/40 w-full sm:w-auto">
-<i class="fas fa-microchip text-amber-400 text-xs shrink-0"></i>
-<select id="mdl-sel" onchange="onMdlChange()" class="bg-transparent text-[11px] font-bold text-slate-200 outline-none cursor-pointer w-full">
-<optgroup label="🤖 AUTO-PILOT">
-<option value="auto_pilot">⚡ Auto Select (Smart Intent)</option>
-</optgroup>
-<optgroup label="🧠 Reasoning">
-<option value="deepseek/deepseek-r1:free">DeepSeek R1 — Reasoning</option>
-<option value="google/gemini-2.5-flash-preview:free">Gemini 2.5 Flash Preview</option>
-</optgroup>
-<optgroup label="⚙️ General">
-<option value="openai/gpt-oss-120b:free">GPT OSS 120B</option>
-<option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B Instruct</option>
-<option value="mistralai/mistral-7b-instruct:free">Mistral 7B Instruct</option>
-</optgroup>
-<optgroup label="💻 Coding">
-<option value="qwen/qwen-2.5-coder-32b-instruct:free">Qwen 2.5 Coder 32B</option>
-</optgroup>
-</select>
-</div>
-</div>
-<div id="mode-bar" class="mt-3 px-3 py-1.5 bg-amber-500/5 rounded-lg border border-amber-500/8 text-[9px] font-mono text-amber-400 flex items-center gap-2">
-<i id="mode-icon" class="fas fa-bolt"></i>
-<span id="mode-txt">AUTO-PILOT aktif — Smart intent detection</span>
-</div>
-</div>
+      </div>
+    </div>
 
-<!-- Chat Body -->
-<div id="chat" class="overflow-y-auto p-4 space-y-4 text-sm" style="height:380px;max-height:50vh">
-<div class="flex gap-3 anim-fade">
-<div class="w-7 h-7 rounded-full bg-purple-500/15 border border-purple-500/20 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-robot text-purple-400 text-[10px]"></i></div>
-<div class="bg-slate-900/40 p-3.5 rounded-2xl rounded-tl-none border border-slate-800/50 max-w-[88%]">
-<p class="text-purple-400 font-bold text-[10px] mb-2">System v9.0-ULTRA</p>
-<div class="text-slate-300 text-xs leading-relaxed space-y-1">
-<p>🚀 Trading Terminal berhasil dimuat.</p>
-<p>Fitur aktif: <b class="text-amber-400">Risk Calculator</b> • <b class="text-amber-400">Journal</b> • <b class="text-amber-400">AI Router</b> • <b class="text-amber-400">Quick Prompts</b></p>
-<p class="text-slate-500 mt-1">Ketik pertanyaan atau gunakan tombol analisis cepat di bawah.</p>
-</div>
-</div>
-</div>
-</div>
+    <!-- AI CHAT -->
+    <div class="glass-card overflow-hidden">
 
-<!-- Quick Prompts -->
-<div class="px-4 py-2 border-t border-slate-800/30 flex gap-2 overflow-x-auto">
-<button class="qp-btn" onclick="qp('sinyal')"><i class="fas fa-chart-line mr-1"></i>Sinyal XAUUSD</button>
-<button class="qp-btn" onclick="qp('cpi')"><i class="fas fa-search mr-1"></i>Analisis CPI</button>
-<button class="qp-btn" onclick="qp('sltp')"><i class="fas fa-shield-halved mr-1"></i>Hitung SL/TP</button>
-<button class="qp-btn" onclick="qp('dxy')"><i class="fas fa-dollar-sign mr-1"></i>Korelasi DXY</button>
-<button class="qp-btn" onclick="qp('strat')"><i class="fas fa-chess mr-1"></i>Strategi Hari Ini</button>
-<button class="qp-btn" onclick="qp('news')"><i class="fas fa-newspaper mr-1"></i>Dampak NFP</button>
-</div>
+      <!-- Chat Header -->
+      <div class="border-b border-slate-800/35 p-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <h2 class="text-sm font-bold flex items-center gap-2">
+              <i class="fas fa-brain grad-purple"></i>AI Terminal Router
+            </h2>
+            <p class="text-[9px] text-emerald-400/75 font-mono mt-0.5">
+              <i class="fas fa-shield-alt mr-1"></i>XSS-Guard &bull; Hard-Isolated &bull; History-Aware &bull; Spam-Protected
+            </p>
+          </div>
+          <div class="flex items-center gap-2 bg-slate-900/35 px-3 py-1.5 rounded-xl border border-slate-700/35 w-full sm:w-auto">
+            <i class="fas fa-microchip text-amber-400 text-[10px] shrink-0"></i>
+            <select id="mdl-sel" class="bg-transparent text-[11px] font-bold text-slate-200 outline-none cursor-pointer w-full">
+              <optgroup label="🤖 AUTO-PILOT">
+                <option value="auto_pilot">⚡ Auto Select (Smart Intent)</option>
+              </optgroup>
+              <optgroup label="🧠 Reasoning">
+                <option value="deepseek/deepseek-r1:free">DeepSeek R1 — Reasoning</option>
+                <option value="google/gemini-2.5-flash-preview:free">Gemini 2.5 Flash Preview</option>
+              </optgroup>
+              <optgroup label="⚙️ General">
+                <option value="openai/gpt-oss-120b:free">GPT OSS 120B</option>
+                <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B</option>
+                <option value="mistralai/mistral-7b-instruct:free">Mistral 7B</option>
+              </optgroup>
+              <optgroup label="💻 Coding">
+                <option value="qwen/qwen-2.5-coder-32b-instruct:free">Qwen 2.5 Coder 32B</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div id="mode-bar" class="mt-3 px-3 py-1.5 bg-amber-500/4 rounded-lg border border-amber-500/7 text-[9px] font-mono text-amber-400 flex items-center gap-2">
+          <i id="mode-icon" class="fas fa-bolt"></i>
+          <span id="mode-txt">AUTO-PILOT aktif — Smart intent detection</span>
+        </div>
+      </div>
 
-<!-- Input -->
-<div class="border-t border-slate-800/30 p-3 md:p-4">
-<div class="flex items-center justify-between mb-2 px-1">
-<span class="text-[9px] text-slate-600 font-mono"><i class="fas fa-history mr-1"></i>History: <span id="h-cnt">0</span> pesan</span>
-<button onclick="clearChat()" class="text-[9px] text-slate-600 hover:text-red-400 transition"><i class="fas fa-trash-alt mr-1"></i>Reset</button>
-</div>
-<div class="flex gap-2">
-<input type="text" id="u-in" placeholder="Tanya analisis, sinyal, strategi..." class="flex-grow bg-slate-900/40 border border-slate-700/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/50 transition text-slate-100 placeholder-slate-600">
-<button onclick="sendMsg()" id="send-btn" class="bg-gradient-to-r from-amber-500 to-orange-600 px-4 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 transition active:scale-95 flex items-center gap-1.5 shrink-0">
-<span class="hidden sm:inline text-xs">Kirim</span><i class="fas fa-paper-plane text-xs"></i>
-</button>
-</div>
-</div>
-</div>
+      <!-- Chat Messages -->
+      <div id="chat" class="overflow-y-auto p-4 space-y-4 text-sm" style="height:360px">
+        <div class="flex gap-2.5 anim-fade">
+          <div class="w-7 h-7 rounded-full bg-purple-500/14 border border-purple-500/18 flex items-center justify-center shrink-0 mt-0.5">
+            <i class="fas fa-robot text-purple-400 text-[10px]"></i>
+          </div>
+          <div class="bg-slate-900/35 p-3.5 rounded-2xl rounded-tl-none border border-slate-800/45 max-w-[88%]">
+            <p class="text-purple-400 font-bold text-[10px] mb-2">System v9.1-PATCHED</p>
+            <div class="text-slate-300 text-xs leading-relaxed space-y-1">
+              <p>🚀 Terminal v9.1 berhasil dimuat. Bug pada versi sebelumnya sudah dipatch:</p>
+              <p>✅ Login form via <b class="text-amber-400">event listener</b> (bukan inline onsubmit)</p>
+              <p>✅ TradingView <b class="text-amber-400">wait-for-load</b> guard</p>
+              <p>✅ Journal <b class="text-amber-400">try-catch</b> localStorage parsing</p>
+              <p>✅ Rate limit hanya aktif setelah <b class="text-amber-400">validasi lulus</b></p>
+              <p>✅ Token decoder <b class="text-amber-400">whitespace-tolerant</b></p>
+              <p class="text-slate-500 mt-1.5">Siap analisis XAUUSD &amp; DXY. Gunakan Quick Prompts di bawah!</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-</main>
+      <!-- Quick Prompts -->
+      <div class="px-4 py-2.5 border-t border-slate-800/25 flex gap-2 overflow-x-auto">
+        <button class="qp-btn" data-qp="sinyal"><i class="fas fa-chart-line mr-1"></i>Sinyal XAUUSD</button>
+        <button class="qp-btn" data-qp="cpi"><i class="fas fa-search mr-1"></i>Analisis CPI</button>
+        <button class="qp-btn" data-qp="sltp"><i class="fas fa-shield-halved mr-1"></i>Hitung SL/TP</button>
+        <button class="qp-btn" data-qp="dxy"><i class="fas fa-dollar-sign mr-1"></i>Korelasi DXY</button>
+        <button class="qp-btn" data-qp="strat"><i class="fas fa-chess mr-1"></i>Strategi Hari Ini</button>
+        <button class="qp-btn" data-qp="news"><i class="fas fa-newspaper mr-1"></i>Dampak NFP</button>
+      </div>
 
-<footer class="text-center py-3 text-[8px] text-slate-700 border-t border-slate-800/20">
-<i class="fas fa-shield-alt mr-1 text-emerald-500/40"></i>GOLD &amp; DXY v9.0-ULTRA &bull; Protected Session &bull; All data local
-</footer>
-</div>
+      <!-- Input Area -->
+      <div class="border-t border-slate-800/25 p-3 md:p-4">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <span class="text-[9px] text-slate-600 font-mono">
+            <i class="fas fa-history mr-1"></i>History: <span id="h-cnt">0</span> pesan
+          </span>
+          <button id="clear-chat-btn" class="text-[9px] text-slate-600 hover:text-red-400 transition">
+            <i class="fas fa-trash-alt mr-1"></i>Reset sesi
+          </button>
+        </div>
+        <div class="flex gap-2">
+          <input type="text" id="u-in" maxlength="2000"
+            placeholder="Tanya analisis, sinyal, strategi trading..."
+            class="flex-grow bg-slate-900/35 border border-slate-700/35 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500/45 transition text-slate-100 placeholder-slate-600">
+          <button id="send-btn"
+            class="bg-gradient-to-r from-amber-500 to-orange-600 px-4 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 transition active:scale-95 flex items-center gap-1.5 shrink-0">
+            <span class="hidden sm:inline text-xs">Kirim</span>
+            <i class="fas fa-paper-plane text-xs"></i>
+          </button>
+        </div>
+      </div>
 
-<!-- ===================== JAVASCRIPT ===================== -->
+    </div><!-- /AI Chat -->
+  </main>
+
+  <footer class="text-center py-3 text-[8px] text-slate-700 border-t border-slate-800/18 mt-2">
+    <i class="fas fa-shield-alt mr-1 text-emerald-500/35"></i>
+    GOLD &amp; DXY v9.1-PATCHED &bull; Session lokal &bull; Semua data tersimpan di browser
+  </footer>
+</div><!-- /app -->
+
+<!-- =========== TradingView SDK =========== -->
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<!-- =========== APP SCRIPT =========== -->
 <script>
 (function(){
 "use strict";
 
-// ======== CONFIG ========
+/* ===== CONFIG ===== */
 const CFG={
   ep:"https://openrouter.ai/api/v1/chat/completions",
   maxH:10,
-  sp:`Kamu adalah AI Trading Analyst profesional untuk GOLD & DXY Terminal v9.0.
-Spesialisasi: XAUUSD (Gold), DXY, analisis teknikal/fundamental.
-- Support/Resistance, Fibonacci, Trendline, Elliott Wave
-- NFP, CPI, FOMC, GDP interpretation
-- Risk management & position sizing
+  rateLimitMs:1500,
+  sp:`Kamu adalah AI Trading Analyst profesional untuk GOLD & DXY Terminal v9.1.
+Spesialisasi: XAUUSD (Gold), DXY, analisis teknikal & fundamental.
+Topik: Support/Resistance, Fibonacci, Elliott Wave, Trendline, Candlestick Pattern.
+Data: NFP, CPI, FOMC, GDP, PPI, Retail Sales.
+Risk management: Position sizing, SL/TP, R:R ratio.
 Format: Bahasa Indonesia profesional. Sinyal: 📈 BUY / 📉 SELL + Entry + SL + TP.
-Gunakan **bold**, *italic*, - list. Jawaban padat & langsung.`
+Gunakan **bold** untuk angka penting, - untuk list poin. Jawaban padat & langsung ke inti.`
 };
 
-// ======== STATE ========
+/* ===== STATE ===== */
 const S={
-  logged:false, loading:false, chartOn:false, chartVis:true,
-  hist:[], journal:JSON.parse(localStorage.getItem('gd_journal')||'[]'),
+  loading:false,
+  chartReady:false,
+  chartVis:true,
+  hist:[],
+  journal:[],
   lastSend:0
 };
 
-// ======== MODEL REGISTRY 2025 ========
+/* ===== MODEL REGISTRY 2025 ===== */
 const POOLS={
-  trading:['google/gemini-2.5-flash-preview:free','deepseek/deepseek-r1:free','meta-llama/llama-3.3-70b-instruct:free'],
-  coding:['qwen/qwen-2.5-coder-32b-instruct:free','deepseek/deepseek-r1:free','mistralai/mistral-7b-instruct:free'],
-  general:['openai/gpt-oss-120b:free','meta-llama/llama-3.3-70b-instruct:free','google/gemini-2.5-flash-preview:free']
+  trading:[
+    'google/gemini-2.5-flash-preview:free',
+    'deepseek/deepseek-r1:free',
+    'meta-llama/llama-3.3-70b-instruct:free'
+  ],
+  coding:[
+    'qwen/qwen-2.5-coder-32b-instruct:free',
+    'deepseek/deepseek-r1:free',
+    'mistralai/mistral-7b-instruct:free'
+  ],
+  general:[
+    'openai/gpt-oss-120b:free',
+    'meta-llama/llama-3.3-70b-instruct:free',
+    'google/gemini-2.5-flash-preview:free'
+  ]
 };
 const IKW={
-  trading:['xauusd','gold','emas','dxy','sinyal','signal','entry','exit','support','resistance','trend','buy','sell','stop loss','take profit','sl','tp','nfp','cpi','fomc','fibonacci','elliott','candle','breakout','pullback','rally','bearish','bullish','pivot','scalping','swing'],
-  coding:['code','coding','program','script','function','bug','error','debug','javascript','python','html','css','algorithm','api','json','regex']
+  trading:['xauusd','gold','emas','dxy','sinyal','signal','entry','exit','support','resistance','trend','buy','sell','stop loss','take profit','sl','tp','nfp','cpi','fomc','fibonacci','elliott','breakout','pullback','rally','bearish','bullish','pivot','scalping','swing','candle','chart','teknikal','fundamental'],
+  coding:['code','coding','program','script','function','bug','error','debug','javascript','python','html','css','algorithm','api','json','regex','database']
 };
 
-// ======== SECURITY ========
-const _v="c2stb3ItdjEtZWM5YWFjNzJhOWRhMWEzMjk5YjA2NGM5OGNiNzQ0MTdmMDJlNTg4ZmVhMjllOTk1NjBlM2Y1MjFmMGZiYTQwMw==";
+/* ===== QUICK PROMPT MAP ===== */
+const QP={
+  sinyal:'📊 Berikan sinyal trading XAUUSD hari ini lengkap dengan level entry, Stop Loss, dan Take Profit berdasarkan analisis teknikal H1 dan H4.',
+  cpi:'📈 Analisis dampak rilis data CPI terbaru terhadap pergerakan XAUUSD dan DXY. Berikan proyeksi arah harga jangka pendek.',
+  sltp:'🛡️ Jelaskan cara menghitung position sizing optimal untuk akun $10,000 dengan risk 2% di pair XAUUSD. Sertakan contoh penghitungan SL dan TP.',
+  dxy:'💵 Analisis korelasi indeks DXY dengan XAUUSD hari ini. Apakah ada divergensi yang perlu diwaspadai trader?',
+  strat:'🎯 Berikan strategi trading XAUUSD terbaik untuk sesi hari ini berdasarkan kondisi dan sentimen pasar terkini.',
+  news:'📰 Analisis dampak data NFP (Non-Farm Payroll) terbaru terhadap Gold dan Dollar Index. Bagaimana posisi trading terbaik pasca rilis?'
+};
+
+/* ===== SECURITY ===== */
+const _RAW="c2stb3ItdjEtZWM5YWFjNzJhOWRhMWEzMjk5YjA2NGM5OGNiNzQ0MTdmMDJlNTg4ZmVhMjllOTk1NjBlM2Y1MjFmMGZiYTQwMw==";
+
 function gk(){
-  if(!_v||_v.startsWith("__OPENROUTER"))return"";
-  try{const d=atob(_v).trim();return d.startsWith("sk-or-")?d:"";}catch(e){return"";}
+  if(!_RAW||_RAW.startsWith("__OPENROUTER"))return"";
+  try{
+    /* FIX #5: toleran terhadap whitespace & line endings */
+    const decoded=atob(_RAW.replace(/\s+/g,''));
+    const clean=decoded.trim().replace(/[\r\n]/g,'');
+    return clean.startsWith("sk-or-")?clean:"";
+  }catch(e){
+    console.warn("[Auth] Token decode error:",e.message);
+    return"";
+  }
 }
 
+/* Safe HTML escape menggunakan DOM API — anti-XSS paling kuat */
 function esc(s){
   if(typeof s!=='string')return'';
   const d=document.createElement('div');
@@ -386,158 +490,248 @@ function esc(s){
   return d.innerHTML;
 }
 
-function vInput(t){
-  if(!t||!t.trim())return{ok:false,r:'Pesan tidak boleh kosong'};
-  if(t.length>5000)return{ok:false,r:'Pesan terlalu panjang (maks 5000 karakter)'};
-  if(/<script|javascript:|on\w+\s*=|data:text\/html/i.test(t))
-    return{ok:false,r:'⚠️ Input mencurigakan terdeteksi — potensi injeksi skrip diblokir'};
-  return{ok:true};
-}
-
-function rMd(raw){
+/* Markdown renderer — safe (escape dulu, baru parse) */
+function md(raw){
   let s=esc(raw);
+  /* code block triple backtick */
   s=s.replace(/```([\s\S]*?)```/g,'<pre><code>$1</code></pre>');
-  s=s.replace(/`([^`\n]+)`/g,'<code>$1</code>');
-  s=s.replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>');
-  s=s.replace(/\*([^*\n]+)\*/g,'<em>$1</em>');
+  /* inline code */
+  s=s.replace(/`([^`\n]{1,200})`/g,'<code>$1</code>');
+  /* bold */
+  s=s.replace(/\*\*([^*\n]{1,300})\*\*/g,'<strong>$1</strong>');
+  /* italic */
+  s=s.replace(/\*([^*\n]{1,200})\*/g,'<em>$1</em>');
+  /* h3 */
   s=s.replace(/^### (.+)$/gm,'<h3>$1</h3>');
+  /* hr */
   s=s.replace(/^---$/gm,'<hr>');
-  s=s.replace(/^- (.+)$/gm,'<li>$1</li>');
-  s=s.replace(/(<li>.*<\/li>\n?)+/gs,m=>'<ul>'+m+'</ul>');
+  /* list items */
+  s=s.replace(/^[-•] (.+)$/gm,'<li>$1</li>');
+  s=s.replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>');
+  /* paragraphs */
   s=s.replace(/\n{2,}/g,'</p><p class="mt-2">');
   s=s.replace(/\n/g,'<br>');
   return'<p>'+s+'</p>';
 }
 
-// ======== ALERTS ========
-function toast(msg,type='info'){
-  const c=document.getElementById('alert-box');
-  const cols={info:'border-blue-500/20 text-blue-400 bg-blue-500/8',success:'border-emerald-500/20 text-emerald-400 bg-emerald-500/8',warning:'border-amber-500/20 text-amber-400 bg-amber-500/8',error:'border-red-500/20 text-red-400 bg-red-500/8'};
-  const el=document.createElement('div');
-  el.className='alert-toast glass px-4 py-2.5 rounded-xl border text-xs font-medium '+cols[type];
-  el.innerHTML=msg;
-  c.appendChild(el);
-  setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(80px)';el.style.transition='all .3s';setTimeout(()=>el.remove(),300)},4000);
+/* Input validator */
+function vIn(t){
+  if(!t||!t.trim())return{ok:false,r:'Pesan tidak boleh kosong'};
+  if(t.length>2000)return{ok:false,r:'Pesan terlalu panjang (maks 2000 karakter)'};
+  /* XSS / injection pattern */
+  if(/<\s*script|javascript\s*:|on\w+\s*=|data\s*:\s*text\s*\/\s*html/i.test(t))
+    return{ok:false,r:'⚠️ Input mencurigakan terblokir. Jangan masukkan kode HTML/script.'};
+  return{ok:true};
 }
 
-// ======== AUTH ========
-function doLogin(e){
-  e.preventDefault();
-  const u=document.getElementById('lg-user').value;
+/* ===== TOAST ALERTS ===== */
+function toast(msg,type='info'){
+  const c=document.getElementById('alert-box');
+  const col={
+    info:'border-blue-500/18 text-blue-400 bg-blue-500/7',
+    success:'border-emerald-500/18 text-emerald-400 bg-emerald-500/7',
+    warning:'border-amber-500/18 text-amber-400 bg-amber-500/7',
+    error:'border-red-500/18 text-red-400 bg-red-500/7'
+  };
+  const el=document.createElement('div');
+  el.className='alert-toast glass px-4 py-2.5 rounded-xl border text-xs font-medium '+(col[type]||col.info);
+  el.style.pointerEvents='auto';
+  el.innerHTML=msg;
+  c.appendChild(el);
+  setTimeout(()=>{
+    el.style.opacity='0';el.style.transform='translateX(70px)';
+    el.style.transition='all .28s ease';
+    setTimeout(()=>el.remove(),300);
+  },4500);
+}
+
+/* ===== AUTH ===== */
+function doLogin(){
+  const u=document.getElementById('lg-user').value.trim();
   const p=document.getElementById('lg-pass').value;
+  const errEl=document.getElementById('lg-err');
   if(u==='trader'&&p==='goldrush2024'){
-    S.logged=true;
     localStorage.setItem('gd_ses','ok');
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
-    document.getElementById('lg-err').classList.add('hidden');
+    errEl.classList.add('hidden');
     initApp();
   }else{
-    document.getElementById('lg-err').classList.remove('hidden');
+    errEl.classList.remove('hidden');
+    document.getElementById('lg-pass').value='';
+    document.getElementById('lg-pass').focus();
   }
-  return false;
 }
+
 function doLogout(){
-  S.logged=false;localStorage.removeItem('gd_ses');
+  localStorage.removeItem('gd_ses');
   document.getElementById('login-screen').classList.remove('hidden');
   document.getElementById('app').classList.add('hidden');
+  S.hist=[];S.loading=false;
 }
+
 function chkSes(){
   if(localStorage.getItem('gd_ses')==='ok'){
-    S.logged=true;
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
     initApp();
   }
 }
 
-// ======== CHART ========
+/* ===== CHART — FIX #4: tunggu tv.js siap ===== */
 function initChart(){
-  if(S.chartOn)return;
+  if(S.chartReady)return;
+  /* Guard: cek apakah TradingView global tersedia */
+  if(typeof TradingView==='undefined'||typeof TradingView.widget==='undefined'){
+    console.warn('[Chart] TradingView belum siap, retry 800ms...');
+    setTimeout(initChart,800);
+    return;
+  }
   try{
-    new TradingView.widget({autosize:true,symbol:"FX_IDC:XAUUSD",interval:"H1",timezone:"Asia/Jakarta",theme:"dark",style:"1",locale:"id",toolbar_bg:"#06060e",enable_publishing:false,hide_side_toolbar:false,allow_symbol_change:true,container_id:"tv_chart"});
-    S.chartOn=true;
-  }catch(e){console.error('TV init fail',e);}
+    new TradingView.widget({
+      autosize:true,
+      symbol:"FX_IDC:XAUUSD",
+      interval:"H1",
+      timezone:"Asia/Jakarta",
+      theme:"dark",
+      style:"1",
+      locale:"id",
+      toolbar_bg:"#06060e",
+      enable_publishing:false,
+      hide_side_toolbar:false,
+      allow_symbol_change:true,
+      container_id:"tv_chart"
+    });
+    S.chartReady=true;
+  }catch(e){
+    console.error('[Chart] Init error:',e);
+  }
 }
+
 function toggleChart(){
   const w=document.getElementById('chart-wrap');
   S.chartVis=!S.chartVis;
   w.classList.toggle('hidden');
-  document.getElementById('tv-toggle-lbl').textContent=S.chartVis?'Hide Chart':'Show Chart';
+  document.getElementById('tv-lbl').textContent=S.chartVis?'Hide Chart':'Show Chart';
 }
 
-// ======== RISK CALC ========
+/* ===== RISK CALCULATOR ===== */
 function calcRisk(){
   const b=parseFloat(document.getElementById('rc-bal').value)||0;
   const r=parseFloat(document.getElementById('rc-rsk').value)||0;
-  const sl=parseFloat(document.getElementById('rc-sl').value)||1;
-  const tp=parseFloat(document.getElementById('rc-tp').value)||1;
+  const sl=Math.max(parseFloat(document.getElementById('rc-sl').value)||1,0.1);
+  const tp=Math.max(parseFloat(document.getElementById('rc-tp').value)||1,0.1);
   const amt=b*(r/100);
-  const pv=10;
-  const lot=amt/(sl*pv);
+  const pipVal=10; /* Standard lot, XAUUSD pip value ~$10 */
+  const lot=sl>0?(amt/(sl*pipVal)):0;
   const rr=tp/sl;
-  const pft=lot*tp*pv;
+  const pft=lot*tp*pipVal;
   document.getElementById('rc-amt').textContent='$'+amt.toFixed(2);
   document.getElementById('rc-lot').textContent=lot.toFixed(2);
-  document.getElementById('rc-rr').textContent='1:'+rr.toFixed(1);
+  document.getElementById('rc-rr').textContent='1:'+rr.toFixed(2);
   document.getElementById('rc-pft').textContent='$'+pft.toFixed(2);
 }
 
-// ======== JOURNAL ========
+/* ===== JOURNAL — FIX #3: safe localStorage parse ===== */
+function loadJournal(){
+  try{
+    const raw=localStorage.getItem('gd_journal');
+    S.journal=raw?JSON.parse(raw):[];
+    if(!Array.isArray(S.journal))S.journal=[];
+  }catch(e){
+    console.warn('[Journal] Parse error, reset:',e);
+    S.journal=[];
+    localStorage.removeItem('gd_journal');
+  }
+}
+function saveJournal(){
+  try{localStorage.setItem('gd_journal',JSON.stringify(S.journal));}
+  catch(e){toast('⚠️ Gagal simpan journal (storage penuh?)','warning');}
+}
 function addTrade(){
   const pair=document.getElementById('jn-pair').value;
   const side=document.getElementById('jn-side').value;
-  const pips=parseFloat(document.getElementById('jn-pips').value)||0;
-  if(!pips){toast('Masukkan jumlah pips','warning');return;}
+  const pipsRaw=document.getElementById('jn-pips').value;
+  const pips=parseFloat(pipsRaw);
+  if(!pipsRaw||isNaN(pips)){toast('⚠️ Masukkan nilai pips yang valid','warning');return;}
   S.journal.push({id:Date.now(),pair,side,pips,ts:new Date().toLocaleString('id-ID')});
-  localStorage.setItem('gd_journal',JSON.stringify(S.journal));
+  saveJournal();
   document.getElementById('jn-pips').value='';
   renderJournal();
-  toast('📝 Trade tercatat!','success');
+  toast('📝 Trade berhasil dicatat!','success');
 }
 function delTrade(id){
   S.journal=S.journal.filter(e=>e.id!==id);
-  localStorage.setItem('gd_journal',JSON.stringify(S.journal));
-  renderJournal();
+  saveJournal();renderJournal();
 }
 function renderJournal(){
   const c=document.getElementById('jn-list');
   const wd=document.getElementById('wr-disp');
-  if(!S.journal.length){c.innerHTML='<p class="text-[10px] text-slate-600 text-center py-3">Belum ada trade</p>';wd.textContent='WR: 0%';return;}
+  if(!S.journal.length){
+    c.innerHTML='<p class="text-[10px] text-slate-600 text-center py-3">Belum ada trade tercatat</p>';
+    wd.textContent='WR: 0%';return;
+  }
   let w=0,h='';
-  S.journal.slice().reverse().forEach(e=>{
+  [...S.journal].reverse().forEach(e=>{
     const win=e.pips>0;if(win)w++;
-    h+=`<div class="j-row flex items-center justify-between text-[10px] bg-slate-900/30 border border-slate-800/20">
-<div class="flex items-center gap-2"><span class="font-bold ${win?'text-emerald-400':'text-red-400'}">${esc(e.pair)}</span><span class="text-slate-500">${esc(e.side)}</span></div>
-<div class="flex items-center gap-2"><span class="${win?'text-emerald-400':'text-red-400'} font-bold">${e.pips>0?'+':''}${e.pips}p</span><button onclick="delTrade(${e.id})" class="text-slate-600 hover:text-red-400 transition"><i class="fas fa-times"></i></button></div></div>`;
+    h+=`<div class="j-row flex items-center justify-between text-[10px] border border-slate-800/20 bg-slate-900/25">
+<div class="flex items-center gap-2"><span class="font-bold ${win?'text-emerald-400':'text-red-400'}">${esc(e.pair)}</span><span class="text-slate-500">${esc(e.side)}</span><span class="text-slate-600">${esc(e.ts)}</span></div>
+<div class="flex items-center gap-2"><span class="${win?'text-emerald-400':'text-red-400'} font-bold">${e.pips>0?'+':''}${e.pips}p</span>
+<button data-id="${e.id}" class="del-trade text-slate-600 hover:text-red-400 transition px-1"><i class="fas fa-times"></i></button></div></div>`;
   });
   c.innerHTML=h;
-  wd.textContent='WR: '+(w/S.journal.length*100).toFixed(0)+'% ('+w+'/'+S.journal.length+')';
+  /* Event delegation untuk delete — tidak pakai inline onclick */
+  c.querySelectorAll('.del-trade').forEach(btn=>{
+    btn.addEventListener('click',function(){delTrade(Number(this.dataset.id));});
+  });
+  const total=S.journal.length;
+  wd.textContent='WR:'+(w/total*100).toFixed(0)+'% ('+w+'/'+total+')';
 }
 function exportJournal(){
+  if(!S.journal.length){toast('⚠️ Journal masih kosong','warning');return;}
   const blob=new Blob([JSON.stringify(S.journal,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='journal-'+Date.now()+'.json';a.click();URL.revokeObjectURL(a.href);
-  toast('📥 Journal diexport!','success');
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='journal-'+Date.now()+'.json';a.click();URL.revokeObjectURL(a.href);
+  toast('📥 Journal berhasil diexport!','success');
 }
 
-// ======== CHAT ENGINE ========
+/* ===== CHAT ENGINE ===== */
 function addMsg({role,content,model=null}){
   const c=document.getElementById('chat');
   let h='';
   if(role==='user'){
-    h=`<div class="flex gap-2.5 justify-end anim-fade"><div class="bg-amber-500/8 p-3 rounded-2xl rounded-tr-none border border-amber-500/15 max-w-[85%]"><p class="text-amber-400 font-bold text-[10px] mb-1 text-right">Kamu</p><p class="text-slate-200 text-xs leading-relaxed">${esc(content)}</p></div><div class="w-7 h-7 rounded-full bg-amber-500/15 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-user text-amber-400 text-[10px]"></i></div></div>`;
+    h=`<div class="flex gap-2.5 justify-end anim-fade">
+<div class="bg-amber-500/7 p-3 rounded-2xl rounded-tr-none border border-amber-500/13 max-w-[85%]">
+<p class="text-amber-400 font-bold text-[10px] mb-1 text-right">Kamu</p>
+<p class="text-slate-200 text-xs leading-relaxed">${esc(content)}</p></div>
+<div class="w-7 h-7 rounded-full bg-amber-500/13 border border-amber-500/18 flex items-center justify-center shrink-0 mt-0.5">
+<i class="fas fa-user text-amber-400 text-[10px]"></i></div></div>`;
   }else if(role==='ai'){
-    const mb=model?`<span class="model-pill ml-1"><i class="fas fa-microchip"></i>${esc(model)}</span>`:'';
-    h=`<div class="flex gap-2.5 anim-fade"><div class="w-7 h-7 rounded-full bg-purple-500/15 border border-purple-500/20 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-robot text-purple-400 text-[10px]"></i></div><div class="bg-slate-900/40 p-3 rounded-2xl rounded-tl-none border border-slate-800/50 max-w-[85%]"><div class="flex items-center gap-1 mb-2 flex-wrap"><p class="text-purple-400 font-bold text-[10px]">AI Engine</p>${mb}</div><div class="ai-out text-slate-200 text-xs leading-relaxed">${rMd(content)}</div></div></div>`;
+    const mb=model?`<span class="model-pill ml-1"><i class="fas fa-microchip mr-0.5"></i>${esc(model.split('/').pop()||model)}</span>`:'';
+    h=`<div class="flex gap-2.5 anim-fade">
+<div class="w-7 h-7 rounded-full bg-purple-500/13 border border-purple-500/17 flex items-center justify-center shrink-0 mt-0.5">
+<i class="fas fa-robot text-purple-400 text-[10px]"></i></div>
+<div class="bg-slate-900/35 p-3 rounded-2xl rounded-tl-none border border-slate-800/40 max-w-[85%]">
+<div class="flex items-center gap-1 mb-2 flex-wrap"><p class="text-purple-400 font-bold text-[10px]">AI Engine</p>${mb}</div>
+<div class="ai-out text-slate-200 text-xs leading-relaxed">${md(content)}</div></div></div>`;
   }else if(role==='error'){
-    let hint='Kesalahan routing. Pilih model lain atau coba lagi.';
-    if(content.includes('429'))hint='⏳ Kuota model habis (rate limit). Tunggu 1-2 menit atau pilih model lain.';
-    else if(content.includes('timeout')||content.includes('network'))hint='🌐 Koneksi timeout. Periksa internet dan coba lagi.';
-    else if(content.includes('503')||content.includes('busy'))hint='🔧 Model sedang overload. Gunakan model alternatif.';
-    else if(content.includes('401')||content.includes('auth'))hint='🔑 Token tidak valid. Pastikan API key sudah diinjeksi.';
-    h=`<div class="flex gap-2.5 anim-fade"><div class="w-7 h-7 rounded-full bg-red-500/15 border border-red-500/20 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-exclamation-triangle text-red-400 text-[10px]"></i></div><div class="err-box max-w-[85%]"><p class="text-red-400 font-bold text-[10px] mb-1.5"><i class="fas fa-times-circle mr-1"></i>Error</p><p class="text-[10px] text-red-300/70 font-mono whitespace-pre-wrap bg-slate-950/50 p-2 rounded-lg border border-red-500/8 mb-2">${esc(content)}</p><p class="text-[9px] text-slate-500"><i class="fas fa-lightbulb text-amber-400/60 mr-1"></i>${esc(hint)}</p></div></div>`;
+    /* FIX: pesan error lebih informatif berdasarkan kode */
+    let hint='Coba pilih model lain dari dropdown.';
+    const cl=content.toLowerCase();
+    if(cl.includes('429'))hint='⏳ Rate limit — Kuota model habis. Tunggu 1-2 menit atau pilih model lain.';
+    else if(cl.includes('503')||cl.includes('busy')||cl.includes('overload'))hint='🔧 Server model overload. Coba lagi dalam beberapa detik.';
+    else if(cl.includes('timeout')||cl.includes('network')||cl.includes('failed to fetch'))hint='🌐 Koneksi timeout atau gagal. Periksa internet Anda.';
+    else if(cl.includes('401')||cl.includes('auth')||cl.includes('unauthorized'))hint='🔑 Token tidak valid. Pastikan API key sudah diinjeksi dengan benar.';
+    else if(cl.includes('400'))hint='📋 Request tidak valid. Coba ubah prompt atau model.';
+    h=`<div class="flex gap-2.5 anim-fade">
+<div class="w-7 h-7 rounded-full bg-red-500/13 border border-red-500/17 flex items-center justify-center shrink-0 mt-0.5">
+<i class="fas fa-exclamation-triangle text-red-400 text-[10px]"></i></div>
+<div class="err-box max-w-[85%]"><p class="text-red-400 font-bold text-[10px] mb-1.5"><i class="fas fa-times-circle mr-1"></i>Error — Model Gagal Merespons</p>
+<p class="text-[10px] text-red-300/65 font-mono bg-slate-950/40 p-2 rounded-lg border border-red-500/7 mb-2 whitespace-pre-wrap">${esc(content)}</p>
+<p class="text-[9px] text-amber-400/75"><i class="fas fa-lightbulb mr-1"></i>${esc(hint)}</p></div></div>`;
   }else if(role==='sys'){
-    h=`<div class="text-center py-1.5 anim-fade"><span class="text-[9px] font-mono text-slate-600 bg-slate-900/30 px-3 py-1 rounded-full border border-slate-800/30">${esc(content)}</span></div>`;
+    h=`<div class="text-center py-1.5 anim-fade">
+<span class="text-[9px] font-mono text-slate-600 bg-slate-900/28 px-3 py-1 rounded-full border border-slate-800/25">${esc(content)}</span></div>`;
   }
   c.insertAdjacentHTML('beforeend',h);
   c.scrollTop=c.scrollHeight;
@@ -546,18 +740,31 @@ function addMsg({role,content,model=null}){
 function showLoad(m){
   const c=document.getElementById('chat');
   const id='ld-'+Date.now();
-  c.insertAdjacentHTML('beforeend',`<div id="${id}" class="flex gap-2.5 anim-fade"><div class="w-7 h-7 rounded-full bg-purple-500/15 border border-purple-500/20 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-satellite-dish text-purple-400 text-[10px]"></i></div><div class="bg-slate-900/40 p-3 rounded-2xl rounded-tl-none border border-slate-800/50"><p class="text-[9px] text-slate-500 font-mono mb-1.5"><i class="fas fa-circle-notch fa-spin text-purple-400 mr-1"></i><span class="ld-lbl">${esc(m)}</span></p><div class="flex items-center gap-1"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div></div></div>`);
+  c.insertAdjacentHTML('beforeend',
+    `<div id="${id}" class="flex gap-2.5 anim-fade">
+<div class="w-7 h-7 rounded-full bg-purple-500/13 border border-purple-500/17 flex items-center justify-center shrink-0 mt-0.5">
+<i class="fas fa-satellite-dish text-purple-400 text-[10px]"></i></div>
+<div class="bg-slate-900/35 p-3 rounded-2xl rounded-tl-none border border-slate-800/40">
+<p class="text-[9px] text-slate-500 font-mono mb-1.5">
+<i class="fas fa-circle-notch fa-spin text-purple-400 mr-1"></i>
+<span class="ld-lbl">${esc(m)}</span></p>
+<div class="flex items-center gap-1">
+<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+</div></div></div>`);
   c.scrollTop=c.scrollHeight;
   return id;
 }
-function updLoad(id,m){const el=document.getElementById(id);if(el){const l=el.querySelector('.ld-lbl');if(l)l.textContent=m;}}
+function updLoad(id,n){const el=document.getElementById(id);if(el){const l=el.querySelector('.ld-lbl');if(l)l.textContent=n;}}
 function rmLoad(id){const el=document.getElementById(id);if(el)el.remove();}
+
 function setLoad(v){
   S.loading=v;
   const b=document.getElementById('send-btn');
   const i=document.getElementById('u-in');
   b.disabled=v;i.disabled=v;
-  b.innerHTML=v?'<i class="fas fa-circle-notch fa-spin text-xs"></i>':'<span class="hidden sm:inline text-xs">Kirim</span><i class="fas fa-paper-plane text-xs"></i>';
+  b.innerHTML=v
+    ?'<i class="fas fa-circle-notch fa-spin text-xs"></i>'
+    :'<span class="hidden sm:inline text-xs">Kirim</span><i class="fas fa-paper-plane text-xs"></i>';
 }
 
 function detectI(t){
@@ -568,19 +775,25 @@ function detectI(t){
   return top[1]>0?top[0]:'general';
 }
 
+/* FIX #9: lastSend hanya di-update setelah validasi & API key check lulus */
 async function sendMsg(){
   if(S.loading)return;
-  const now=Date.now();
-  if(now-S.lastSend<1500){toast('⏱ Tunggu sebentar sebelum mengirim lagi','warning');return;}
-  S.lastSend=now;
 
   const inp=document.getElementById('u-in');
   const txt=inp.value.trim();
-  const chk=vInput(txt);
-  if(!chk.ok){toast(chk.r,'warning');return;}
 
+  /* Validasi input */
+  const v=vIn(txt);
+  if(!v.ok){toast(v.r,'warning');return;}
+
+  /* API key check */
   const key=gk();
-  if(!key){toast('❌ API Key tidak ditemukan. Cek injeksi sed.','error');return;}
+  if(!key){toast('❌ API Key tidak ditemukan. Cek proses injeksi sed.','error');return;}
+
+  /* FIX #9: Rate limit hanya aktif setelah validasi lulus */
+  const now=Date.now();
+  if(now-S.lastSend<CFG.rateLimitMs){toast('⏱ Tunggu sebentar sebelum kirim lagi.','warning');return;}
+  S.lastSend=now;
 
   addMsg({role:'user',content:txt});
   inp.value='';
@@ -588,39 +801,59 @@ async function sendMsg(){
 
   const sel=document.getElementById('mdl-sel').value;
   let models=[],isAuto=false;
-
   if(sel==='auto_pilot'){
     isAuto=true;
     const intent=detectI(txt);
     models=[...(POOLS[intent]||POOLS.general)];
-    addMsg({role:'sys',content:'AUTO-PILOT: intent "'+intent+'" → '+models.length+' model'});
+    addMsg({role:'sys',content:'AUTO-PILOT: intent "'+intent+'" — Mencoba '+models.length+' model secara berurutan'});
   }else{
     models=[sel];
   }
 
-  const msgs=[{role:'system',content:CFG.sp},...S.hist.slice(-CFG.maxH*2),{role:'user',content:txt}];
-  const lid=showLoad(models[0].split('/').pop()||models[0]);
+  const msgs=[
+    {role:'system',content:CFG.sp},
+    ...S.hist.slice(-(CFG.maxH*2)),
+    {role:'user',content:txt}
+  ];
+
+  const lid=showLoad((models[0].split('/').pop()||models[0]));
   let ok=false,resp='',mUsed='',lastErr='';
 
   for(let i=0;i<models.length;i++){
     const m=models[i];
-    updLoad(lid,m.split('/').pop()||m);
+    updLoad(lid,(m.split('/').pop()||m));
     try{
-      const r=await fetch(CFG.ep,{method:'POST',headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json','HTTP-Referer':location.href,'X-Title':'GoldDXY-v9'},body:JSON.stringify({model:m,messages:msgs,temperature:0.7,max_tokens:2048})});
-      const d=await r.json();
+      const res=await fetch(CFG.ep,{
+        method:'POST',
+        headers:{
+          'Authorization':'Bearer '+key,
+          'Content-Type':'application/json',
+          'HTTP-Referer':location.href,
+          'X-Title':'GoldDXY-Terminal-v9.1'
+        },
+        body:JSON.stringify({
+          model:m,
+          messages:msgs,
+          temperature:0.7,
+          max_tokens:2048
+        })
+      });
+      const d=await res.json();
       if(d.error){
-        lastErr='['+(d.error.code||r.status)+'] '+(d.error.message||JSON.stringify(d.error));
+        lastErr='[HTTP '+(d.error.code||res.status)+'] '+(d.error.message||JSON.stringify(d.error));
+        /* HARD-ISOLATED: jika bukan auto, stop & tampilkan error asli */
         if(!isAuto){rmLoad(lid);addMsg({role:'error',content:lastErr});setLoad(false);return;}
+        /* AUTO-PILOT: lanjut ke model berikutnya */
         continue;
       }
       if(d.choices&&d.choices[0]?.message?.content){
         ok=true;resp=d.choices[0].message.content;mUsed=d.model||m;break;
       }else{
-        lastErr='Respons tidak valid: '+JSON.stringify(d).slice(0,200);
+        lastErr='Respons tidak valid dari server:\n'+JSON.stringify(d).slice(0,300);
         if(!isAuto){rmLoad(lid);addMsg({role:'error',content:lastErr});setLoad(false);return;}
       }
     }catch(e){
-      lastErr='Network: '+(e.message||'Gagal tersambung');
+      lastErr='Network Error: '+(e.message||'Gagal tersambung ke OpenRouter');
       if(!isAuto){rmLoad(lid);addMsg({role:'error',content:lastErr});setLoad(false);return;}
     }
   }
@@ -631,40 +864,38 @@ async function sendMsg(){
     S.hist.push({role:'user',content:txt},{role:'assistant',content:resp});
     updHCnt();
     addMsg({role:'ai',content:resp,model:mUsed});
-
-    // AI Signal Alert Detection
-    const rl=resp.toLowerCase();
-    if(rl.includes('📈 buy')||rl.includes('📉 sell')||rl.includes('sinyal')){
-      toast('🔔 <b>Sinyal AI terdeteksi!</b> Cek respons di bawah.','warning');
+    /* AI Signal detection → toast alert */
+    if(/📈\s*buy|📉\s*sell/i.test(resp)||(/sinyal/i.test(resp)&&/entry/i.test(resp))){
+      toast('🔔 <b>Sinyal trading terdeteksi!</b> Cek respons AI di bawah.','warning');
     }
   }else{
-    addMsg({role:'error',content:'AUTO-PILOT: Semua '+models.length+' model gagal.\n\nError terakhir:\n'+lastErr});
+    addMsg({role:'error',content:'AUTO-PILOT: Semua '+models.length+' model gagal merespons.\n\nError terakhir:\n'+lastErr});
   }
 
   setLoad(false);
   inp.focus();
 }
 
-// Quick Prompts
-const QP_MAP={
-  sinyal:'📊 Berikan sinyal trading XAUUSD hari ini lengkap dengan level entry, SL, dan TP berdasarkan analisis teknikal terkini.',
-  cpi:'📈 Analisis dampak rilis data CPI terbaru terhadap pergerakan XAUUSD dan DXY. Proyeksi jangka pendek.',
-  sltp:'🛡️ Jelaskan cara menghitung position sizing untuk akun $10,000 dengan risk 2% di XAUUSD. Berikan contoh SL/TP.',
-  dxy:'💵 Analisis korelasi DXY dengan XAUUSD saat ini. Apakah ada divergensi?',
-  strat:'🎯 Berikan strategi trading XAUUSD yang cocok untuk sesi hari ini berdasarkan kondisi pasar terkini.',
-  news:'📰 Analisis dampak data NFP terbaru terhadap Gold dan Dollar Index. Bagaimana posisi terbaik?'
-};
-function qp(k){
+/* FIX #10: Quick prompt dengan loading check & feedback */
+function useQP(key){
+  if(S.loading){toast('⏳ Tunggu respons AI selesai terlebih dahulu.','warning');return;}
   const inp=document.getElementById('u-in');
-  inp.value=QP_MAP[k]||'';
+  inp.value=QP[key]||'';
   inp.focus();
-  setTimeout(()=>sendMsg(),400);
+  setTimeout(()=>sendMsg(),350);
 }
 
 function clearChat(){
   S.hist=[];updHCnt();
-  document.getElementById('chat').innerHTML='<div class="flex gap-2.5 anim-fade"><div class="w-7 h-7 rounded-full bg-purple-500/15 border border-purple-500/20 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-robot text-purple-400 text-[10px]"></i></div><div class="bg-slate-900/40 p-3 rounded-2xl rounded-tl-none border border-slate-800/50 max-w-[88%]"><p class="text-purple-400 font-bold text-[10px] mb-1">System</p><p class="text-slate-400 text-xs">🔄 Sesi direset. Siap untuk analisis baru!</p></div></div>';
+  document.getElementById('chat').innerHTML=`
+<div class="flex gap-2.5 anim-fade">
+<div class="w-7 h-7 rounded-full bg-purple-500/13 border border-purple-500/17 flex items-center justify-center shrink-0 mt-0.5">
+<i class="fas fa-robot text-purple-400 text-[10px]"></i></div>
+<div class="bg-slate-900/35 p-3.5 rounded-2xl rounded-tl-none border border-slate-800/45 max-w-[88%]">
+<p class="text-purple-400 font-bold text-[10px] mb-1">System</p>
+<p class="text-slate-400 text-xs">🔄 Sesi direset. Konteks AI dihapus. Siap untuk analisis baru!</p></div></div>`;
 }
+
 function updHCnt(){document.getElementById('h-cnt').textContent=Math.floor(S.hist.length/2);}
 
 function onMdlChange(){
@@ -673,42 +904,87 @@ function onMdlChange(){
   const ico=document.getElementById('mode-icon');
   const txt=document.getElementById('mode-txt');
   if(v==='auto_pilot'){
-    bar.className='mt-3 px-3 py-1.5 bg-amber-500/5 rounded-lg border border-amber-500/8 text-[9px] font-mono text-amber-400 flex items-center gap-2';
+    bar.className='mt-3 px-3 py-1.5 bg-amber-500/4 rounded-lg border border-amber-500/7 text-[9px] font-mono text-amber-400 flex items-center gap-2';
     ico.className='fas fa-bolt';txt.textContent='AUTO-PILOT aktif — Smart intent detection';
   }else{
-    bar.className='mt-3 px-3 py-1.5 bg-purple-500/5 rounded-lg border border-purple-500/10 text-[9px] font-mono text-purple-400 flex items-center gap-2';
-    ico.className='fas fa-lock';txt.textContent='HARD-ISOLATED: '+v.split('/').pop()+' — No fallback';
+    bar.className='mt-3 px-3 py-1.5 bg-purple-500/4 rounded-lg border border-purple-500/7 text-[9px] font-mono text-purple-400 flex items-center gap-2';
+    ico.className='fas fa-lock';
+    txt.textContent='HARD-ISOLATED: '+(v.split('/').pop()||v)+' — No fallback';
   }
 }
 
-// Export Chat
 function exportChat(){
-  let txt='=== GOLD & DXY Chat Export ===\n'+new Date().toLocaleString('id-ID')+'\n\n';
-  S.hist.forEach(m=>{txt+=(m.role==='user'?'[USER] ':'[AI] ')+m.content+'\n\n';});
-  const blob=new Blob([txt],{type:'text/plain'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chat-'+Date.now()+'.txt';a.click();URL.revokeObjectURL(a.href);
-  toast('📥 Chat diexport!','success');
+  if(!S.hist.length){toast('⚠️ Belum ada percakapan untuk diexport.','warning');return;}
+  let t='=== GOLD & DXY Chat Export ===\n'+new Date().toLocaleString('id-ID')+'\n\n';
+  S.hist.forEach(m=>{t+='['+(m.role==='user'?'USER':'AI')+']\n'+m.content+'\n\n---\n\n';});
+  const blob=new Blob([t],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='chat-'+Date.now()+'.txt';a.click();URL.revokeObjectURL(a.href);
+  toast('📥 Chat berhasil diexport!','success');
 }
 
-// ======== INIT ========
+/* ===== INIT ===== */
 function initApp(){
-  initChart();calcRisk();renderJournal();onMdlChange();updHCnt();
-  toast('🚀 Terminal v9.0-ULTRA siap!','success');
+  loadJournal();
+  renderJournal();
+  calcRisk();
+  onMdlChange();
+  updHCnt();
+  /* FIX #4: initChart dipanggil SETELAH DOM ready, dengan retry guard */
+  setTimeout(initChart,200);
+  toast('🚀 GOLD & DXY v9.1 siap!','success');
 }
 
-// Enter key
-document.getElementById('u-in').addEventListener('keydown',function(e){
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
+/* ===== EVENT LISTENERS — Semua pakai addEventListener, bukan inline ===== */
+/* FIX #1 & #2: Tidak ada satupun onclick/onsubmit di HTML */
+document.addEventListener('DOMContentLoaded',function(){
+
+  /* Login */
+  document.getElementById('lg-btn').addEventListener('click',doLogin);
+  document.getElementById('login-form').addEventListener('keydown',function(e){
+    if(e.key==='Enter')doLogin();
+  });
+
+  /* Logout */
+  document.getElementById('logout-btn').addEventListener('click',doLogout);
+
+  /* Header buttons */
+  document.getElementById('tv-toggle-btn').addEventListener('click',toggleChart);
+  document.getElementById('exp-chat-btn').addEventListener('click',exportChat);
+
+  /* Risk calc — gunakan event delegation pada container */
+  ['rc-bal','rc-rsk','rc-sl','rc-tp'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.addEventListener('input',calcRisk);
+  });
+  document.getElementById('calc-btn').addEventListener('click',calcRisk);
+
+  /* Journal */
+  document.getElementById('add-trade-btn').addEventListener('click',addTrade);
+  document.getElementById('exp-journal-btn').addEventListener('click',exportJournal);
+  document.getElementById('jn-pips').addEventListener('keydown',function(e){
+    if(e.key==='Enter')addTrade();
+  });
+
+  /* AI Chat */
+  document.getElementById('send-btn').addEventListener('click',sendMsg);
+  document.getElementById('u-in').addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
+  });
+  document.getElementById('clear-chat-btn').addEventListener('click',clearChat);
+  document.getElementById('mdl-sel').addEventListener('change',onMdlChange);
+
+  /* Quick Prompts — event delegation */
+  document.querySelectorAll('.qp-btn').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const k=this.dataset.qp;
+      if(k)useQP(k);
+    });
+  });
+
+  /* Check session */
+  chkSes();
 });
-
-// Expose globally
-window.doLogin=doLogin;window.doLogout=doLogout;window.sendMsg=sendMsg;window.qp=qp;
-window.clearChat=clearChat;window.toggleChart=toggleChart;window.calcRisk=calcRisk;
-window.addTrade=addTrade;window.delTrade=delTrade;window.exportJournal=exportJournal;
-window.exportChat=exportChat;window.onMdlChange=onMdlChange;
-
-// Boot
-document.addEventListener('DOMContentLoaded',chkSes);
 
 })();
 </script>
