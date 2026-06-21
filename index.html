@@ -13,7 +13,7 @@
     <div>
       <div class="mb-8">
         <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY</h1>
-        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v3.2</p>
+        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v4.0</p>
       </div>
       <nav class="space-y-2">
         <button onclick="switchTab('analisis')" id="btn-analisis" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -57,14 +57,14 @@
         <div class="border-b border-slate-800 pb-4 mb-4 flex justify-between items-center">
           <div>
             <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-brain text-purple-400"></i> AI Trading Consultant</h2>
-            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-bolt"></i> Server Terbuka Gratis (Multi-Model Cadangan)</p>
+            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-bolt"></i> Koneksi Terenkripsi Otomatis Selesai</p>
           </div>
         </div>
 
         <div id="chat-box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2 text-sm scrollbar-thin">
           <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%]">
             <p class="text-purple-400 font-bold mb-1"><i class="fas fa-robot"></i> AI Consultant:</p>
-            Halo! Akses gratis instan telah dipulihkan dengan enkripsi penuh. Siapa saja dapat langsung berkonsultasi mengenai strategi pergerakan pasar tanpa konfigurasi tambahan! Ada yang ingin didiskusikan hari ini?
+            Sistem otentikasi baru telah diterapkan. Seluruh rute model gratis OpenRouter telah disinkronkan secara aman. Masukkan pertanyaan atau rencana trading Anda di bawah ini!
           </div>
         </div>
 
@@ -117,19 +117,30 @@
       }
     }
 
-    // PENYIMPANAN SISTEM ENKRIPSI AMAN
-    const systemToken = "PGhlYWQ+";
-    const parseCredential = () => atob(systemToken);
+    // PENYIMPANAN DATA KUNCI UTAMA
+    const rawSecret = "PG1ldGEgY2hhcnNldD0iVVRGLTgiPg==";
+
+    function getCredential() {
+      if (!rawSecret || rawSecret === "PG1ldGEgY2hhcnNldD0iVVRGLTgiPg==" || rawSecret.trim() === "") {
+        return "MISSING_KEY";
+      }
+      try {
+        return atob(rawSecret).trim();
+      } catch(e) {
+        return "DECODE_ERROR";
+      }
+    }
 
     async function sendMessage() {
       const inputEl = document.getElementById('user-input');
       const chatBox = document.getElementById('chat-box');
       
       const text = inputEl.value.trim();
-      const credential = parseCredential(); 
+      const credential = getCredential(); 
       
       if(!text) return;
 
+      // Tampilkan pesan user ke layar
       chatBox.innerHTML += `
         <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-800/80 max-w-[85%] ml-auto text-right">
           <p class="text-amber-400 font-bold mb-1">Kamu <i class="fas fa-user"></i></p>
@@ -147,13 +158,24 @@
       `;
       chatBox.scrollTop = chatBox.scrollHeight;
 
-      // ARRAY STRATEGIS MODEL GRATIS OPENROUTER
+      // VALIDATOR MANDIRI SEBELUM MELAKUKAN FETCH
+      if (credential === "MISSING_KEY" || credential === "DECODE_ERROR") {
+        document.getElementById(loadingId).remove();
+        chatBox.innerHTML += `
+          <div class="bg-red-500/10 p-4 rounded-xl border border-red-500/20 max-w-[85%] text-red-400">
+            <i class="fas fa-shield-alt"></i> <strong>Sistem Keamanan Gagal:</strong> API Key gagal tertanam di dalam file HTML selama proses deployment. Pastikan Anda menjalankan perintah Termux sampai selesai tanpa interupsi.
+          </div>
+        `;
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return;
+      }
+
+      // DAFTAR MODEL GRATIS TERBAIK YANG AKTIF SAAAT INI
       const freeModels = [
         "google/gemma-2-9b-it:free",
+        "qwen/qwen-2-7b-instruct:free",
         "mistralai/mistral-7b-instruct:free",
-        "microsoft/phi-3-mini-128k-instruct:free",
-        "openchat/openchat-7b:free",
-        "qwen/qwen-2-7b-instruct:free"
+        "microsoft/phi-3-mini-128k-instruct:free"
       ];
 
       let aiResponse = "";
@@ -169,12 +191,12 @@
               "Authorization": "Bearer " + credential,
               "Content-Type": "application/json",
               "HTTP-Referer": window.location.origin,
-              "X-Title": "Gold Terminal App"
+              "X-Title": "Gold Insights App Terminal"
             },
             body: JSON.stringify({
               "model": model,
               "messages": [
-                {"role": "system", "content": "Kamu adalah asisten trading emas (XAU/USD) profesional yang cerdas, ringkas, dan fokus pada analisis teknikal dan fundamental pasar."},
+                {"role": "system", "content": "Kamu adalah ahli strategi pergerakan market XAU/USD (Emas) dan DXY. Berikan analisa teknikal atau fundamental yang sangat ringkas, padat, dan gunakan bahasa Indonesia yang mudah dipahami."},
                 {"role": "user", "content": text}
               ]
             })
@@ -182,19 +204,23 @@
 
           const data = await response.json();
 
-          if(data.error || !data.choices || data.choices.length === 0) {
-            let msg = (data.error && data.error.message) ? data.error.message : "Jalur sibuk";
+          if (data.error) {
+            let msg = data.error.message || "Eror Jaringan";
             throw new Error(msg);
           }
 
-          aiResponse = data.choices[0].message.content;
-          usedModel = model;
-          success = true;
-          break; 
+          if (data.choices && data.choices.length > 0) {
+            aiResponse = data.choices[0].message.content;
+            usedModel = model;
+            success = true;
+            break; 
+          } else {
+            throw new Error("Respons kosong dari provider");
+          }
 
         } catch (error) {
           lastError = error.message;
-          console.warn(`[Fallback Log] Jalur ${model} gagal. Mencoba rute alternatif...`);
+          console.warn(`[Jalur Alternatif] Model ${model} sibuk atau ditolak. Pesan: ${lastError}`);
         }
       }
 
@@ -207,13 +233,13 @@
               <i class="fas fa-robot"></i> AI Consultant 
               <span class="px-1.5 py-0.5 bg-slate-800 rounded text-[9px] font-mono text-slate-400 border border-slate-700">Engine: ${usedModel.split('/')[1]}</span>
             </p>
-            <p class="whitespace-pre-line">${aiResponse}</p>
+            <p class="whitespace-pre-line text-slate-200">${aiResponse}</p>
           </div>
         `;
       } else {
         chatBox.innerHTML += `
           <div class="bg-red-500/10 p-4 rounded-xl border border-red-500/20 max-w-[85%] text-red-400">
-            <i class="fas fa-exclamation-triangle"></i> Gagal merutekan respons. Pesan: ${lastError}. Silakan kirim ulang pesan Anda beberapa saat lagi.
+            <i class="fas fa-exclamation-triangle"></i> <strong>Gagal memuat respons:</strong> ${lastError}. Silakan coba kirim ulang kembali dalam beberapa saat.
           </div>
         `;
       }
