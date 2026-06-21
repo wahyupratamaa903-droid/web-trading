@@ -13,7 +13,7 @@
     <div>
       <div class="mb-8">
         <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY</h1>
-        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v6.2</p>
+        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v7.0</p>
       </div>
       <nav class="space-y-2">
         <button onclick="switchTab('analisis')" id="btn-analisis" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -58,16 +58,16 @@
         <div class="border-b border-slate-800 pb-4 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-brain text-purple-400"></i> AI Trading Consultant</h2>
-            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-shield-alt"></i> Gateway Protocol Terenkripsi</p>
+            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-shield-alt"></i> Gateway Terverifikasi (Daftar Model 2026)</p>
           </div>
           
           <div class="w-full sm:w-auto flex items-center gap-2 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
             <label for="model-selector" class="text-xs font-bold text-slate-400 whitespace-nowrap"><i class="fas fa-cpu text-purple-400 mr-1"></i> Model AI:</label>
             <select id="model-selector" class="bg-transparent text-xs font-bold text-slate-200 outline-none cursor-pointer pr-4">
-              <option value="meta-llama/llama-3-8b-instruct:free" class="bg-slate-900 text-slate-100">Meta: Llama 3 8B Free</option>
-              <option value="google/gemma-2-9b-it:free" class="bg-slate-900 text-slate-100">Google: Gemma 2 9B Free</option>
-              <option value="qwen/qwen-2-7b-instruct:free" class="bg-slate-900 text-slate-100">Alibaba: Qwen 2 7B Free</option>
-              <option value="deepseek/deepseek-chat" class="bg-slate-900 text-slate-100">DeepSeek: Chat V3 (Jalur Utama)</option>
+              <option value="google/gemma-4-31b-it:free" class="bg-slate-900 text-slate-100">Google: Gemma 4 31B Free (Sangat Direkomendasikan)</option>
+              <option value="moonshotai/kimi-k2.6:free" class="bg-slate-900 text-slate-100">Moonshot: Kimi K2.6 Free (Analisis Rinci)</option>
+              <option value="google/gemma-4-26b-a4b-it:free" class="bg-slate-900 text-slate-100">Google: Gemma 4 26b Free (Cepat)</option>
+              <option value="openai/gpt-oss-120b:free" class="bg-slate-900 text-slate-100">OpenAI: GPT OSS 120B Free (Logika Kuat)</option>
             </select>
           </div>
         </div>
@@ -75,7 +75,7 @@
         <div id="chat-box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2 text-sm scrollbar-thin">
           <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%]">
             <p class="text-purple-400 font-bold mb-1"><i class="fas fa-robot"></i> AI Consultant:</p>
-            Alamat rute model AI gratis berhasil diperbarui sesuai kebijakan jaringan terbaru. Silakan pilih model di atas dan kirim pesan analisis Anda!
+            Daftar model gratis terbaru tahun 2026 berhasil disinkronkan! Silakan gunakan Google Gemma 4 atau Moonshot Kimi untuk memulai pembongkaran analisa market emas malam ini.
           </div>
         </div>
 
@@ -163,7 +163,7 @@
       const loadingId = 'loading-' + Date.now();
       chatBox.innerHTML += `
         <div id="${loadingId}" class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%] animate-pulse">
-          <p class="text-purple-400 font-bold mb-1"><i class="fas fa-spinner fa-spin"></i> Menghubungi server ${selectedModel.split('/')[1]}...</p>
+          <p class="text-purple-400 font-bold mb-1"><i class="fas fa-spinner fa-spin"></i> Memproses lewat model ${selectedModel.split('/')[1]}...</p>
         </div>
       `;
       chatBox.scrollTop = chatBox.scrollHeight;
@@ -191,7 +191,7 @@
           body: JSON.stringify({
             "model": selectedModel,
             "messages": [
-              {"role": "system", "content": "Kamu adalah konsultan trading khusus emas (XAU/USD) dan DXY yang cerdas, tajam, dan objektif. Berikan jawaban ringkas namun komprehensif dalam Bahasa Indonesia."},
+              {"role": "system", "content": "Kamu adalah konsultan trading finansial khusus emas (XAU/USD) dan DXY yang andal. Jawab secara padat, objektif, profesional, menggunakan Bahasa Indonesia."},
               {"role": "user", "content": text}
             ]
           })
@@ -202,7 +202,7 @@
         if (document.getElementById(loadingId)) document.getElementById(loadingId).remove();
 
         if (data.error) {
-          throw new Error(data.error.message || "Eror dari sistem OpenRouter.");
+          throw new Error(data.error.message || "Eror respon server OpenRouter.");
         }
 
         if (data.choices && data.choices.length > 0) {
@@ -224,7 +224,7 @@
         if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
         chatBox.innerHTML += `
           <div class="bg-red-500/10 p-4 rounded-xl border border-red-500/20 max-w-[85%] text-red-400">
-            <i class="fas fa-exclamation-circle"></i> <strong>Model Respons Gagal:</strong> ${error.message}. Silakan pindah ke opsi model AI alternatif lainnya di menu atas.
+            <i class="fas fa-exclamation-circle"></i> <strong>Model Gagal:</strong> ${error.message}. Silakan pindah ke opsi model gratis alternatif lainnya di atas.
           </div>
         `;
       }
