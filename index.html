@@ -13,7 +13,7 @@
     <div>
       <div class="mb-8">
         <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">GOLD & DXY</h1>
-        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v8.4 HARD-LOCK</p>
+        <p class="text-[10px] text-slate-400 tracking-widest uppercase">Trading Terminal v8.5 VERIFIED</p>
       </div>
       <nav class="space-y-2">
         <button onclick="switchTab('analisis')" id="btn-analisis" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -26,8 +26,8 @@
     </div>
     <div class="pt-4 border-t border-slate-800/60 hidden md:block">
       <div class="flex items-center gap-2 text-xs text-slate-400">
-        <i class="fas fa-lock text-red-500 animate-pulse"></i>
-        <span>Hard Isolation Router Aktif</span>
+        <i class="fas fa-check-circle text-emerald-500"></i>
+        <span>Slug Terverifikasi Aktif</span>
       </div>
     </div>
   </aside>
@@ -52,8 +52,8 @@
         
         <div class="border-b border-slate-800 pb-4 mb-4 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
           <div>
-            <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-brain text-purple-400"></i> AI Smart Router (Hard-Locked)</h2>
-            <p class="text-xs text-red-400 font-mono"><i class="fas fa-ban"></i> Anti-Bypass Tanpa Toleransi Otomatis</p>
+            <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-brain text-purple-400"></i> AI Terminal Router</h2>
+            <p class="text-xs text-emerald-400 font-mono"><i class="fas fa-check-shield"></i> Sinkronisasi Slug OpenRouter 2026</p>
           </div>
           
           <div class="w-full xl:w-auto flex items-center gap-2 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
@@ -62,51 +62,12 @@
               <optgroup label="Sistem Otomatis">
                 <option value="auto_pilot" class="bg-slate-900 text-amber-400 font-bold">⚡ AUTO-PILOT (Pilih Otomatis)</option>
               </optgroup>
-              <optgroup label="OpenAI & Google">
+              <optgroup label="Model Populer & Valid">
+                <option value="deepseek/deepseek-r1:free" class="bg-slate-900 text-slate-100">DeepSeek R1 (Free)</option>
                 <option value="openai/gpt-oss-120b:free" class="bg-slate-900 text-slate-100">OpenAI: GPT OSS 120B</option>
-                <option value="openai/gpt-oss-20b:free" class="bg-slate-900 text-slate-100">OpenAI: GPT OSS 20B</option>
-                <option value="google/gemma-4-31b:free" class="bg-slate-900 text-slate-100">Google: Gemma 4 31B</option>
-              </optgroup>
-              <optgroup label="DeepSeek & Qwen">
-                <option value="deepseek/deepseek-r1:free" class="bg-slate-900 text-slate-100">DeepSeek R1</option>
-                <option value="deepseek/deepseek-v4-flash:free" class="bg-slate-900 text-slate-100">DeepSeek V4 Flash</option>
-                <option value="deepseek/deepseek-v3-base:free" class="bg-slate-900 text-slate-100">DeepSeek V3 Base</option>
-                <option value="deepseek/deepseek-chat-v3-0324:free" class="bg-slate-900 text-slate-100">DeepSeek Chat V3</option>
-                <option value="qwen/qwen3-coder:free" class="bg-slate-900 text-slate-100">Qwen 3 Coder</option>
-                <option value="qwen/qwen3-coder-next:free" class="bg-slate-900 text-slate-100">Qwen 3 Coder Next</option>
-                <option value="qwen/qwen2.5-vl-3b-instruct:free" class="bg-slate-900 text-slate-100">Qwen 2.5 VL 3B</option>
-              </optgroup>
-              <optgroup label="Nvidia & Others">
-                <option value="nvidia/nemotron-3-ultra:free" class="bg-slate-900 text-slate-100">Nvidia Nemotron 3 Ultra</option>
-                <option value="nvidia/nemotron-3-super:free" class="bg-slate-900 text-slate-100">Nvidia Nemotron 3 Super</option>
-                <option value="nvidia/nemotron-3-nano-30b-a3b:free" class="bg-slate-900 text-slate-100">Nvidia Nemotron 3 Nano 30B</option>
-                <option value="nvidia/nemotron-nano-9b-v2:free" class="bg-slate-900 text-slate-100">Nvidia Nemotron Nano 9B v2</option>
-                <option value="nvidia/llama-nemotron-rerank-vl-1b-v2:free" class="bg-slate-900 text-slate-100">Nvidia Llama Nemotron VL</option>
-                <option value="nex-agi/nex-n2-pro:free" class="bg-slate-900 text-slate-100">Nex N2 Pro</option>
-                <option value="upstage/solar-pro-3:free" class="bg-slate-900 text-slate-100">Solar Pro 3</option>
-                <option value="cohere/north-mini-code:free" class="bg-slate-900 text-slate-100">Cohere North Mini Code</option>
-                <option value="poolside/laguna-m.1:free" class="bg-slate-900 text-slate-100">Poolside Laguna M.1</option>
-                <option value="cognitivecomputations/dolphin-mistral-24b-venice-edition:free" class="bg-slate-900 text-slate-100">Dolphin Mistral 24B Venice</option>
-              </optgroup>
-              <optgroup label="OpenRouter Alpha Cluster">
-                <option value="openrouter/optimus-alpha:free" class="bg-slate-900 text-slate-100">OR Optimus Alpha</option>
-                <option value="openrouter/owl-alpha:free" class="bg-slate-900 text-slate-100">OR Owl Alpha</option>
-                <option value="openrouter/elephant-alpha:free" class="bg-slate-900 text-slate-100">OR Elephant Alpha</option>
-                <option value="openrouter/hunter-alpha:free" class="bg-slate-900 text-slate-100">OR Hunter Alpha</option>
-                <option value="openrouter/healer-alpha:free" class="bg-slate-900 text-slate-100">OR Healer Alpha</option>
-                <option value="openrouter/aurora-alpha:free" class="bg-slate-900 text-slate-100">OR Aurora Alpha</option>
-                <option value="openrouter/pony-alpha:free" class="bg-slate-900 text-slate-100">OR Pony Alpha</option>
-                <option value="openrouter/cypher-alpha:free" class="bg-slate-900 text-slate-100">OR Cypher Alpha</option>
-                <option value="openrouter/bert-nebulon-alpha:free" class="bg-slate-900 text-slate-100">OR Bert Nebulon</option>
-                <option value="openrouter/sherlock-dash-alpha:free" class="bg-slate-900 text-slate-100">OR Sherlock Dash</option>
-                <option value="openrouter/sherlock-think-alpha:free" class="bg-slate-900 text-slate-100">OR Sherlock Think</option>
-                <option value="openrouter/polaris-alpha:free" class="bg-slate-900 text-slate-100">OR Polaris Alpha</option>
-                <option value="openrouter/sonoma-dusk-alpha:free" class="bg-slate-900 text-slate-100">OR Sonoma Dusk</option>
-                <option value="openrouter/sonoma-sky-alpha:free" class="bg-slate-900 text-slate-100">OR Sonoma Sky</option>
-                <option value="openrouter/horizon-beta:free" class="bg-slate-900 text-slate-100">OR Horizon Beta</option>
-                <option value="openrouter/horizon-alpha:free" class="bg-slate-900 text-slate-100">OR Horizon Alpha</option>
-                <option value="openrouter/quasar-alpha:free" class="bg-slate-900 text-slate-100">OR Quasar Alpha</option>
-                <option value="openrouter/bodybuilder:free" class="bg-slate-900 text-slate-100">OR Bodybuilder</option>
+                <option value="meta-llama/llama-3.3-70b-instruct:free" class="bg-slate-900 text-slate-100">Llama 3.3 70B (Free)</option>
+                <option value="qwen/qwen-2.5-coder-32b-instruct:free" class="bg-slate-900 text-slate-100">Qwen 2.5 Coder 32B</option>
+                <option value="google/gemini-2.5-flash:free" class="bg-slate-900 text-slate-100">Google: Gemini 2.5 Flash</option>
               </optgroup>
             </select>
           </div>
@@ -115,12 +76,12 @@
         <div id="chat-box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2 text-sm scrollbar-thin">
           <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%]">
             <p class="text-purple-400 font-bold mb-1"><i class="fas fa-robot"></i> System Core:</p>
-            Mode **Isolation Terkunci**. Jika kamu tidak memilih Auto-Pilot, sistem hanya akan memanggil model pilihanmu saja tanpa dialihkan ke model lain!
+            ID Model lama yang tidak valid telah dibersihkan. Silakan pilih **DeepSeek R1 (Free)** atau model lainnya dari menu di atas untuk menguji isolasi rute obrolan.
           </div>
         </div>
 
         <div class="flex gap-2">
-          <input type="text" id="user-input" placeholder="Tanyakan apapun ke multi-model AI ini..." class="flex-grow bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition text-slate-100">
+          <input type="text" id="user-input" placeholder="Tanyakan analisa pasar atau strategi..." class="flex-grow bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition text-slate-100">
           <button onclick="sendMessage()" class="bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition flex items-center gap-2">
             Kirim <i class="fas fa-paper-plane"></i>
           </button>
@@ -202,24 +163,9 @@
       chatBox.scrollTop = chatBox.scrollHeight;
 
       let modelsToTry = [];
-      const lowerText = text.toLowerCase();
-
-      // LOGIKA ANTI-FALLBACK: Jika memilih manual, HANYA coba 1 model tersebut saja!
       if (selectedDropdown === 'auto_pilot') {
-          const allModelOptions = Array.from(document.getElementById('model-selector').options)
-                                       .map(opt => opt.value)
-                                       .filter(val => val !== 'auto_pilot');
-
-          if (lowerText.includes('code') || lowerText.includes('script') || lowerText.includes('html') || lowerText.includes('python')) {
-              modelsToTry = ['qwen/qwen3-coder:free', 'cohere/north-mini-code:free', 'openai/gpt-oss-120b:free'];
-          } else if (lowerText.includes('gambar') || lowerText.includes('lihat')) {
-              modelsToTry = ['qwen/qwen2.5-vl-3b-instruct:free', 'nvidia/llama-nemotron-rerank-vl-1b-v2:free'];
-          } else {
-              modelsToTry = ['deepseek/deepseek-r1:free', 'openai/gpt-oss-120b:free', 'google/gemma-4-31b:free'];
-          }
-          modelsToTry = [...new Set([...modelsToTry, ...allModelOptions])];
+          modelsToTry = ['deepseek/deepseek-r1:free', 'openai/gpt-oss-120b:free', 'meta-llama/llama-3.3-70b-instruct:free'];
       } else {
-          // KUNCI MATI: Tidak ada model lain selain yang dipilih user di dropdown!
           modelsToTry = [selectedDropdown];
       }
 
@@ -230,7 +176,7 @@
 
       for (let model of modelsToTry) {
           document.getElementById(loadingId).innerHTML = `
-            <p class="text-purple-400 font-bold mb-1"><i class="fas fa-satellite-dish animate-pulse"></i> Meminta respons dari: <span class="text-amber-400">${model.split('/')[1]}</span>...</p>
+            <p class="text-purple-400 font-bold mb-1"><i class="fas fa-satellite-dish animate-pulse"></i> Mengirim data ke: <span class="text-amber-400">${model.split('/')[1]}</span>...</p>
           `;
 
           try {
@@ -260,7 +206,7 @@
               errorMessage = data.error.message || JSON.stringify(data.error);
             }
           } catch (error) {
-            errorMessage = error.message || "Koneksi jaringan terputus.";
+            errorMessage = error.message || "Gagal tersambung ke OpenRouter.";
           }
       }
 
@@ -270,8 +216,8 @@
         chatBox.innerHTML += `
           <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-[85%]">
             <p class="text-purple-400 font-bold mb-1 flex items-center gap-2">
-              <i class="fas fa-check-circle text-emerald-500"></i> AI Smart Router
-              <span class="px-1.5 py-0.5 bg-slate-800 rounded text-[9px] font-mono text-slate-400 border border-slate-700">Respons dari: ${modelUsed.split('/')[1]}</span>
+              <i class="fas fa-check-circle text-emerald-500"></i> AI Engine
+              <span class="px-1.5 py-0.5 bg-slate-800 rounded text-[9px] font-mono text-slate-400 border border-slate-700">${modelUsed}</span>
             </p>
             <p class="whitespace-pre-line text-slate-200 mt-2">${finalResponse}</p>
           </div>
@@ -279,7 +225,7 @@
       } else {
         chatBox.innerHTML += `
           <div class="bg-red-500/10 p-4 rounded-xl border border-red-500/20 max-w-[85%] text-red-400">
-            <p class="font-bold"><i class="fas fa-exclamation-triangle"></i> Gagal Memuat Model Pilihan:</p>
+            <p class="font-bold"><i class="fas fa-exclamation-triangle"></i> Terjadi Kendala:</p>
             <p class="text-xs font-mono mt-1 bg-slate-950 p-2 rounded border border-slate-800/80">${errorMessage}</p>
           </div>
         `;
