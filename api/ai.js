@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   if (!apiKey) {
     return res.status(401).json({
-      error: { message: 'OPENROUTER_API_KEY belum diset di Vercel Env atau tombol Kunci di header.' }
+      error: { message: 'OPENROUTER_API_KEY belum diset di Vercel Env atau tombol Kunci (🔑) di header.' }
     });
   }
 
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': req.headers.origin || 'https://web-trading-theta.vercel.app',
-        'X-Title': 'GoldDXY-v10-Modular'
+        'X-Title': 'GoldDXY-v11-Pro'
       },
       body: JSON.stringify(req.body)
     });

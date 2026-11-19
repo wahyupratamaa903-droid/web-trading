@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-  <title>GOLD &amp; DXY v10 — Modular Real-Time Terminal</title>
+  <title>MULTI-MARKET INTELLIGENCE TERMINAL v11</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <link rel="stylesheet" href="./css/styles.css">
@@ -14,11 +14,11 @@
   <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center login-bg">
     <div class="login-card rounded-2xl p-7 w-full max-w-sm mx-4 anim-fade">
       <div class="text-center mb-6">
-        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl grad-bg-amber border border-amber-500/20 flex items-center justify-center neon-pulse-amber">
-          <i class="fas fa-chart-line text-xl grad-amber"></i>
+        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl grad-bg-amber border border-amber-500/20 flex items-center justify-center">
+          <i class="fas fa-globe text-xl grad-amber"></i>
         </div>
-        <h1 class="text-lg font-black grad-amber">GOLD &amp; DXY</h1>
-        <p class="text-[9px] text-slate-500 tracking-[.2em] uppercase mt-1">Modular Intelligence v10</p>
+        <h1 class="text-lg font-black grad-amber">MARKET TERMINAL v11</h1>
+        <p class="text-[9px] text-slate-500 tracking-[.2em] uppercase mt-1">Custom Multi-Asset Intelligence</p>
       </div>
       <form id="login-form" class="space-y-3">
         <div>
@@ -37,28 +37,39 @@
     </div>
   </div>
 
-  <!-- MODAL API KEY OPENROUTER -->
-  <div id="apikey-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm px-4">
-    <div class="glass-card p-5 w-full max-w-sm border border-amber-500/25">
+  <!-- MODAL CUSTOM WATCHLIST -->
+  <div id="watchlist-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm px-4">
+    <div class="glass-card p-5 w-full max-w-md border border-amber-500/25 max-h-[85vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-3">
-        <h3 class="text-xs font-bold text-amber-400"><i class="fas fa-key mr-1.5"></i>Pengaturan OpenRouter API Key</h3>
-        <button id="apikey-close" class="text-slate-400 hover:text-white text-base">&times;</button>
+        <h3 class="text-xs font-bold text-amber-400"><i class="fas fa-sliders-h mr-1.5"></i>Atur Custom Watchlist (Semua Pair)</h3>
+        <button id="close-watchlist-btn" class="text-slate-400 hover:text-white text-lg">&times;</button>
       </div>
-      <p class="text-[10px] text-slate-400 mb-3 leading-relaxed">
-        Simpan API Key OpenRouter (<code>sk-or-v1-...</code>) secara lokal di browser HP, atau atur <code>OPENROUTER_API_KEY</code> di Environment Variables Vercel.
-      </p>
-      <input type="password" id="apikey-input" placeholder="sk-or-v1-..." class="calc-in mb-3">
-      <button id="apikey-save" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 py-2 rounded-xl text-xs font-bold text-white">
-        Simpan API Key
-      </button>
+      <p class="text-[10px] text-slate-400 mb-2">Pilih dari daftar pair populer atau ketik simbol kustom apa saja (contoh: <code>EUR/JPY</code>, <code>XAG/USD</code>, <code>SOL/USD</code>, <code>US100</code>, <code>NVDA</code>):</p>
+      <div class="flex gap-2 mb-3">
+        <input type="text" id="custom-pair-input" placeholder="Ketik pair/simbol kustom..." class="calc-in">
+        <button id="add-custom-pair-btn" class="bg-amber-500 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-950 shrink-0">Tambah</button>
+      </div>
+      <div id="preset-pair-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-1.5"></div>
     </div>
   </div>
 
-  <!-- MAIN APPLICATION -->
+  <!-- MODAL API KEY -->
+  <div id="apikey-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm px-4">
+    <div class="glass-card p-5 w-full max-w-sm border border-amber-500/25">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-xs font-bold text-amber-400"><i class="fas fa-key mr-1.5"></i>OpenRouter API Key</h3>
+        <button id="apikey-close" class="text-slate-400 hover:text-white text-lg">&times;</button>
+      </div>
+      <input type="password" id="apikey-input" placeholder="sk-or-v1-..." class="calc-in mb-3">
+      <button id="apikey-save" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 py-2 rounded-xl text-xs font-bold text-white">Simpan API Key</button>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
   <div id="app" class="hidden min-h-screen relative z-10">
     <div id="alert-box" class="fixed top-3 right-3 z-50 space-y-2" style="max-width:300px;pointer-events:none"></div>
 
-    <!-- TOP HEADER -->
+    <!-- HEADER -->
     <header class="sticky top-0 z-40 glass border-b border-slate-800/40">
       <div class="max-w-5xl mx-auto px-3 py-2.5 flex items-center justify-between">
         <div class="flex items-center gap-2">
@@ -66,15 +77,16 @@
             <i class="fas fa-chart-line text-sm grad-amber"></i>
           </div>
           <div>
-            <h1 class="text-xs font-black grad-amber leading-tight">GOLD &amp; DXY v10</h1>
+            <h1 class="text-xs font-black grad-amber leading-tight">MULTI-MARKET PRO v11</h1>
             <p id="data-source-badge" class="text-[8px] text-emerald-400 font-mono">Connecting...</p>
           </div>
         </div>
         <div class="flex items-center gap-1.5">
-          <span class="text-[9px] text-slate-400 font-mono flex items-center gap-1 mr-1"><span class="live-dot"></span><span id="update-time">--:--</span></span>
-          <button id="refresh-btn" title="Refresh Data" class="text-[10px] text-slate-300 hover:text-emerald-400 px-2.5 py-1.5 rounded-lg border border-slate-700/50"><i class="fas fa-sync-alt"></i></button>
-          <button id="api-key-btn" title="Set API Key" class="text-[10px] text-amber-400 hover:text-amber-300 px-2.5 py-1.5 rounded-lg border border-amber-500/25"><i class="fas fa-key"></i></button>
-          <button id="logout-btn" title="Keluar" class="text-[10px] text-slate-400 hover:text-red-400 px-2.5 py-1.5 rounded-lg border border-slate-700/50"><i class="fas fa-sign-out-alt"></i></button>
+          <span class="text-[9px] text-slate-400 font-mono hidden sm:flex items-center gap-1 mr-1"><span class="live-dot"></span><span id="update-time">--:--</span></span>
+          <button id="open-watchlist-btn" title="Custom Watchlist" class="text-[10px] text-amber-400 px-2.5 py-1.5 rounded-lg border border-amber-500/30 font-bold"><i class="fas fa-plus mr-1"></i>Pair</button>
+          <button id="refresh-btn" title="Refresh" class="text-[10px] text-slate-300 px-2.5 py-1.5 rounded-lg border border-slate-700/50"><i class="fas fa-sync-alt"></i></button>
+          <button id="api-key-btn" title="API Key" class="text-[10px] text-purple-400 px-2.5 py-1.5 rounded-lg border border-purple-500/30"><i class="fas fa-key"></i></button>
+          <button id="logout-btn" title="Keluar" class="text-[10px] text-slate-400 px-2.5 py-1.5 rounded-lg border border-slate-700/50"><i class="fas fa-sign-out-alt"></i></button>
         </div>
       </div>
     </header>
@@ -82,200 +94,263 @@
     <!-- RUNNING TICKER -->
     <div class="glass border-b border-slate-800/30 overflow-hidden">
       <div class="py-1.5 px-3 flex items-center gap-3">
-        <span class="text-amber-500 font-bold text-[9px] shrink-0 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>REAL-TIME</span>
+        <span class="text-amber-500 font-bold text-[9px] shrink-0 flex items-center gap-1"><span class="live-dot"></span>LIVE FEED</span>
         <div class="overflow-hidden flex-grow">
-          <div class="ticker-track text-[10px] text-slate-400">
-            <span class="mx-4">💰 <b class="text-amber-400">XAU</b>: <span id="tk-xau">--</span></span>
-            <span class="mx-4">💵 <b class="text-cyan-400">DXY</b>: <span id="tk-dxy">--</span></span>
-            <span class="mx-4">💶 <b class="text-slate-200">EUR/USD</b>: <span id="tk-eur">--</span></span>
-            <span class="mx-4">🔥 <b class="text-orange-400">BTC</b>: <span id="tk-btc">--</span></span>
-            <span class="mx-4">💰 <b class="text-amber-400">XAU</b>: <span id="tk-xau2">--</span></span>
-            <span class="mx-4">💵 <b class="text-cyan-400">DXY</b>: <span id="tk-dxy2">--</span></span>
-            <span class="mx-4">💶 <b class="text-slate-200">EUR/USD</b>: <span id="tk-eur2">--</span></span>
-            <span class="mx-4">🔥 <b class="text-orange-400">BTC</b>: <span id="tk-btc2">--</span></span>
-          </div>
+          <div id="ticker-track" class="ticker-track text-[10px] text-slate-300"></div>
         </div>
       </div>
     </div>
 
-    <!-- MAIN CONTENT CONTAINER -->
     <main class="max-w-5xl mx-auto p-3 md:p-5 space-y-4">
 
-      <!-- WATCHLIST -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-        <div class="glass-card glow-card-amber p-3"><div class="flex justify-between"><p class="text-[9px] text-slate-400 font-mono">XAU/USD</p><span class="live-dot"></span></div><p id="w-xau-px" class="text-base font-black text-amber-400 price-cell">--</p><p id="w-xau-ch" class="text-[10px] text-slate-500">--</p></div>
-        <div class="glass-card glow-card-blue p-3"><div class="flex justify-between"><p class="text-[9px] text-slate-400 font-mono">DXY</p><span class="live-dot"></span></div><p id="w-dxy-px" class="text-base font-black text-cyan-400 price-cell">--</p><p id="w-dxy-ch" class="text-[10px] text-slate-500">--</p></div>
-        <div class="glass-card p-3"><div class="flex justify-between"><p class="text-[9px] text-slate-400 font-mono">EUR/USD</p><span class="live-dot"></span></div><p id="w-eur-px" class="text-base font-black text-slate-100 price-cell">--</p><p id="w-eur-ch" class="text-[10px] text-slate-500">--</p></div>
-        <div class="glass-card p-3"><div class="flex justify-between"><p class="text-[9px] text-slate-400 font-mono">BTC/USD</p><span class="live-dot"></span></div><p id="w-btc-px" class="text-base font-black text-orange-400 price-cell">--</p><p id="w-btc-ch" class="text-[10px] text-slate-500">--</p></div>
+      <!-- CUSTOM WATCHLIST GRID -->
+      <div>
+        <div class="flex items-center justify-between mb-1.5 px-0.5">
+          <span class="text-[9px] font-mono text-slate-400">Ketuk kartu pair untuk mengaktifkan analisis seluruh tab</span>
+          <span class="text-[9px] font-mono text-amber-400">Custom Watchlist</span>
+        </div>
+        <div id="watchlist-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2"></div>
       </div>
 
-      <!-- TAB 1: MARKET OVERVIEW -->
+      <!-- TAB 1: MARKET WAR ROOM & LIVE CHART -->
       <section id="tab-overview" class="tab-panel active space-y-4">
-        <div class="war-room-panel p-4 cyber-grid">
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2">
-              <div class="w-2 h-2 rounded-full bg-amber-500 anim-war"></div>
-              <h2 class="text-xs font-black grad-amber">AI MARKET WAR ROOM</h2>
+        <div class="war-room-panel p-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div>
+              <h2 class="text-xs font-black grad-amber">MULTI-FACTOR MARKET WAR ROOM</h2>
+              <p class="text-[9px] text-slate-400">Evaluasi 6 faktor objektif sebelum menyimpulkan arah pasar</p>
             </div>
-            <button id="war-refresh" class="text-[9px] text-amber-400 px-2 py-1 rounded border border-amber-500/20"><i class="fas fa-sync-alt mr-1"></i>Sync</button>
+            <div class="flex items-center gap-1.5">
+              <select id="war-pair-select" class="calc-in text-[11px] w-32"></select>
+              <input type="text" id="war-custom-input" placeholder="Simbol lain..." class="calc-in text-[11px] w-28">
+              <button id="war-custom-btn" class="bg-amber-500/20 border border-amber-500/30 text-amber-300 px-2.5 py-1.5 rounded-lg text-[10px] font-bold">Cek</button>
+            </div>
           </div>
           <div id="war-room-content"></div>
         </div>
 
         <div class="glass-card p-4">
-          <h2 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-chart-area grad-amber"></i>XAU/USD — TradingView Live Chart</h2>
-          <div id="tv_chart" style="height:360px" class="rounded-xl overflow-hidden border border-slate-800/50"></div>
+          <h2 id="chart-pair-title" class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-chart-area grad-amber"></i>XAU/USD — Live Chart</h2>
+          <div id="tv_chart" style="height:370px" class="rounded-xl overflow-hidden border border-slate-800/50"></div>
         </div>
       </section>
 
-      <!-- TAB 2: SIGNALS & SMC -->
+      <!-- TAB 2: CUSTOM INDICATORS, TRADINGVIEW TECHNICALS & SMC -->
       <section id="tab-signals" class="tab-panel space-y-4">
         <div class="glass-card p-4 glow-card-emerald">
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-crosshairs grad-emerald"></i>Technical Signal Engine (Real H1 OHLC)</h2>
-            <button id="sig-refresh" class="text-[9px] text-emerald-400 px-2 py-1 rounded border border-emerald-500/20"><i class="fas fa-sync-alt mr-1"></i>Hitung Ulang</button>
-          </div>
-          <div id="sig-main-card" class="signal-card signal-neutral mb-3">
-            <div class="flex items-start justify-between mb-2">
-              <div>
-                <span id="sig-direction" class="text-base font-black block mb-1">--</span>
-                <p id="sig-reason" class="text-[10px] text-slate-300 leading-relaxed">Menghitung indikator...</p>
-              </div>
-              <div class="text-right shrink-0 ml-2">
-                <p class="text-[8px] text-slate-400">Confidence</p>
-                <p id="sig-conf-val" class="text-base font-black text-amber-400">--%</p>
-              </div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div>
+              <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-sliders-h grad-emerald"></i>Custom Indicator &amp; Trend Analyzer</h2>
+              <p id="sig-source-info" class="text-[9px] text-slate-400 font-mono mt-0.5">Memverifikasi sumber OHLC...</p>
             </div>
-            <div class="confidence-bar mb-3"><div id="sig-conf-bar" class="confidence-fill bg-amber-500" style="width:0%"></div></div>
-            <div class="grid grid-cols-3 gap-2 mb-3 text-center">
-              <div class="bg-slate-900/50 rounded-lg p-2"><p class="text-[8px] text-slate-400">Entry</p><p id="sig-entry" class="text-xs font-bold text-slate-100">--</p></div>
-              <div class="bg-slate-900/50 rounded-lg p-2"><p class="text-[8px] text-slate-400">Stop Loss</p><p id="sig-sl" class="text-xs font-bold text-red-400">--</p></div>
-              <div class="bg-slate-900/50 rounded-lg p-2"><p class="text-[8px] text-slate-400">Take Profit</p><p id="sig-tp" class="text-xs font-bold text-emerald-400">--</p></div>
-            </div>
-            <div class="flex gap-1.5 flex-wrap mb-3">
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full border border-slate-700">RSI(14): <b id="sig-rsi" class="text-amber-400">--</b></span>
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full border border-slate-700">MACD: <b id="sig-macd" class="text-amber-400">--</b></span>
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full border border-slate-700">Trend: <b id="sig-ema" class="text-amber-400">--</b></span>
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full border border-slate-700">Vol: <b id="sig-vol" class="text-amber-400">--</b></span>
-            </div>
-            <div class="flex gap-2">
-              <div id="fc-6h" class="forecast-pill flex-1 bg-slate-900/50 border-slate-700"></div>
-              <div id="fc-24h" class="forecast-pill flex-1 bg-slate-900/50 border-slate-700"></div>
-              <div id="fc-7d" class="forecast-pill flex-1 bg-slate-900/50 border-slate-700"></div>
+            <div class="flex items-center gap-1.5">
+              <select id="sig-pair-select" class="calc-in text-[11px] w-32"></select>
+              <select id="sig-tf-select" class="calc-in text-[11px] w-24">
+                <option value="15m">M15</option>
+                <option value="60m" selected>H1</option>
+                <option value="1d">D1</option>
+              </select>
             </div>
           </div>
+
+          <div class="grid grid-cols-3 gap-2 mb-3 bg-slate-900/45 p-2.5 rounded-xl border border-slate-800/50">
+            <div><label class="text-[8px] text-slate-400 block">EMA Cepat</label><input type="number" id="ind-ema-fast" value="20" class="calc-in text-[11px] py-1"></div>
+            <div><label class="text-[8px] text-slate-400 block">EMA Lambat</label><input type="number" id="ind-ema-slow" value="50" class="calc-in text-[11px] py-1"></div>
+            <div><label class="text-[8px] text-slate-400 block">Periode RSI</label><input type="number" id="ind-rsi-p" value="14" class="calc-in text-[11px] py-1"></div>
+          </div>
+
+          <div id="custom-indicators-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+        </div>
+
+        <div class="glass-card p-4">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-tachometer-alt grad-amber"></i>TradingView Official Technical Summary (Seluruh Indikator TV)</h2>
+            <span class="text-[8px] text-emerald-400 font-mono">Verified TradingView Feed</span>
+          </div>
+          <div id="tv-ta-widget" class="rounded-xl overflow-hidden border border-slate-800/40" style="min-height:380px"></div>
         </div>
 
         <div class="glass-card p-4 glow-card-purple">
-          <h2 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-layer-group grad-purple"></i>SMC Toolkit &amp; Liquidity Heatmap</h2>
-          <div class="section-label">Smart Money Swing Zones</div>
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-layer-group grad-purple"></i>SMC Toolkit &amp; Liquidity Heatmap</h2>
+            <span id="smc-pair-label" class="text-[9px] font-mono text-amber-400 font-bold">XAU/USD</span>
+          </div>
           <div id="smc-zones" class="space-y-1.5 mb-3"></div>
-          <div class="section-label mt-3">Liquidity Heatmap (D1/H4/H1)</div>
+          <div class="section-label mt-3">Liquidity Heatmap</div>
           <div id="liq-heatmap" class="liq-heatmap"></div>
         </div>
       </section>
 
-      <!-- TAB 3: MACRO & NEWS -->
+      <!-- TAB 3: MAKRO, MULTI-CURRENCY NEWS FILTER & KALENDER -->
       <section id="tab-macro" class="tab-panel space-y-4">
         <div class="glass-card p-4 glow-card-blue">
-          <h2 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-building grad-blue"></i>Institutional Dashboard (Live Macro &amp; 30D Correlation)</h2>
+          <h2 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-building grad-blue"></i>Institutional Macro &amp; 30D Correlation</h2>
           <div class="grid grid-cols-3 gap-2 mb-3">
             <div class="inst-widget"><p class="text-[8px] text-slate-400 mb-1">Fear &amp; Greed</p><p id="inst-fg" class="text-base font-black text-amber-400">--</p><p id="inst-fg-lbl" class="text-[8px] text-slate-400">--</p></div>
-            <div class="inst-widget"><p class="text-[8px] text-slate-400 mb-1">VIX</p><p id="inst-vix" class="text-base font-black text-purple-400">--</p><p class="text-[8px] text-slate-400">Volatility</p></div>
-            <div class="inst-widget"><p class="text-[8px] text-slate-400 mb-1">US10Y</p><p id="inst-10y" class="text-base font-black text-cyan-400">--%</p><p class="text-[8px] text-slate-400">Treasury Yield</p></div>
+            <div class="inst-widget"><p class="text-[8px] text-slate-400 mb-1">CBOE VIX</p><p id="inst-vix" class="text-base font-black text-purple-400">--</p><p class="text-[8px] text-slate-400">Volatility</p></div>
+            <div class="inst-widget"><p class="text-[8px] text-slate-400 mb-1">US10Y Yield</p><p id="inst-10y" class="text-base font-black text-cyan-400">--%</p><p class="text-[8px] text-slate-400">Treasury</p></div>
           </div>
           <div class="section-label">30-Day Pearson Correlation Matrix</div>
-          <div class="overflow-x-auto">
-            <table id="corr-matrix" class="w-full text-center" style="border-collapse:separate;border-spacing:2px"></table>
-          </div>
+          <div class="overflow-x-auto"><table id="corr-matrix" class="w-full text-center" style="border-collapse:separate;border-spacing:2px"></table></div>
         </div>
 
         <div class="glass-card p-4">
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-radar grad-purple"></i>News Sentiment Radar (Live RSS)</h2>
-            <button id="news-refresh-btn" class="text-[9px] text-purple-400 px-2 py-1 rounded border border-purple-500/20"><i class="fas fa-sync-alt mr-1"></i>Refresh</button>
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-radar grad-purple"></i>Multi-Currency News Intelligence &amp; Source Tracker</h2>
+              <p id="news-source-aggregator" class="text-[8px] text-cyan-400 font-mono mt-0.5">Menghubungkan ke sumber berita...</p>
+            </div>
+            <button id="news-refresh-btn" class="text-[9px] text-purple-400 px-2.5 py-1 rounded border border-purple-500/25"><i class="fas fa-sync-alt"></i></button>
           </div>
-          <div id="sentiment-list" class="space-y-2 max-h-64 overflow-y-auto"></div>
+
+          <div class="flex gap-1.5 overflow-x-auto pb-2 mb-2">
+            <button class="chip-btn active" data-news-topic="ALL">Semua Pasar</button>
+            <button class="chip-btn" data-news-topic="XAU">XAU / Gold</button>
+            <button class="chip-btn" data-news-topic="USD">USD / DXY</button>
+            <button class="chip-btn" data-news-topic="EUR">EUR / EURUSD</button>
+            <button class="chip-btn" data-news-topic="GBP">GBP / GBPUSD</button>
+            <button class="chip-btn" data-news-topic="JPY">JPY / USDJPY</button>
+            <button class="chip-btn" data-news-topic="AUD">AUD</button>
+            <button class="chip-btn" data-news-topic="CAD">CAD / Oil</button>
+            <button class="chip-btn" data-news-topic="BTC">BTC / Crypto</button>
+          </div>
+
+          <div class="flex gap-2 mb-2.5">
+            <input type="text" id="news-custom-input" placeholder="Cari berita pair/mata uang (misal: EUR/USD, ECB, NFP)..." class="calc-in text-[11px]">
+            <button id="news-search-btn" class="bg-purple-600/30 border border-purple-500/40 text-purple-200 px-3 py-1.5 rounded-xl text-[10px] font-bold shrink-0">Telusuri</button>
+          </div>
+
+          <div class="flex gap-1.5 overflow-x-auto pb-2 mb-2">
+            <button class="chip-btn active" data-news-color="ALL">Semua Warna</button>
+            <button class="chip-btn" data-news-color="red"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span>Merah (High)</button>
+            <button class="chip-btn" data-news-color="orange"><span class="inline-block w-2 h-2 rounded-full bg-orange-500 mr-1"></span>Oranye (Med-High)</button>
+            <button class="chip-btn" data-news-color="yellow"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1"></span>Kuning (Medium)</button>
+            <button class="chip-btn" data-news-color="gray"><span class="inline-block w-2 h-2 rounded-full bg-slate-400 mr-1"></span>Abu-abu (Low)</button>
+          </div>
+
+          <div id="sentiment-list" class="space-y-2 max-h-80 overflow-y-auto"></div>
         </div>
 
         <div class="glass-card p-4">
-          <h2 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-calendar-alt grad-amber"></i>Kalender Ekonomi Real-Time (TradingView)</h2>
-          <div class="rounded-xl overflow-hidden border border-slate-800/50" style="height:340px">
+          <h2 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-calendar-alt grad-amber"></i>Kalender Ekonomi Global (TradingView)</h2>
+          <div class="rounded-xl overflow-hidden border border-slate-800/50" style="height:360px">
             <iframe src="https://s.tradingview.com/embed-widget/events/?locale=id&colorTheme=dark&isTransparent=true&width=100%25&height=100%25" style="width:100%;height:100%;border:none" loading="lazy"></iframe>
           </div>
         </div>
       </section>
 
-      <!-- TAB 4: TOOLS -->
+      <!-- TAB 4: PRO TOOLS -->
       <section id="tab-tools" class="tab-panel space-y-4">
-        <div class="glass-card p-4">
-          <h2 class="text-xs font-bold flex items-center gap-2 mb-3"><i class="fas fa-calculator grad-emerald"></i>Kalkulator Risk Management</h2>
-          <div class="grid grid-cols-2 gap-2.5">
-            <div><label class="text-[9px] text-slate-400 block mb-1">Balance ($)</label><input type="number" id="rc-bal" value="10000" class="calc-in"></div>
-            <div><label class="text-[9px] text-slate-400 block mb-1">Risk (%)</label><input type="number" id="rc-rsk" value="2" step="0.1" class="calc-in"></div>
-            <div><label class="text-[9px] text-slate-400 block mb-1">SL (pips)</label><input type="number" id="rc-sl" value="20" class="calc-in"></div>
-            <div><label class="text-[9px] text-slate-400 block mb-1">TP (pips)</label><input type="number" id="rc-tp" value="40" class="calc-in"></div>
+        <div class="glass-card p-4 glow-card-emerald">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-calculator grad-emerald"></i>Pro Position Size, Margin &amp; Risk Calculator</h2>
           </div>
-          <button id="calc-btn" class="w-full mt-3 bg-emerald-500/15 border border-emerald-500/25 rounded-xl py-2 text-xs font-bold text-emerald-400">Hitung Lot &amp; R:R</button>
-          <div class="grid grid-cols-2 gap-2.5 mt-3 text-center">
-            <div class="bg-slate-900/45 rounded-xl p-2.5 border border-slate-800/40"><p class="text-[8px] text-slate-400">Risk ($)</p><p id="rc-amt" class="text-sm font-bold text-red-400">$200.00</p></div>
-            <div class="bg-slate-900/45 rounded-xl p-2.5 border border-slate-800/40"><p class="text-[8px] text-slate-400">Lot Size</p><p id="rc-lot" class="text-sm font-bold text-emerald-400">1.00</p></div>
-            <div class="bg-slate-900/45 rounded-xl p-2.5 border border-slate-800/40"><p class="text-[8px] text-slate-400">R:R Ratio</p><p id="rc-rr" class="text-sm font-bold text-amber-400">1:2.00</p></div>
-            <div class="bg-slate-900/45 rounded-xl p-2.5 border border-slate-800/40"><p class="text-[8px] text-slate-400">Est. Profit</p><p id="rc-pft" class="text-sm font-bold text-emerald-400">$400.00</p></div>
+          <p id="rc-pip-info" class="text-[9px] text-cyan-400 font-mono mb-3">Pip Value (XAU/USD): $10/pip per 1.00 lot</p>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div class="col-span-2"><label class="text-[9px] text-slate-400 block mb-1">Instrumen / Pair</label><select id="rc-pair" class="calc-in"></select></div>
+            <div><label class="text-[9px] text-slate-400 block mb-1">Balance Akun ($)</label><input type="number" id="rc-bal" value="10000" class="calc-in"></div>
+            <div><label class="text-[9px] text-slate-400 block mb-1">Risk per Trade (%)</label><input type="number" id="rc-rsk" value="1" step="0.1" class="calc-in"></div>
+            <div><label class="text-[9px] text-slate-400 block mb-1">Stop Loss (pips)</label><input type="number" id="rc-sl" value="25" class="calc-in"></div>
+            <div><label class="text-[9px] text-slate-400 block mb-1">Take Profit (pips)</label><input type="number" id="rc-tp" value="50" class="calc-in"></div>
+            <div class="col-span-2"><label class="text-[9px] text-slate-400 block mb-1">Leverage Akun (1:X)</label><input type="number" id="rc-lev" value="100" class="calc-in"></div>
+          </div>
+
+          <button id="calc-btn" class="w-full mt-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl py-2 text-xs font-bold text-emerald-300">Hitung Lot, Margin &amp; R:R</button>
+
+          <div class="grid grid-cols-3 gap-2 mt-3 text-center">
+            <div class="bg-slate-900/50 rounded-xl p-2 border border-slate-800/40"><p class="text-[8px] text-slate-400">Ukuran Lot</p><p id="rc-lot" class="text-xs font-black text-emerald-400">0.40 Lot</p></div>
+            <div class="bg-slate-900/50 rounded-xl p-2 border border-slate-800/40"><p class="text-[8px] text-slate-400">Risiko ($)</p><p id="rc-amt" class="text-xs font-black text-red-400">$100.00</p></div>
+            <div class="bg-slate-900/50 rounded-xl p-2 border border-slate-800/40"><p class="text-[8px] text-slate-400">Target Profit</p><p id="rc-pft" class="text-xs font-black text-emerald-400">$200.00</p></div>
+            <div class="bg-slate-900/50 rounded-xl p-2 border border-slate-800/40"><p class="text-[8px] text-slate-400">R:R Ratio</p><p id="rc-rr" class="text-xs font-black text-amber-400">1:2.00</p></div>
+            <div class="bg-slate-900/50 rounded-xl p-2 border border-slate-800/40"><p class="text-[8px] text-slate-400">Est. Margin</p><p id="rc-margin" class="text-xs font-black text-cyan-400">$400.00</p></div>
+            <div class="bg-slate-900/50 rounded-xl p-2 border border-slate-800/40"><p class="text-[8px] text-slate-400">Min. Winrate</p><p id="rc-be-wr" class="text-xs font-black text-purple-400">33.3%</p></div>
           </div>
         </div>
 
         <div class="glass-card p-4">
           <div class="flex items-center justify-between mb-3">
-            <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-book grad-amber"></i>Quick Trading Journal</h2>
-            <div class="flex items-center gap-2">
-              <span id="wr-disp" class="text-[9px] text-slate-400 font-mono">WR: 0%</span>
-              <button id="exp-journal-btn" class="text-[10px] text-amber-400"><i class="fas fa-download"></i></button>
-            </div>
+            <h2 class="text-xs font-bold flex items-center gap-2"><i class="fas fa-book grad-amber"></i>Pro Trading Journal &amp; Performance Analytics</h2>
+            <button id="exp-journal-btn" class="text-[10px] text-amber-400 border border-amber-500/30 px-2 py-1 rounded-lg"><i class="fas fa-file-csv mr-1"></i>CSV</button>
           </div>
-          <div class="grid grid-cols-4 gap-2 mb-3">
-            <select id="jn-pair" class="calc-in text-[11px]"><option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>BTCUSD</option></select>
+
+          <div id="jn-stats-grid" class="grid grid-cols-4 gap-1.5 mb-3"></div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2">
+            <input type="text" id="jn-pair" value="XAU/USD" placeholder="Pair" class="calc-in text-[11px]">
             <select id="jn-side" class="calc-in text-[11px]"><option value="BUY">BUY</option><option value="SELL">SELL</option></select>
-            <input type="number" id="jn-pips" placeholder="±pips" class="calc-in text-[11px]">
-            <button id="add-trade-btn" class="bg-amber-500/15 border border-amber-500/25 rounded-xl text-xs font-bold text-amber-400"><i class="fas fa-plus"></i></button>
+            <input type="number" id="jn-lot" value="0.10" step="0.01" placeholder="Lot" class="calc-in text-[11px]">
+            <input type="number" id="jn-pips" placeholder="Pips (±)" class="calc-in text-[11px]">
+            <input type="number" id="jn-pnl" placeholder="P&L $ (opsional)" class="calc-in text-[11px]">
+            <select id="jn-setup" class="calc-in text-[11px]">
+              <option value="SMC / OB">SMC / Order Block</option>
+              <option value="Breakout">Breakout</option>
+              <option value="Trend Pullback">Trend Pullback</option>
+              <option value="News Event">News Event</option>
+            </select>
+            <select id="jn-session" class="calc-in text-[11px]">
+              <option value="London">Sesi London</option>
+              <option value="New York">Sesi New York</option>
+              <option value="Asia">Sesi Asia</option>
+            </select>
+            <button id="add-trade-btn" class="bg-amber-500/20 border border-amber-500/35 rounded-xl text-xs font-bold text-amber-300 py-2"><i class="fas fa-plus mr-1"></i>Catat</button>
           </div>
-          <div id="jn-list" class="space-y-1.5 overflow-y-auto mb-3" style="max-height:11rem"></div>
-          <button id="analyze-journal-btn" class="w-full bg-gradient-to-r from-purple-600/25 to-indigo-600/25 border border-purple-500/30 rounded-xl py-2.5 text-xs font-bold text-purple-300 flex items-center justify-center gap-2">
+          <input type="text" id="jn-note" placeholder="Catatan evaluasi entry / emosi (opsional)..." class="calc-in text-[11px] mb-3">
+
+          <div id="jn-list" class="space-y-1.5 overflow-y-auto mb-3" style="max-height:14rem"></div>
+          <button id="analyze-journal-btn" class="w-full bg-gradient-to-r from-purple-600/30 to-indigo-600/30 border border-purple-500/35 rounded-xl py-2.5 text-xs font-bold text-purple-200 flex items-center justify-center gap-2">
             <i class="fas fa-brain"></i>Evaluasi Jurnal dengan AI Mentor
           </button>
         </div>
       </section>
 
-      <!-- TAB 5: AI MENTOR -->
+      <!-- TAB 5: CUSTOM PAIR AI MENTOR ROUTER -->
       <section id="tab-ai" class="tab-panel space-y-3">
         <div class="glass-card overflow-hidden glow-card-purple">
-          <div class="border-b border-slate-800/40 p-3.5 flex flex-col sm:flex-row justify-between gap-2">
-            <div>
-              <h2 class="text-sm font-bold flex items-center gap-2"><i class="fas fa-brain grad-purple"></i>AI Terminal Router</h2>
-              <p class="text-[9px] text-emerald-400 font-mono">Live Market Context Injected &bull; XSS-Guard</p>
+          <div class="border-b border-slate-800/40 p-3.5 space-y-2.5">
+            <div class="flex flex-col sm:flex-row justify-between gap-2">
+              <div>
+                <h2 class="text-sm font-bold flex items-center gap-2"><i class="fas fa-brain grad-purple"></i>Multi-Market AI Mentor</h2>
+                <p class="text-[9px] text-emerald-400 font-mono">Bebas Pilih Pair &amp; Gaya Trading &bull; Live Data Injected</p>
+              </div>
+              <select id="mdl-sel" class="calc-in text-[11px] sm:w-52">
+                <option value="auto_pilot">⚡ Auto Smart Pool</option>
+                <option value="auto_premium">🌟 Auto Premium (405B/120B)</option>
+                <option value="auto_fast">⚡ Auto Fast Response</option>
+                <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B Free</option>
+                <option value="qwen/qwen3-next-80b-a3b-instruct:free">Qwen3 Next 80B Free</option>
+                <option value="openrouter/free">OpenRouter Auto Free</option>
+              </select>
             </div>
-            <select id="mdl-sel" class="calc-in text-[11px] sm:w-56">
-              <option value="auto_pilot">⚡ Auto Smart (Trading Pool)</option>
-              <option value="auto_premium">🌟 Auto Premium (405B / 120B)</option>
-              <option value="auto_fast">⚡ Auto Fast Response</option>
-              <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B Free</option>
-              <option value="qwen/qwen3-next-80b-a3b-instruct:free">Qwen3 Next 80B Free</option>
-              <option value="openrouter/free">OpenRouter Auto Free</option>
-            </select>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[8px] text-slate-400 block mb-0.5">Pair Fokus AI</label>
+                <select id="ai-pair-select" class="calc-in text-[11px] py-1.5"></select>
+              </div>
+              <div>
+                <label class="text-[8px] text-slate-400 block mb-0.5">Gaya Trading</label>
+                <select id="ai-style-select" class="calc-in text-[11px] py-1.5">
+                  <option value="Scalping (M15)">Scalping (M15)</option>
+                  <option value="Intraday (H1/H4)" selected>Intraday (H1/H4)</option>
+                  <option value="Swing Trading (H4/D1)">Swing Trading (H4/D1)</option>
+                </select>
+              </div>
+            </div>
           </div>
 
-          <div id="chat" class="overflow-y-auto p-3.5 space-y-3 text-sm" style="height:340px">
-            <div class="bg-slate-900/45 p-3 rounded-2xl border border-slate-800/50 text-xs text-slate-300">
-              <p class="text-purple-400 font-bold text-[10px] mb-1">System v10-MODULAR</p>
-              Setiap pertanyaan otomatis menyertakan <b>harga live XAU/USD, DXY, VIX, dan US10Y</b> terbaru agar analisis AI relevan dengan kondisi pasar detik ini.
+          <div id="chat" class="overflow-y-auto p-3.5 space-y-3 text-sm" style="height:330px">
+            <div class="bg-slate-900/50 p-3 rounded-2xl border border-slate-800/60 text-xs text-slate-300">
+              <p class="text-purple-400 font-bold text-[10px] mb-1">System v11-MULTI-MARKET</p>
+              Pilih <b>Pair Fokus AI</b> di atas (Forex, Emas, Kripto, atau Indeks). AI otomatis membaca harga live, indikator teknikal, dan konteks makro pair pilihanmu!
             </div>
           </div>
 
           <div class="px-3.5 py-2 border-t border-slate-800/30 flex gap-2 overflow-x-auto">
-            <button class="qp-btn" data-qp="sinyal">📊 Sinyal XAUUSD</button>
-            <button class="qp-btn" data-qp="dxy">💵 Korelasi DXY</button>
-            <button class="qp-btn" data-qp="cpi">📈 Dampak CPI/Fed</button>
-            <button class="qp-btn" data-qp="sltp">🛡️ Hitung SL/TP</button>
+            <button class="qp-btn" data-qp="analisis">📊 Analisis Pair Aktif</button>
+            <button class="qp-btn" data-qp="smc">🗺️ Zona SMC &amp; OB</button>
+            <button class="qp-btn" data-qp="makro">🌍 Pengaruh Makro</button>
+            <button class="qp-btn" data-qp="risk">🛡️ Rencana Risk/Lot</button>
           </div>
 
           <div class="border-t border-slate-800/30 p-3">
@@ -284,7 +359,7 @@
               <button id="clear-chat-btn" class="text-[9px] text-slate-500 hover:text-red-400">Reset Chat</button>
             </div>
             <div class="flex gap-2">
-              <input type="text" id="u-in" maxlength="2000" placeholder="Tanya analisis XAUUSD, DXY, strategi..." class="calc-in flex-grow">
+              <input type="text" id="u-in" maxlength="2000" placeholder="Tanya analisis pair pilihanmu..." class="calc-in flex-grow">
               <button id="send-btn" class="bg-gradient-to-r from-amber-500 to-orange-600 px-4 py-2 rounded-xl font-bold text-xs text-white shrink-0">
                 <i class="fas fa-paper-plane"></i>
               </button>

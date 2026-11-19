@@ -1,64 +1,70 @@
 import { STATE, onEvent } from '../core/state.js';
+import { formatPairPrice } from '../core/pairs.js';
 import { esc } from '../core/utils.js';
 
 export function renderSMC() {
   const zc = document.getElementById('smc-zones');
   const hc = document.getElementById('liq-heatmap');
+  const titleEl = document.getElementById('smc-pair-label');
   if (!zc || !hc) return;
 
-  const h1 = STATE.xauH1 || [];
-  const d1 = STATE.assets.xau?.candles || [];
-  const xau = STATE.prices.xau || (h1.length ? h1[h1.length - 1].c : 0);
+  const data = STATE.activeData;
+  const pair = STATE.activePair;
+  if (titleEl) titleEl.textContent = `${pair} (${STATE.timeframe})`;
 
-  if (h1.length < 24 || !xau) {
-    zc.innerHTML = '<p class="text-[10px] text-slate-500">Menunggu data candle OHLC untuk pemetaan struktur SMC...</p>';
+  const candles = data?.candles || [];
+  const px = data?.price || 0;
+
+  if (candles.length < 20 || !px) {
+    zc.innerHTML = '<p class="text-[10px] text-slate-400">Menunggu data candle OHLC untuk pemetaan zona SMC...</p>';
     return;
   }
 
-  const recent24H = h1.slice(-24);
-  const recent72H = h1.slice(-72);
-  const h1High = Math.max(...recent24H.map(c => c.h));
-  const h1Low = Math.min(...recent24H.map(c => c.l));
-  const h4High = Math.max(...recent72H.map(c => c.h));
-  const h4Low = Math.min(...recent72H.map(c => c.l));
-  const d1High = d1.length ? Math.max(...d1.slice(-14).map(c => c.h)) : h4High;
-  const d1Low = d1.length ? Math.min(...d1.slice(-14).map(c => c.l)) : h4Low;
+  const recent15 = candles.slice(-15);
+  const recent40 = candles.slice(-40);
 
-  const obBull = h1Low + (h1High - h1Low) * 0.236;
-  const obBear = h1High - (h1High - h1Low) * 0.236;
+  const swingHighShort = Math.max(...recent15.map(c => c.h));
+  const swingLowShort = Math.min(...recent15.map(c => c.l));
+  const swingHighMid = Math.max(...recent40.map(c => c.h));
+  const swingLowMid = Math.min(...recent40.map(c => c.l));
+  const majorHigh = Math.max(...candles.map(c => c.h));
+  const majorLow = Math.min(...candles.map(c => c.l));
+
+  const supplyOB = swingHighShort - (swingHighShort - swingLowShort) * 0.236;
+  const demandOB = swingLowShort + (swingHighShort - swingLowShort) * 0.236;
 
   const zones = [
-    { type: 'BSL / D1 HIGH', price: d1High, tf: 'D1', cls: 'smc-eq-high', icon: '💧', desc: 'Buy-Side Liquidity di atas puncak 14 hari terakhir — target sweep institusi' },
-    { type: 'BOS / H4 HIGH', price: h4High, tf: 'H4', cls: 'smc-bos', icon: '↗', desc: 'Level Break of Structure H4 — penutupan di atas level ini konfirmasi bullish' },
-    { type: 'SUPPLY / OB', price: obBear, tf: 'H1', cls: 'smc-choch', icon: '📦', desc: 'Zona Supply / Premium 76.4% swing H1 — area reaksi seller' },
-    { type: 'DEMAND / OB', price: obBull, tf: 'H1', cls: 'smc-ob', icon: '📦', desc: 'Zona Demand / Discount 23.6% swing H1 — area reaksi buyer' },
-    { type: 'CHoCH / H1 LOW', price: h1Low, tf: 'H1', cls: 'smc-eq-low', icon: '↩', desc: 'Swing Low 24 jam — tembus ke bawah memicu Change of Character bearish' },
-    { type: 'SSL / D1 LOW', price: d1Low, tf: 'D1', cls: 'smc-liq', icon: '🛡️', desc: 'Sell-Side Liquidity di bawah lembah 14 hari terakhir' }
+    { type: 'BSL / MAJOR HIGH', price: majorHigh, cls: 'smc-eq-high', icon: '💧', desc: 'Buy-Side Liquidity di atas puncak tertinggi periode aktif' },
+    { type: 'BOS / SWING HIGH', price: swingHighMid, cls: 'smc-bos', icon: '↗', desc: 'Break of Structure — penutupan di atas level ini konfirmasi kelanjutan naik' },
+    { type: 'PREMIUM / SUPPLY OB', price: supplyOB, cls: 'smc-choch', icon: '📦', desc: 'Zona Supply / Order Block jual (76.4% Fibonacci swing)' },
+    { type: 'DISCOUNT / DEMAND OB', price: demandOB, cls: 'smc-ob', icon: '📦', desc: 'Zona Demand / Order Block beli (23.6% Fibonacci swing)' },
+    { type: 'CHoCH / SWING LOW', price: swingLowMid, cls: 'smc-eq-low', icon: '↩', desc: 'Change of Character — tembus ke bawah memicu struktur bearish' },
+    { type: 'SSL / MAJOR LOW', price: majorLow, cls: 'smc-liq', icon: '🛡️', desc: 'Sell-Side Liquidity di bawah lembah terendah periode aktif' }
   ];
 
   zc.innerHTML = zones.map(z => `
     <div class="smc-zone ${z.cls}">
       <div class="flex items-center justify-between mb-0.5">
-        <div class="flex items-center gap-2"><span class="text-[9px] font-black text-slate-200">${esc(z.icon)} ${esc(z.type)}</span><span class="text-[8px] text-slate-500 font-mono">${esc(z.tf)}</span></div>
-        <span class="text-[9px] font-mono font-bold text-amber-400">$${z.price.toFixed(2)}</span>
+        <span class="text-[9px] font-black text-slate-200">${esc(z.icon)} ${esc(z.type)}</span>
+        <span class="text-[9px] font-mono font-bold text-amber-400">${formatPairPrice(pair, z.price)}</span>
       </div>
       <p class="text-[9px] text-slate-400 leading-snug">${esc(z.desc)}</p>
     </div>
   `).join('');
 
   const heatmap = [
-    { level: 'Major Resistance (D1)', price: d1High, strength: 90, color: 'bg-red-500' },
-    { level: 'Intraday High (H4)', price: h4High, strength: 72, color: 'bg-orange-500' },
-    { level: 'Current Spot Price', price: xau, strength: 55, color: 'bg-amber-500' },
-    { level: 'Intraday Low (H1)', price: h1Low, strength: 70, color: 'bg-blue-500' },
-    { level: 'Major Support (D1)', price: d1Low, strength: 92, color: 'bg-emerald-500' }
+    { level: 'Major Resistance', price: majorHigh, strength: 92, color: 'bg-red-500' },
+    { level: 'Swing High', price: swingHighMid, strength: 74, color: 'bg-orange-500' },
+    { level: 'Current Price', price: px, strength: 55, color: 'bg-amber-500' },
+    { level: 'Swing Low', price: swingLowMid, strength: 72, color: 'bg-blue-500' },
+    { level: 'Major Support', price: majorLow, strength: 94, color: 'bg-emerald-500' }
   ];
 
   hc.innerHTML = heatmap.map(h => `
     <div class="heat-row">
-      <span class="text-[8px] text-slate-400 w-32 shrink-0">${esc(h.level)}</span>
+      <span class="text-[8px] text-slate-400 w-28 shrink-0">${esc(h.level)}</span>
       <div class="heat-bar-wrap"><div class="heat-bar ${h.color}" style="width:${h.strength}%"></div></div>
-      <span class="text-[8px] font-mono text-slate-300 shrink-0 w-16 text-right">$${h.price.toFixed(2)}</span>
+      <span class="text-[8px] font-mono text-slate-200 shrink-0 w-20 text-right">${formatPairPrice(pair, h.price)}</span>
     </div>
   `).join('');
 }

@@ -1,7 +1,7 @@
 import { STATE, onEvent } from '../core/state.js';
 
-const CORR_KEYS = ['xau', 'dxy', 'btc', 'eur', 'spx'];
-const CORR_LABELS = { xau: 'XAU', dxy: 'DXY', btc: 'BTC', eur: 'EUR', spx: 'SPX' };
+const CORR_KEYS = ['xau', 'dxy', 'eur', 'btc', 'spx'];
+const CORR_LABELS = { xau: 'XAU', dxy: 'DXY', eur: 'EUR', btc: 'BTC', spx: 'SPX' };
 
 function pearsonCorrelation(arrA, arrB) {
   const n = Math.min(arrA.length, arrB.length);
@@ -44,14 +44,14 @@ export function renderInstitutional() {
     if (fgLbl) fgLbl.textContent = STATE.fng.label;
   }
 
-  const vix = STATE.assets.vix?.price;
+  const vix = STATE.macro.vix?.price;
   const vixEl = document.getElementById('inst-vix');
   if (vixEl && vix) {
     vixEl.textContent = vix.toFixed(2);
     vixEl.className = 'text-base font-black ' + (vix > 25 ? 'text-red-400' : 'text-purple-400');
   }
 
-  const us10y = STATE.assets.us10y?.price;
+  const us10y = STATE.macro.us10y?.price;
   const y10El = document.getElementById('inst-10y');
   if (y10El && us10y) y10El.textContent = us10y.toFixed(2) + '%';
 
@@ -59,7 +59,7 @@ export function renderInstitutional() {
   if (!tbl) return;
 
   const returnsMap = {};
-  CORR_KEYS.forEach(k => { returnsMap[k] = dailyReturns(STATE.assets[k]?.candles || []); });
+  CORR_KEYS.forEach(k => { returnsMap[k] = dailyReturns(STATE.macro[k]?.candles || []); });
 
   let html = '<thead><tr><th class="text-[8px] text-slate-600 p-1">30D</th>';
   CORR_KEYS.forEach(k => { html += `<th class="text-[8px] text-slate-400 font-bold p-1">${CORR_LABELS[k]}</th>`; });

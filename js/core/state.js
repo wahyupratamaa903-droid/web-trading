@@ -1,3 +1,13 @@
+import { getPairMeta } from './pairs.js';
+
+const savedWatchlist = (() => {
+  try {
+    const raw = JSON.parse(localStorage.getItem('gd_watchlist_v11'));
+    if (Array.isArray(raw) && raw.length > 0) return raw;
+  } catch (e) {}
+  return ['XAU/USD', 'DXY', 'EUR/USD', 'GBP/USD', 'USD/JPY', 'BTC/USD'];
+})();
+
 export const CONFIG = {
   aiProxyEndpoint: '/api/ai',
   openRouterDirect: 'https://openrouter.ai/api/v1/chat/completions',
@@ -5,28 +15,40 @@ export const CONFIG = {
   newsEndpoint: '/api/news',
   maxHistory: 10,
   rateLimitMs: 1500,
-  priceRefreshMs: 30000,
-  systemPrompt: `Kamu adalah AI Trading Analyst senior untuk GOLD & DXY Intelligence Terminal v10.
-Spesialisasi: XAUUSD (Gold), DXY, analisis teknikal & fundamental tingkat institusional.
-Topik: Support/Resistance, Fibonacci, Elliott Wave, SMC, ICT, Liquidity, NFP, CPI, FOMC.
-Format: Bahasa Indonesia profesional. Sinyal: 📈 BUY / 📉 SELL + Entry + SL + TP + Confidence.
-Gunakan **bold**, - list. Padat, presisi, langsung ke inti analisis.`
+  priceRefreshMs: 30000
 };
 
 export const STATE = {
-  loading: false,
-  chartReady: false,
-  dataSource: 'Menghubungkan...',
-  assets: {},
-  xauH1: [],
+  activePair: localStorage.getItem('gd_active_pair_v11') || 'XAU/USD',
+  timeframe: '60m',
+  watchlist: savedWatchlist,
+  watchlistData: {},
+  activeData: null,
+  macro: {},
   fng: null,
   news: [],
-  prices: { xau: 0, dxy: 0, eur: 0, btc: 0 },
-  changes: { xau: 0, dxy: 0, eur: 0, btc: 0 },
+  newsTopic: 'ALL',
+  newsColorFilter: 'ALL',
+  sourceInfo: 'Menghubungkan...',
+  sourceUrl: '',
+  lastMetrics: {},
   hist: [],
   journal: [],
+  loading: false,
   lastSend: 0
 };
+
+export function setActivePair(newPair) {
+  const meta = getPairMeta(newPair);
+  STATE.activePair = meta.pair;
+  localStorage.setItem('gd_active_pair_v11', meta.pair);
+  emitEvent('pair:changed', meta);
+}
+
+export function saveWatchlist() {
+  localStorage.setItem('gd_watchlist_v11', JSON.stringify(STATE.watchlist));
+  emitEvent('watchlist:updated', STATE.watchlist);
+}
 
 const listeners = {};
 export function onEvent(eventName, callback) {
