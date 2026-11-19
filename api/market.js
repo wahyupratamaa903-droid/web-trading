@@ -38,7 +38,9 @@ async function fetchYahooChart(symbol, interval = '1d', range = '1mo') {
   }
 
   const price = meta.regularMarketPrice ?? (candles.length ? candles[candles.length - 1].c : null);
-  const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? (candles.length > 1 ? candles[candles.length - 2].c : price);
+  const prevClose = candles.length >= 2
+    ? candles[candles.length - 2].c
+    : (meta.regularMarketPreviousClose ?? meta.chartPreviousClose ?? price);
   const changePct = prevClose ? ((price - prevClose) / prevClose) * 100 : 0;
 
   return { symbol, price, prevClose, changePct, candles };
